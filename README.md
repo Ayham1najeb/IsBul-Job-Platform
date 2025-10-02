@@ -548,10 +548,8 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 
 ## 👨‍💻 Geliştirici
 
-**İsminiz**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [LinkedIn Profiliniz](https://linkedin.com/in/YOUR_PROFILE)
-- Email: your.email@example.com
+**Ayham Najeb**
+- GitHub: [@Ayham1najeb](https://github.com/Ayham1najeb)
 
 ---
 
@@ -568,7 +566,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 - ✅ **Backend**: %100 Tamamlandı (6 Model + 26 Endpoint)
 - 🔄 **Frontend**: %20 Tamamlandı (Temel sayfalar hazır)
 - 🔄 **Özellikler**: Geliştirme aşamasında
-- 📅 **Tahmini Tamamlanma**: [Tarihiniz]
+- 📅 **Tahmini Tamamlanma**: [01.12.2025]
 
 ### Detaylı İlerleme
 
@@ -590,7 +588,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 Bitirme projesi için ❤️ ile yapıldı
 
 **Proje Durumu**: 🔄 Aktif Geliştirme  
-**Versiyon**: 2.0.0  
+**Versiyon**: 1.0.0  
 **Son Güncelleme**: 2025-10-02  
 **Teknoloji**: React + PHP + MySQL
 
