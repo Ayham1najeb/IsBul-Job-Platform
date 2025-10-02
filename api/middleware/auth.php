@@ -85,4 +85,41 @@ class AuthMiddleware {
         }
     }
 }
+
+/**
+ * Helper function - Kimlik doğrulama
+ * AuthMiddleware::authenticate() metodunu çağırır
+ */
+function authenticate() {
+    $token = JWT::getBearerToken();
+    
+    if (!$token) {
+        return [
+            'success' => false,
+            'message' => 'Token bulunamadı, yetkilendirme reddedildi'
+        ];
+    }
+
+    $decoded = JWT::decode($token);
+    
+    if (!$decoded) {
+        return [
+            'success' => false,
+            'message' => 'Token geçersiz'
+        ];
+    }
+
+    // Token süresinin dolup dolmadığını kontrol et
+    if (isset($decoded->exp) && $decoded->exp < time()) {
+        return [
+            'success' => false,
+            'message' => 'Token süresi dolmuş'
+        ];
+    }
+
+    return [
+        'success' => true,
+        'data' => $decoded
+    ];
+}
 ?>
