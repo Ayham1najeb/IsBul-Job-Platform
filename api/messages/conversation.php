@@ -3,9 +3,6 @@
  * Konuşma Endpoint
  */
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
 include_once '../config/database.php';
 include_once '../models/Message.php';
 include_once '../middleware/auth.php';

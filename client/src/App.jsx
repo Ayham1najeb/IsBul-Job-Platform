@@ -6,6 +6,22 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import JobsPage from './pages/Jobs/JobsPage';
+import JobDetailPage from './pages/Jobs/JobDetailPage';
+import CompaniesPage from './pages/Companies/CompaniesPage';
+import CompanyDetailPage from './pages/Companies/CompanyDetailPage';
+import CompanyDashboard from './pages/Company/CompanyDashboard';
+import CreateJobPage from './pages/Company/CreateJobPage';
+import ManageJobsPage from './pages/Company/ManageJobsPage';
+import CompanyApplicationsPage from './pages/Company/ApplicationsPage';
+import MyApplicationsPage from './pages/Applications/MyApplicationsPage';
+import ProfilePage from './pages/Profile/ProfilePage';
+import EditProfilePage from './pages/Profile/EditProfilePage';
+import ChangePasswordPage from './pages/Profile/ChangePasswordPage';
+import SavedJobsPage from './pages/SavedJobs/SavedJobsPage';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -26,11 +42,97 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs/:id" element={<JobDetailPage />} />
+            <Route path="/companies" element={<CompaniesPage />} />
+            <Route path="/companies/:id" element={<CompanyDetailPage />} />
+            
+            {/* Genel Sayfalar */}
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            
+            {/* Applications */}
+            <Route
+              path="/applications"
+              element={
+                <ProtectedRoute>
+                  <MyApplicationsPage />
+                </ProtectedRoute>
+              }
+            />
+            {/* Saved Jobs */}
+            <Route
+              path="/saved-jobs"
+              element={
+                <ProtectedRoute>
+                  <SavedJobsPage />
+                </ProtectedRoute>
+              }
+            />
+            {/* Profile */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/change-password"
+              element={
+                <ProtectedRoute>
+                  <ChangePasswordPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            {/* Company Routes */}
+            <Route
+              path="/company/dashboard"
+              element={
+                <ProtectedRoute>
+                  <CompanyDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company/jobs"
+              element={
+                <ProtectedRoute>
+                  <ManageJobsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company/jobs/create"
+              element={
+                <ProtectedRoute>
+                  <CreateJobPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company/applications"
+              element={
+                <ProtectedRoute>
+                  <CompanyApplicationsPage />
                 </ProtectedRoute>
               }
             />

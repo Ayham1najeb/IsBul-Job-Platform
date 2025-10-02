@@ -3,8 +3,11 @@
  * Kullanıcının Başvuruları Endpoint
  */
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+// OPTIONS request için (preflight) - CORS .htaccess'te
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 include_once '../config/database.php';
 include_once '../models/Application.php';
@@ -13,7 +16,7 @@ include_once '../middleware/auth.php';
 $auth = authenticate();
 if (!$auth['success']) {
     http_response_code(401);
-    echo json_encode(array("mesaj" => $auth['message']), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("success" => false, "mesaj" => $auth['message']), JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -24,19 +27,36 @@ $db = $database->getConnection();
 
 $application = new Application($db);
 
-$stmt = $application->getUserApplications($user_data->id);
-$num = $stmt->rowCount();
+try {
+    $stmt = $application->getUserApplications($user_data->id);
+    $num = $stmt->rowCount();
 
-if ($num > 0) {
-    $basvurular = array();
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        array_push($basvurular, $row);
+    if ($num > 0) {
+        $basvurular = array();
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            array_push($basvurular, $row);
+        }
+        
+        http_response_code(200);
+        echo json_encode(array(
+            "success" => true,
+            "kayitlar" => $basvurular,
+            "toplam" => $num
+        ), JSON_UNESCAPED_UNICODE);
+    } else {
+        http_response_code(200);
+        echo json_encode(array(
+            "success" => true,
+            "mesaj" => "Başvuru bulunamadı.",
+            "kayitlar" => array(),
+            "toplam" => 0
+        ), JSON_UNESCAPED_UNICODE);
     }
-    
-    http_response_code(200);
-    echo json_encode(array("kayitlar" => $basvurular), JSON_UNESCAPED_UNICODE);
-} else {
-    http_response_code(200);
-    echo json_encode(array("mesaj" => "Başvuru bulunamadı.", "kayitlar" => array()), JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(array(
+        "success" => false,
+        "mesaj" => "Başvurular yüklenirken bir hata oluştu: " . $e->getMessage()
+    ), JSON_UNESCAPED_UNICODE);
 }

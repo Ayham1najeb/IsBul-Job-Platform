@@ -3,11 +3,6 @@
  * Şirket Güncelleme Endpoint
  */
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: PUT");
-header("Access-Control-Allow-Headers: Content-Type, x-auth-token");
-
 include_once '../config/database.php';
 include_once '../models/Company.php';
 include_once '../middleware/auth.php';

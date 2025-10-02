@@ -1,27 +1,31 @@
+/**
+ * Şirket Servisi
+ * Şirketler ile ilgili tüm API çağrıları
+ */
 import api from '../config/api';
 
 export const companyService = {
-  // Get all companies
+  // Tüm şirketleri getir
   getAllCompanies: async (filters = {}) => {
-    const response = await api.get('/companies', { params: filters });
+    const response = await api.get('/companies/', { params: filters });
     return response.data;
   },
 
-  // Get company by ID
+  // ID'ye göre şirket getir
   getCompanyById: async (id) => {
-    const response = await api.get(`/companies/${id}`);
+    const response = await api.get(`/companies/detail.php?id=${id}`);
     return response.data;
   },
 
-  // Create company profile
+  // Şirket profili oluştur
   createCompany: async (companyData) => {
-    const response = await api.post('/companies', companyData);
+    const response = await api.post('/companies/create.php', companyData);
     return response.data;
   },
 
-  // Update company profile
-  updateCompany: async (id, companyData) => {
-    const response = await api.put(`/companies/${id}`, companyData);
+  // Şirket profili güncelle
+  updateCompany: async (companyData) => {
+    const response = await api.put('/companies/update.php', companyData);
     return response.data;
   },
 
