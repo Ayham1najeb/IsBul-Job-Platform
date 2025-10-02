@@ -52,16 +52,32 @@ const ProfilePage = () => {
       setUploading(true);
       const response = await userService.uploadPhoto(file);
       
-      // Kullanıcı bilgilerini güncelle
-      const updatedUser = { ...user, profil_foto: response.profil_foto };
+      console.log('Upload response:', response);
+      
+      // Kullanıcı bilgilerini güncelle - timestamp ekleyerek cache'i bypass et
+      const photoUrl = response.profil_foto + '?t=' + Date.now();
+      const updatedUser = { 
+        ...user, 
+        profil_foto: photoUrl
+      };
+      
+      console.log('Updated user:', updatedUser);
+      
       setUser(updatedUser);
       
       // Store'u güncelle
       useAuthStore.getState().updateUser(updatedUser);
       
+      // LocalStorage'ı da güncelle
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
       alert('✅ Profil fotoğrafı başarıyla güncellendi!');
+      
+      // Sayfayı yenile (opsiyonel)
+      // window.location.reload();
     } catch (error) {
       console.error('Fotoğraf yükleme hatası:', error);
+      console.error('Error response:', error.response?.data);
       alert('❌ Fotoğraf yüklenemedi: ' + (error.response?.data?.mesaj || error.message));
     } finally {
       setUploading(false);

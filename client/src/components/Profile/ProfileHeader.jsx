@@ -43,9 +43,13 @@ const ProfileHeader = ({ user, onPhotoUpload }) => {
           <div className="relative">
             {user.profil_foto ? (
               <img
+                key={user.profil_foto}
                 src={user.profil_foto}
                 alt={user.isim}
                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
+                onError={(e) => {
+                  console.error('Image load error:', user.profil_foto);
+                }}
               />
             ) : (
               <div className="w-32 h-32 rounded-full bg-primary-100 flex items-center justify-center border-4 border-primary-200">

@@ -77,9 +77,11 @@ try {
     
     // Yeni fotoğraf yolunu kaydet
     $photo_path = 'uploads/profiles/' . $filename;
+    $full_url = 'http://localhost/IsBul/' . $photo_path;
+    
     $query = "UPDATE kullanicilar SET profil_foto = :profil_foto WHERE id = :id";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':profil_foto', $photo_path);
+    $stmt->bindParam(':profil_foto', $full_url);
     $stmt->bindParam(':id', $user_id);
     
     if ($stmt->execute()) {
@@ -87,7 +89,7 @@ try {
         echo json_encode([
             'success' => true,
             'mesaj' => 'Profil fotoğrafı başarıyla güncellendi',
-            'profil_foto' => 'http://localhost/IsBul/api/' . $photo_path
+            'profil_foto' => $full_url
         ], JSON_UNESCAPED_UNICODE);
     } else {
         throw new Exception('Veritabanı güncellenemedi');
