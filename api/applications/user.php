@@ -3,11 +3,8 @@
  * Kullanıcının Başvuruları Endpoint
  */
 
-// OPTIONS request için (preflight) - CORS .htaccess'te
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// CORS Headers
+require_once '../config/cors_headers.php';
 
 include_once '../config/database.php';
 include_once '../models/Application.php';

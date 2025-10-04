@@ -4,11 +4,8 @@
  * Kullanıcı profil fotoğrafı yükleme
  */
 
-// OPTIONS request için (preflight) - CORS .htaccess'te
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// CORS Headers
+require_once '../config/cors_headers.php';
 
 require_once '../config/database.php';
 require_once '../middleware/auth.php';
