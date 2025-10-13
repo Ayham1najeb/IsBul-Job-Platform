@@ -5,30 +5,41 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { userService } from '../../services/userService';
+import { profileService } from '../../services/profileService';
 import ProfileHeader from '../../components/Profile/ProfileHeader';
 import ProfileInfo from '../../components/Profile/ProfileInfo';
 import { Edit, Lock, Loader, Briefcase, FileText } from 'lucide-react';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user: authUser } = useAuthStore();
+  const authUser = useAuthStore((state) => state.user);
+  const updateUser = useAuthStore((state) => state.updateUser);
   const [user, setUser] = useState(authUser);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    // TODO: API'den profil bilgilerini çek
-    // loadProfile();
+    loadProfile();
   }, []);
 
   const loadProfile = async () => {
     try {
       setLoading(true);
-      const data = await userService.getProfile();
-      setUser(data);
+      const response = await profileService.getProfile();
+      console.log('API Response:', response);
+      const profileData = response.data;
+      console.log('Profile Data:', profileData);
+      setUser(profileData);
+      // Store'u da güncelle
+      updateUser({
+        ...authUser,
+        ...profileData
+      });
     } catch (error) {
       console.error('Profil yüklenemedi:', error);
+      console.error('Error details:', error.response?.data);
+      // Hata durumunda authUser'ı kullan
+      setUser(authUser);
     } finally {
       setLoading(false);
     }
@@ -50,31 +61,14 @@ const ProfilePage = () => {
 
     try {
       setUploading(true);
-      const response = await userService.uploadPhoto(file);
+      const response = await profileService.uploadPhoto(file);
       
       console.log('Upload response:', response);
       
-      // Kullanıcı bilgilerini güncelle - timestamp ekleyerek cache'i bypass et
-      const photoUrl = response.profil_foto + '?t=' + Date.now();
-      const updatedUser = { 
-        ...user, 
-        profil_foto: photoUrl
-      };
-      
-      console.log('Updated user:', updatedUser);
-      
-      setUser(updatedUser);
-      
-      // Store'u güncelle
-      useAuthStore.getState().updateUser(updatedUser);
-      
-      // LocalStorage'ı da güncelle
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      // Profili yeniden yükle
+      await loadProfile();
       
       alert('✅ Profil fotoğrafı başarıyla güncellendi!');
-      
-      // Sayfayı yenile (opsiyonel)
-      // window.location.reload();
     } catch (error) {
       console.error('Fotoğraf yükleme hatası:', error);
       console.error('Error response:', error.response?.data);
@@ -96,7 +90,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Başlık */}
         <ProfileHeader user={user} onPhotoUpload={handlePhotoUpload} />

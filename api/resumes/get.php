@@ -3,6 +3,9 @@
  * Özgeçmiş Getir Endpoint
  */
 
+// CORS Headers
+require_once '../config/cors_headers.php';
+
 include_once '../config/database.php';
 include_once '../models/Resume.php';
 include_once '../middleware/auth.php';

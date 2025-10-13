@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,6 +12,7 @@ import JobDetailPage from './pages/Jobs/JobDetailPage';
 import CompaniesPage from './pages/Companies/CompaniesPage';
 import CompanyDetailPage from './pages/Companies/CompanyDetailPage';
 import CompanyDashboard from './pages/Company/CompanyDashboard';
+import CreateCompanyPage from './pages/Company/CreateCompanyPage';
 import CreateJobPage from './pages/Company/CreateJobPage';
 import ManageJobsPage from './pages/Company/ManageJobsPage';
 import CompanyApplicationsPage from './pages/Company/ApplicationsPage';
@@ -22,6 +24,11 @@ import SavedJobsPage from './pages/SavedJobs/SavedJobsPage';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';
+import MessagesPage from './pages/Messages/MessagesPage';
+import ResumePage from './pages/Resume/ResumePage';
+import EditResumePage from './pages/Resume/EditResumePage';
+import ResumePreviewPage from './pages/Resume/ResumePreviewPage';
+import ResumeSettingsPage from './pages/Resume/ResumeSettingsPage';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -37,6 +44,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
@@ -61,6 +69,51 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
+            {/* Messages */}
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <MessagesPage />
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Resume */}
+            <Route
+              path="/resume"
+              element={
+                <ProtectedRoute>
+                  <ResumePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resume/edit"
+              element={
+                <ProtectedRoute>
+                  <EditResumePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resume/preview"
+              element={
+                <ProtectedRoute>
+                  <ResumePreviewPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resume/settings"
+              element={
+                <ProtectedRoute>
+                  <ResumeSettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            
             {/* Saved Jobs */}
             <Route
               path="/saved-jobs"
@@ -109,6 +162,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CompanyDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company/create"
+              element={
+                <ProtectedRoute>
+                  <CreateCompanyPage />
                 </ProtectedRoute>
               }
             />

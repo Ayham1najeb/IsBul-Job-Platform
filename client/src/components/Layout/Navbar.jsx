@@ -4,7 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { Briefcase, User, LogOut, Menu, X, Bookmark, FileText, Building2, Bell } from 'lucide-react';
+import { Briefcase, User, LogOut, Menu, X, Bookmark, FileText, Building2, Bell, MessageSquare, FileUser, Settings } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NotificationBell from '../Notifications/NotificationBell';
 
@@ -118,6 +118,13 @@ const Navbar = () => {
                 {user?.rol === 'is_arayan' && (
                   <>
                     <Link
+                      to="/resume"
+                      className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <FileUser className="h-4 w-4" />
+                      Özgeçmişim
+                    </Link>
+                    <Link
                       to="/applications"
                       className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                     >
@@ -132,6 +139,15 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
+                
+                {/* Mesajlar - Tüm kullanıcılar için */}
+                <Link
+                  to="/messages"
+                  className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  Mesajlar
+                </Link>
 
                 {/* Şirket Menüsü */}
                 {user?.rol === 'firma' && (
@@ -163,25 +179,82 @@ const Navbar = () => {
                   </button>
                   
                   {/* Dropdown */}
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
-                    >
-                      Profilim
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
-                    >
-                      Çıkış Yap
-                    </button>
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden">
+                    {/* Kullanıcı Bilgisi */}
+                    <div className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+                      <p className="font-semibold">{user?.isim} {user?.soyisim}</p>
+                      <p className="text-xs text-blue-100">{user?.email}</p>
+                    </div>
+
+                    {/* Menü İçeriği */}
+                    <div className="py-2">
+                      <Link
+                        to="/profile"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Profilim
+                      </Link>
+                      <Link
+                        to="/dashboard"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                      >
+                        <Briefcase className="w-4 h-4" />
+                        Dashboard
+                      </Link>
+                      
+                      {user?.rol === 'is_arayan' && (
+                        <>
+                          <Link
+                            to="/resume"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                          >
+                            <FileText className="w-4 h-4" />
+                            Özgeçmişim
+                          </Link>
+                          <Link
+                            to="/applications"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                          >
+                            <FileText className="w-4 h-4" />
+                            Başvurularım
+                          </Link>
+                          <Link
+                            to="/saved-jobs"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                          >
+                            <Bookmark className="w-4 h-4" />
+                            Kayıtlı İşler
+                          </Link>
+                        </>
+                      )}
+
+                      <Link
+                        to="/messages"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        Mesajlar
+                      </Link>
+
+                      <div className="border-t border-gray-100 my-2"></div>
+
+                      <Link
+                        to="/profile/edit"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                      >
+                        <Settings className="w-4 h-4" />
+                        Ayarlar
+                      </Link>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Çıkış Yap
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>

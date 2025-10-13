@@ -3,6 +3,9 @@
  * Mesaj Gönder Endpoint
  */
 
+// CORS Headers
+require_once '../config/cors_headers.php';
+
 include_once '../config/database.php';
 include_once '../models/Message.php';
 include_once '../middleware/auth.php';

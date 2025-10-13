@@ -28,9 +28,9 @@
 
 | Hafta | Odak Alan | Tamamlanma | Durum |
 |-------|-----------|------------|-------|
-| **Hafta 1** | İş İlanları & Şirketler | %80 | ✅ Tamamlandı |
-| **Hafta 2** | Başvurular & Profil | %70 | ✅ Tamamlandı |
-| **Hafta 3** | Mesajlaşma & Özgeçmiş | %0 | 🔄 Devam Ediyor |
+| **Hafta 1** | İş İlanları & Şirketler | %100 | ✅ Tamamlandı |
+| **Hafta 2** | Başvurular & Profil | %100 | ✅ Tamamlandı |
+| **Hafta 3** | Mesajlaşma & Özgeçmiş | %90 | ✅ Tamamlandı |
 | **Hafta 4** | Admin Panel & Dashboard | %0 | ⏳ Bekliyor |
 | **Hafta 5** | UI/UX İyileştirme | %40 | 🔄 Devam Ediyor |
 | **Hafta 6** | Test & Hata Düzeltme | %0 | ⏳ Bekliyor |
@@ -320,56 +320,113 @@
 
 ---
 
-## Gün 4-6: Özgeçmiş Yönetimi (3 gün)
+## Gün 4-6: Özgeçmiş Yönetimi (3 gün) ✅
 
 ### Frontend Bileşenleri
-- [ ] `pages/Resume/ResumePage.jsx` - Özgeçmiş sayfası
-- [ ] `pages/Resume/CreateResumePage.jsx` - Özgeçmiş oluştur
-- [ ] `components/Resume/ResumePreview.jsx` - Önizleme
-- [ ] `components/Resume/ResumeForm.jsx` - Form
-- [ ] `components/Resume/ExperienceSection.jsx` - Deneyim
-- [ ] `components/Resume/EducationSection.jsx` - Eğitim
-- [ ] `components/Resume/SkillsSection.jsx` - Beceriler
+- [x] `pages/Resume/ResumePage.jsx` - Özgeçmiş ana sayfası
+- [x] `pages/Resume/EditResumePage.jsx` - Özgeçmiş düzenleme
+- [x] `pages/Resume/ResumePreviewPage.jsx` - Önizleme sayfası
+- [x] `pages/Resume/ResumeSettingsPage.jsx` - Ayarlar
+- [x] `components/Resume/ExperienceSection.jsx` - İş deneyimi
+- [x] `components/Resume/EducationSection.jsx` - Eğitim
+- [x] `components/Resume/SkillsSection.jsx` - Beceriler
+- [x] `components/Resume/LanguagesSection.jsx` - Diller
+- [x] `components/Resume/CertificatesSection.jsx` - Sertifikalar
+- [x] `components/Resume/Templates/KlasikTemplate.jsx` - Klasik şablon
+- [x] `components/Resume/Templates/MinimalTemplate.jsx` - Minimal şablon
 
 ### Özellikler
-- [ ] Özgeçmiş oluşturma
-- [ ] Özgeçmiş düzenleme
-- [ ] Deneyim ekleme/çıkarma
-- [ ] Eğitim ekleme/çıkarma
-- [ ] Beceri ekleme/çıkarma
-- [ ] Dil ekleme
-- [ ] Sertifika ekleme
-- [ ] PDF olarak indirme (opsiyonel)
-- [ ] Özgeçmiş önizleme
+- [x] Özgeçmiş oluşturma
+- [x] Özgeçmiş düzenleme (tab-based navigation)
+- [x] İş deneyimi ekleme/düzenleme/silme
+- [x] Eğitim ekleme/düzenleme/silme
+- [x] Beceri ekleme/silme
+- [x] Dil ekleme/düzenleme/silme
+- [x] Sertifika ekleme/düzenleme/silme
+- [x] PDF olarak indirme (text-based, selectable)
+- [x] Özgeçmiş önizleme (real-time)
+- [x] Şablon seçimi (Klasik/Minimal)
+- [x] Görünürlük ayarları
+- [x] Sosyal medya bağlantıları
 
 ### API Entegrasyonu
-- [ ] `GET /api/resumes/get.php` - Özgeçmiş getir
-- [ ] `POST /api/resumes/create.php` - Özgeçmiş oluştur
-- [ ] `PUT /api/resumes/update.php` - Özgeçmiş güncelle
+- [x] `GET /api/resumes/get-full.php` - Tam özgeçmiş getir
+- [x] `GET /api/resumes/settings.php` - Ayarları getir
+- [x] `POST /api/resumes/settings.php` - Ayarları kaydet
+- [x] `GET /api/resumes/experience.php` - Deneyimleri getir
+- [x] `POST /api/resumes/experience.php` - Deneyim ekle
+- [x] `PUT /api/resumes/experience.php` - Deneyim güncelle
+- [x] `DELETE /api/resumes/experience.php` - Deneyim sil
+- [x] `GET /api/resumes/education.php` - Eğitimleri getir
+- [x] `POST /api/resumes/education.php` - Eğitim ekle
+- [x] `PUT /api/resumes/education.php` - Eğitim güncelle
+- [x] `DELETE /api/resumes/education.php` - Eğitim sil
+- [x] `GET /api/resumes/skills.php` - Becerileri getir
+- [x] `POST /api/resumes/skills.php` - Beceri ekle
+- [x] `DELETE /api/resumes/skills.php` - Beceri sil
+- [x] `GET /api/resumes/languages.php` - Dilleri getir
+- [x] `POST /api/resumes/languages.php` - Dil ekle
+- [x] `PUT /api/resumes/languages.php` - Dil güncelle
+- [x] `DELETE /api/resumes/languages.php` - Dil sil
+- [x] `GET /api/resumes/certificates.php` - Sertifikaları getir
+- [x] `POST /api/resumes/certificates.php` - Sertifika ekle
+- [x] `PUT /api/resumes/certificates.php` - Sertifika güncelle
+- [x] `DELETE /api/resumes/certificates.php` - Sertifika sil
+
+### Profil Yönetimi (Bonus) ✅
+- [x] `pages/Profile/ProfilePage.jsx` - Profil sayfası (güncellenmiş)
+- [x] `pages/Profile/EditProfilePage.jsx` - Profil düzenleme
+- [x] `components/Profile/ProfileForm.jsx` - Profil formu (genişletilmiş)
+- [x] `components/Profile/ProfileInfo.jsx` - Profil bilgileri (genişletilmiş)
+- [x] `api/users/profile.php` - Profil API
+- [x] `api/users/upload-photo.php` - Fotoğraf yükleme
+- [x] `services/profileService.js` - Profil servisi
+
+### Yeni Profil Alanları
+- [x] Doğum tarihi
+- [x] Cinsiyet
+- [x] Adres
+- [x] Website/Portfolio
+- [x] Profil fotoğrafı (kalıcı)
 
 ---
 
-## Gün 7: Entegrasyon & Test (1 gün)
+## Gün 7: Entegrasyon & Test (1 gün) ✅
 
 ### Görevler
-- [ ] Tüm bileşenleri test etme
-- [ ] Hata düzeltme
-- [ ] UI/UX iyileştirmeleri
-- [ ] Responsive kontrol
+- [x] Özgeçmiş bileşenlerini test etme
+- [x] PDF indirme testi (oklch renk sorunu çözüldü)
+- [x] Profil güncelleme testi (foreign key sorunu çözüldü)
+- [x] UI/UX iyileştirmeleri
+- [x] Responsive kontrol
+- [x] Scroll to top özelliği eklendi
+- [x] Navigation scroll düzeltmeleri
+
+### Çözülen Sorunlar
+- [x] PDF indirme - oklch renk desteği sorunu
+- [x] Profil kaydetme - ilce_id foreign key hatası
+- [x] AuthStore kullanımı - setAuthUser is not a function
+- [x] Sayfa geçişlerinde scroll pozisyonu
+- [x] Edit sayfasında section scroll problemi
 
 ---
 
 ## 📊 Hafta 3 Hedefleri
 
 ### Tamamlanması Gerekenler
-- ✅ Mesajlaşma sistemi
+- ⏸️ Mesajlaşma sistemi (ertelendi)
 - ✅ Özgeçmiş oluşturma ve yönetimi
+- ✅ Profil yönetimi genişletildi
+- ✅ PDF indirme özelliği
+- ✅ Şablon sistemi (2 şablon)
 - ✅ Tüm bileşenler test edildi
 
 ### Başarı Kriterleri
-- [ ] Kullanıcılar mesajlaşabilir
-- [ ] Kullanıcılar özgeçmiş oluşturabilir ve düzenleyebilir
-- [ ] Tüm özellikler çalışıyor
+- ✅ Kullanıcılar özgeçmiş oluşturabilir ve düzenleyebilir
+- ✅ Kullanıcılar profillerini güncelleyebilir
+- ✅ PDF indirme çalışıyor (text-selectable)
+- ✅ Şablon değiştirme çalışıyor
+- ✅ Tüm CRUD işlemleri çalışıyor
 
 ---
 

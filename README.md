@@ -23,7 +23,7 @@
 
 Bu proje modern web teknolojileri ile geliştirilmektedir:
 
-### ✅ Frontend: React (İLERLİYOR - %40 TAMAMLANDI)
+### ✅ Frontend: React (İLERLİYOR - %75 TAMAMLANDI)
 - ⚛️ React 18 + Vite
 - 🎨 TailwindCSS ile modern tasarım
 - 🧭 React Router ile sayfa yönetimi
@@ -38,11 +38,13 @@ Bu proje modern web teknolojileri ile geliştirilmektedir:
   - İş İlanları (Jobs) - Liste, detay, filtreleme
   - Şirketler (Companies) - Liste, detay, profil
   - Başvurular (Applications) - Kullanıcı ve şirket başvuruları
-  - Profil (Profile) - Görüntüleme ve düzenleme
+  - Profil (Profile) - Görüntüleme ve düzenleme (genişletilmiş)
+  - Özgeçmiş (Resume) - Oluşturma, düzenleme, önizleme, PDF indirme
   - Kayıtlı İşler (Saved Jobs)
   - Hakkımızda (About)
   - İletişim (Contact)
   - SSS (FAQ)
+  - Şirket Oluşturma (Company Create)
 
 ### ✅ Backend: PHP + MySQL (TAMAMLANDI)
 - 🐘 PHP 7.4+ ile RESTful API
@@ -230,8 +232,12 @@ IsBul/
 - ✅ İş ilanlarına başvurma
 - ✅ Başvuru durumlarını takip etme
 - ✅ İş ilanlarını kaydetme
-- ✅ Profil yönetimi ve düzenleme
-- ✅ Özgeçmiş oluşturma ve düzenleme
+- ✅ Profil yönetimi ve düzenleme (genişletilmiş: doğum tarihi, cinsiyet, adres, website)
+- ✅ Profil fotoğrafı yükleme (kalıcı)
+- ✅ Özgeçmiş oluşturma ve düzenleme (tam özellikli)
+- ✅ İş deneyimi, eğitim, beceriler, diller, sertifikalar yönetimi
+- ✅ Özgeçmiş önizleme (2 şablon: Klasik & Minimal)
+- ✅ PDF olarak indirme (text-selectable)
 - ✅ Şirket profillerini görüntüleme
 - 🔄 Mesajlaşma sistemi (yapılacak)
 - 🔄 Firmaları takip etme ve değerlendirme (yapılacak)
@@ -281,10 +287,29 @@ IsBul/
 - ✅ `GET /api/applications/job.php?ilan_id=` - İlana yapılan başvurular (Şirket - Auth gerekli)
 - ✅ `PUT /api/applications/update-status.php` - Başvuru durumu güncelle (Şirket - Auth gerekli)
 
-#### 📄 Özgeçmişler (3)
-- ✅ `GET /api/resumes/get.php` - Kullanıcının özgeçmişi (Auth gerekli)
-- ✅ `POST /api/resumes/create.php` - Özgeçmiş oluştur (Auth gerekli)
-- ✅ `PUT /api/resumes/update.php` - Özgeçmiş güncelle (Auth gerekli)
+#### 📄 Özgeçmişler (16)
+- ✅ `GET /api/resumes/get-full.php` - Tam özgeçmiş getir (Auth gerekli)
+- ✅ `GET /api/resumes/settings.php` - Özgeçmiş ayarları getir
+- ✅ `POST /api/resumes/settings.php` - Özgeçmiş ayarları kaydet
+- ✅ `GET /api/resumes/experience.php` - İş deneyimleri
+- ✅ `POST /api/resumes/experience.php` - Deneyim ekle
+- ✅ `PUT /api/resumes/experience.php` - Deneyim güncelle
+- ✅ `DELETE /api/resumes/experience.php` - Deneyim sil
+- ✅ `GET /api/resumes/education.php` - Eğitimler
+- ✅ `POST /api/resumes/education.php` - Eğitim ekle
+- ✅ `PUT /api/resumes/education.php` - Eğitim güncelle
+- ✅ `DELETE /api/resumes/education.php` - Eğitim sil
+- ✅ `GET /api/resumes/skills.php` - Beceriler
+- ✅ `POST /api/resumes/skills.php` - Beceri ekle
+- ✅ `DELETE /api/resumes/skills.php` - Beceri sil
+- ✅ `GET /api/resumes/languages.php` - Diller
+- ✅ `POST /api/resumes/languages.php` - Dil ekle
+- ✅ `PUT /api/resumes/languages.php` - Dil güncelle
+- ✅ `DELETE /api/resumes/languages.php` - Dil sil
+- ✅ `GET /api/resumes/certificates.php` - Sertifikalar
+- ✅ `POST /api/resumes/certificates.php` - Sertifika ekle
+- ✅ `PUT /api/resumes/certificates.php` - Sertifika güncelle
+- ✅ `DELETE /api/resumes/certificates.php` - Sertifika sil
 
 #### 💬 Mesajlar (3)
 - ✅ `POST /api/messages/send.php` - Mesaj gönder (Auth gerekli)
@@ -308,20 +333,21 @@ IsBul/
 | **İş İlanları** | 5 | ✅ Tamamlandı |
 | **Şirketler** | 3 | ✅ Tamamlandı |
 | **Başvurular** | 4 | ✅ Tamamlandı |
-| **Özgeçmişler** | 3 | ✅ Tamamlandı |
+| **Özgeçmişler** | 16 | ✅ Tamamlandı |
 | **Mesajlar** | 3 | ✅ Tamamlandı |
+| **Kullanıcılar** | 3 | ✅ Tamamlandı |
 | **Kategoriler** | 1 | ✅ Tamamlandı |
 | **Lokasyonlar** | 2 | ✅ Tamamlandı |
-| **TOPLAM** | **26** | **✅ %100** |
+| **TOPLAM** | **42** | **✅ %100** |
 
 ---
 
 ### 🔄 Geliştirilecek Endpoints (İleride)
 
-#### Kullanıcılar
-- 🔄 `GET /api/users/profile.php` - Profil bilgisi
-- 🔄 `PUT /api/users/profile.php` - Profil güncelle
-- 🔄 `POST /api/users/upload-photo.php` - Profil fotoğrafı yükle
+#### Kullanıcılar (3)
+- ✅ `GET /api/users/profile.php` - Profil bilgisi (Auth gerekli)
+- ✅ `PUT /api/users/profile.php` - Profil güncelle (Auth gerekli)
+- ✅ `POST /api/users/upload-photo.php` - Profil fotoğrafı yükle (Auth gerekli)
 
 #### Değerlendirmeler
 - 🔄 `POST /api/ratings/create.php` - Şirket değerlendirmesi yap
@@ -578,11 +604,13 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 
 ## 📊 Proje İstatistikleri
 
-- ✅ **Backend**: %100 Tamamlandı (6 Model + 26 Endpoint)
-- ✅ **Frontend**: %40 Tamamlandı (12 sayfa + bileşenler hazır)
+- ✅ **Backend**: %100 Tamamlandı (6 Model + 42 Endpoint)
+- ✅ **Frontend**: %75 Tamamlandı (16 sayfa + 30+ bileşen hazır)
 - ✅ **Database**: %100 Tamamlandı (Migrations & Seeds)
 - ✅ **UI/UX**: Modern ve responsive tasarım
-- 📅 **Tahmini Tamamlanma**: [15.11.2025]
+- ✅ **Özgeçmiş Sistemi**: %90 Tamamlandı
+- ✅ **Profil Yönetimi**: %100 Tamamlandı
+- 📅 **Tahmini Tamamlanma**: [01.11.2025]
 
 ### Detaylı İlerleme
 
@@ -593,18 +621,27 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 | **Database Migrations** | %100 | ✅ Tamamlandı |
 | **Database Seeds** | %100 | ✅ Tamamlandı |
 | **Authentication** | %100 | ✅ Tamamlandı |
-| **Frontend Pages** | %40 | 🔄 Devam Ediyor |
-| **UI Components** | %40 | 🔄 Devam Ediyor |
-| **UI/UX Design** | %60 | 🔄 Devam Ediyor |
-| **Testing** | %0 | ⏳ Başlanmadı |
+| **Frontend Pages** | %75 | 🔄 Devam Ediyor |
+| **UI Components** | %70 | 🔄 Devam Ediyor |
+| **UI/UX Design** | %80 | 🔄 Devam Ediyor |
+| **Özgeçmiş Sistemi** | %90 | ✅ Neredeyse Tamamlandı |
+| **Profil Yönetimi** | %100 | ✅ Tamamlandı |
+| **PDF İndirme** | %100 | ✅ Tamamlandı |
+| **Testing** | %20 | 🔄 Başladı |
 
-### 🎨 Son Güncellemeler (02 Ekim 2025)
-- ✅ Modern Login ve Register sayfaları tasarımı
-- ✅ Sayfa geçiş animasyonları eklendi
-- ✅ Footer tasarımı güncellendi
-- ✅ Hakkımızda, İletişim ve SSS sayfaları eklendi
-- ✅ Database migrations ve seeds dosyaları hazırlandı
-- ✅ 15 kategori, 30 şehir, 15 sektör verisi eklendi
+### 🎨 Son Güncellemeler (13 Ekim 2025)
+- ✅ Özgeçmiş sistemi tamamlandı (5 bölüm: Deneyim, Eğitim, Beceriler, Diller, Sertifikalar)
+- ✅ 2 özgeçmiş şablonu eklendi (Klasik & Minimal)
+- ✅ PDF indirme özelliği (text-selectable, çok sayfalı)
+- ✅ Profil yönetimi genişletildi (doğum tarihi, cinsiyet, adres, website)
+- ✅ Profil fotoğrafı yükleme sistemi (kalıcı)
+- ✅ Scroll to top özelliği eklendi
+- ✅ 16 özgeçmiş API endpoint'i eklendi
+- ✅ 3 profil API endpoint'i eklendi
+- ✅ Tab-based navigation ile özgeçmiş düzenleme
+- ✅ Real-time önizleme sistemi
+- ✅ Şablon değiştirme özelliği
+- ✅ Görünürlük ayarları (Herkese Açık, Sadece Şirketler, Gizli)
 
 ---
 
@@ -615,8 +652,9 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 Bitirme projesi için ❤️ ile yapıldı
 
 **Proje Durumu**: 🔄 Aktif Geliştirme  
-**Versiyon**: 1.0.0  
-**Son Güncelleme**: 2025-10-02  
-**Teknoloji**: React + PHP + MySQL
+**Versiyon**: 1.3.0  
+**Son Güncelleme**: 2025-10-13  
+**Teknoloji**: React + PHP + MySQL  
+**İlerleme**: %75 Tamamlandı
 
 </div>

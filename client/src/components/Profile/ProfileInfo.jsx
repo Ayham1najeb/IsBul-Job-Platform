@@ -2,9 +2,11 @@
  * Profil Bilgileri Bileşeni
  * Kullanıcı profil bilgilerini gösterir
  */
-import { User, Mail, Phone, MapPin, Briefcase, Calendar } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, Calendar, Globe, Home, Users } from 'lucide-react';
 
 const ProfileInfo = ({ user }) => {
+  console.log('ProfileInfo - User data:', user);
+  
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <h2 className="text-xl font-bold text-gray-900 mb-6">Profil Bilgileri</h2>
@@ -64,6 +66,63 @@ const ProfileInfo = ({ user }) => {
             </div>
           </div>
         </div>
+
+        {/* Doğum Tarihi */}
+        {user.dogum_tarihi && (
+          <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-gray-600">Doğum Tarihi</div>
+              <div className="font-medium text-gray-900">
+                {new Date(user.dogum_tarihi).toLocaleDateString('tr-TR')}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cinsiyet */}
+        {user.cinsiyet && (
+          <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <Users className="w-5 h-5 text-gray-400 mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-gray-600">Cinsiyet</div>
+              <div className="font-medium text-gray-900">
+                {user.cinsiyet === 'erkek' && 'Erkek'}
+                {user.cinsiyet === 'kadin' && 'Kadın'}
+                {user.cinsiyet === 'diger' && 'Diğer'}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Adres */}
+        {user.adres && (
+          <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <Home className="w-5 h-5 text-gray-400 mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-gray-600">Adres</div>
+              <div className="font-medium text-gray-900">{user.adres}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Website */}
+        {user.website && (
+          <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <Globe className="w-5 h-5 text-gray-400 mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-gray-600">Website</div>
+              <a 
+                href={user.website} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-medium text-blue-600 hover:underline"
+              >
+                {user.website}
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Üyelik Tarihi */}
         <div className="flex items-start gap-3">

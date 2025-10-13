@@ -74,27 +74,33 @@ const MyApplicationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Başlık */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Briefcase className="w-8 h-8 text-primary-600" />
-            Başvurularım
-          </h1>
-          <p className="text-gray-600 mt-2">
-            {stats.toplam} başvuru
-          </p>
+        <div className="mb-8 animate-fade-in">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+              <Briefcase className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Başvurularım
+              </h1>
+              <p className="text-gray-600">
+                {stats.toplam} başvuru yaptınız
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* İstatistikler */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 animate-slide-up">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`p-4 rounded-xl border-2 transition-all shadow-md hover:shadow-lg ${
               filterStatus === 'all'
-                ? 'border-primary-500 bg-primary-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 bg-white hover:border-blue-200'
             }`}
           >
             <div className="text-2xl font-bold text-gray-900">{stats.toplam}</div>
@@ -103,10 +109,10 @@ const MyApplicationsPage = () => {
 
           <button
             onClick={() => setFilterStatus('beklemede')}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`p-4 rounded-xl border-2 transition-all shadow-md hover:shadow-lg ${
               filterStatus === 'beklemede'
                 ? 'border-yellow-500 bg-yellow-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                : 'border-gray-200 bg-white hover:border-yellow-200'
             }`}
           >
             <div className="text-2xl font-bold text-yellow-600">{stats.beklemede}</div>
@@ -115,10 +121,10 @@ const MyApplicationsPage = () => {
 
           <button
             onClick={() => setFilterStatus('inceleniyor')}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`p-4 rounded-xl border-2 transition-all shadow-md hover:shadow-lg ${
               filterStatus === 'inceleniyor'
                 ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                : 'border-gray-200 bg-white hover:border-blue-200'
             }`}
           >
             <div className="text-2xl font-bold text-blue-600">{stats.inceleniyor}</div>
@@ -127,10 +133,10 @@ const MyApplicationsPage = () => {
 
           <button
             onClick={() => setFilterStatus('kabul')}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`p-4 rounded-xl border-2 transition-all shadow-md hover:shadow-lg ${
               filterStatus === 'kabul'
                 ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                : 'border-gray-200 bg-white hover:border-green-200'
             }`}
           >
             <div className="text-2xl font-bold text-green-600">{stats.kabul}</div>
@@ -139,10 +145,10 @@ const MyApplicationsPage = () => {
 
           <button
             onClick={() => setFilterStatus('red')}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`p-4 rounded-xl border-2 transition-all shadow-md hover:shadow-lg ${
               filterStatus === 'red'
                 ? 'border-red-500 bg-red-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                : 'border-gray-200 bg-white hover:border-red-200'
             }`}
           >
             <div className="text-2xl font-bold text-red-600">{stats.red}</div>

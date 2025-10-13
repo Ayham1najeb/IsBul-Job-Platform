@@ -49,7 +49,9 @@ if(!empty($data->email) && !empty($data->sifre)) {
                 "soyisim" => $userData['soyisim'],
                 "email" => $userData['email'],
                 "telefon" => $userData['telefon'],
+                "sehir" => $userData['sehir_id'],
                 "rol" => $userData['rol'],
+                "profil_foto" => $userData['profil_foto'],
                 "profil_resmi" => $userData['profil_resmi']
             )
         ));
