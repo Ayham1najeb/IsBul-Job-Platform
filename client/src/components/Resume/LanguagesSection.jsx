@@ -25,14 +25,16 @@ const LanguagesSection = ({ languages, onUpdate }) => {
     try {
       if (editingId) {
         await resumeService.updateLanguage({ ...formData, id: editingId });
+        alert('✅ Dil başarıyla güncellendi!');
       } else {
         await resumeService.addLanguage(formData);
+        alert('✅ Dil başarıyla eklendi!');
       }
       resetForm();
       onUpdate();
     } catch (error) {
       console.error('Hata:', error);
-      alert('İşlem başarısız oldu');
+      alert('❌ İşlem başarısız oldu: ' + (error.response?.data?.mesaj || error.message));
     }
   };
 

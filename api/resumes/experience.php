@@ -59,17 +59,24 @@ try {
                        :halen_calisiyor, :aciklama, :sehir, :sektor, :sira)";
             
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $bitis_tarihi = $data->bitis_tarihi ?? null;
+            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
+            $aciklama = $data->aciklama ?? null;
+            $sehir = $data->sehir ?? null;
+            $sektor = $data->sektor ?? null;
+            $sira = isset($data->sira) ? $data->sira : 0;
+            
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':sirket_adi', $data->sirket_adi);
             $stmt->bindParam(':pozisyon', $data->pozisyon);
             $stmt->bindParam(':baslangic_tarihi', $data->baslangic_tarihi);
-            $stmt->bindParam(':bitis_tarihi', $data->bitis_tarihi ?? null);
-            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
+            $stmt->bindParam(':bitis_tarihi', $bitis_tarihi);
             $stmt->bindParam(':halen_calisiyor', $halen_calisiyor);
-            $stmt->bindParam(':aciklama', $data->aciklama ?? null);
-            $stmt->bindParam(':sehir', $data->sehir ?? null);
-            $stmt->bindParam(':sektor', $data->sektor ?? null);
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $stmt->bindParam(':aciklama', $aciklama);
+            $stmt->bindParam(':sehir', $sehir);
+            $stmt->bindParam(':sektor', $sektor);
             $stmt->bindParam(':sira', $sira);
             
             if ($stmt->execute()) {
@@ -103,18 +110,25 @@ try {
                       WHERE id = :id AND kullanici_id = :kullanici_id";
             
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $bitis_tarihi = $data->bitis_tarihi ?? null;
+            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
+            $aciklama = $data->aciklama ?? null;
+            $sehir = $data->sehir ?? null;
+            $sektor = $data->sektor ?? null;
+            $sira = isset($data->sira) ? $data->sira : 0;
+            
             $stmt->bindParam(':id', $data->id);
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':sirket_adi', $data->sirket_adi);
             $stmt->bindParam(':pozisyon', $data->pozisyon);
             $stmt->bindParam(':baslangic_tarihi', $data->baslangic_tarihi);
-            $stmt->bindParam(':bitis_tarihi', $data->bitis_tarihi ?? null);
-            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
+            $stmt->bindParam(':bitis_tarihi', $bitis_tarihi);
             $stmt->bindParam(':halen_calisiyor', $halen_calisiyor);
-            $stmt->bindParam(':aciklama', $data->aciklama ?? null);
-            $stmt->bindParam(':sehir', $data->sehir ?? null);
-            $stmt->bindParam(':sektor', $data->sektor ?? null);
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $stmt->bindParam(':aciklama', $aciklama);
+            $stmt->bindParam(':sehir', $sehir);
+            $stmt->bindParam(':sektor', $sektor);
             $stmt->bindParam(':sira', $sira);
             
             if ($stmt->execute()) {

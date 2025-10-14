@@ -35,13 +35,21 @@ try {
                       (kullanici_id, dil_adi, seviye, okuma_seviyesi, yazma_seviyesi, konusma_seviyesi, sertifika) 
                       VALUES (:kullanici_id, :dil_adi, :seviye, :okuma_seviyesi, :yazma_seviyesi, :konusma_seviyesi, :sertifika)";
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $seviye = $data->seviye ?? 'orta';
+            $okuma_seviyesi = $data->okuma_seviyesi ?? 'orta';
+            $yazma_seviyesi = $data->yazma_seviyesi ?? 'orta';
+            $konusma_seviyesi = $data->konusma_seviyesi ?? 'orta';
+            $sertifika = $data->sertifika ?? null;
+            
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':dil_adi', $data->dil_adi);
-            $stmt->bindParam(':seviye', $data->seviye ?? 'orta');
-            $stmt->bindParam(':okuma_seviyesi', $data->okuma_seviyesi ?? 'orta');
-            $stmt->bindParam(':yazma_seviyesi', $data->yazma_seviyesi ?? 'orta');
-            $stmt->bindParam(':konusma_seviyesi', $data->konusma_seviyesi ?? 'orta');
-            $stmt->bindParam(':sertifika', $data->sertifika ?? null);
+            $stmt->bindParam(':seviye', $seviye);
+            $stmt->bindParam(':okuma_seviyesi', $okuma_seviyesi);
+            $stmt->bindParam(':yazma_seviyesi', $yazma_seviyesi);
+            $stmt->bindParam(':konusma_seviyesi', $konusma_seviyesi);
+            $stmt->bindParam(':sertifika', $sertifika);
             $stmt->execute();
             echo json_encode(['success' => true, 'mesaj' => 'Dil eklendi', 'id' => $db->lastInsertId()], JSON_UNESCAPED_UNICODE);
             break;

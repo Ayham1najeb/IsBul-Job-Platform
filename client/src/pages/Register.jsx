@@ -30,10 +30,21 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(formData);
-      navigate('/dashboard');
+      const response = await register(formData);
+      console.log('Kayıt yanıtı:', response);
+      // Kayıt başarılı, email doğrulama sayfasına yönlendir
+      if (response.requiresVerification) {
+        navigate('/verify-email', { 
+          state: { 
+            email: formData.email
+          } 
+        });
+      }
     } catch (err) {
       console.error('Kayıt hatası:', err);
+      console.error('Hata detayı:', err.response?.data);
+      // Hata mesajını göster
+      alert('❌ Kayıt hatası: ' + (err.response?.data?.message || err.message));
     }
   };
 

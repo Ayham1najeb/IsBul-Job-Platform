@@ -77,7 +77,11 @@ class User {
      * @return array|false Kullanıcı bilgileri veya false
      */
     public function getUserByEmail() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
+        $query = "SELECT k.*, s.isim as sehir, i.isim as ilce 
+                  FROM " . $this->table_name . " k
+                  LEFT JOIN sehirler s ON k.sehir_id = s.id
+                  LEFT JOIN ilceler i ON k.ilce_id = i.id
+                  WHERE k.email = :email LIMIT 1";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":email", $this->email);

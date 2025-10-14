@@ -35,14 +35,21 @@ try {
                       (kullanici_id, sertifika_adi, kurum, tarih, gecerlilik_tarihi, sertifika_no, aciklama, dosya_url) 
                       VALUES (:kullanici_id, :sertifika_adi, :kurum, :tarih, :gecerlilik_tarihi, :sertifika_no, :aciklama, :dosya_url)";
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $gecerlilik_tarihi = $data->gecerlilik_tarihi ?? null;
+            $sertifika_no = $data->sertifika_no ?? null;
+            $aciklama = $data->aciklama ?? null;
+            $dosya_url = $data->dosya_url ?? null;
+            
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':sertifika_adi', $data->sertifika_adi);
             $stmt->bindParam(':kurum', $data->kurum);
             $stmt->bindParam(':tarih', $data->tarih);
-            $stmt->bindParam(':gecerlilik_tarihi', $data->gecerlilik_tarihi ?? null);
-            $stmt->bindParam(':sertifika_no', $data->sertifika_no ?? null);
-            $stmt->bindParam(':aciklama', $data->aciklama ?? null);
-            $stmt->bindParam(':dosya_url', $data->dosya_url ?? null);
+            $stmt->bindParam(':gecerlilik_tarihi', $gecerlilik_tarihi);
+            $stmt->bindParam(':sertifika_no', $sertifika_no);
+            $stmt->bindParam(':aciklama', $aciklama);
+            $stmt->bindParam(':dosya_url', $dosya_url);
             $stmt->execute();
             echo json_encode(['success' => true, 'mesaj' => 'Sertifika eklendi', 'id' => $db->lastInsertId()], JSON_UNESCAPED_UNICODE);
             break;

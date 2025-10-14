@@ -32,6 +32,8 @@ const ResumePreviewPage = () => {
     try {
       setLoading(true);
       const data = await resumeService.getFullResume();
+      console.log('Yüklenen özgeçmiş verisi:', data);
+      console.log('Deneyimler:', data.data?.deneyimler);
       setResumeData(data.data);
       if (data.data?.ayarlar?.pdf_template && data.data.ayarlar.pdf_template !== 'modern') {
         setSelectedTemplate(data.data.ayarlar.pdf_template);

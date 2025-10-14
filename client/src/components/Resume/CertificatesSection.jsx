@@ -22,14 +22,16 @@ const CertificatesSection = ({ certificates, onUpdate }) => {
     try {
       if (editingId) {
         await resumeService.updateCertificate({ ...formData, id: editingId });
+        alert('✅ Sertifika başarıyla güncellendi!');
       } else {
         await resumeService.addCertificate(formData);
+        alert('✅ Sertifika başarıyla eklendi!');
       }
       resetForm();
       onUpdate();
     } catch (error) {
       console.error('Hata:', error);
-      alert('İşlem başarısız oldu');
+      alert('❌ İşlem başarısız oldu: ' + (error.response?.data?.mesaj || error.message));
     }
   };
 

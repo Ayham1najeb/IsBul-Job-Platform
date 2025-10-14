@@ -18,6 +18,7 @@ const Login = () => {
   });
 
   const from = location.state?.from || '/dashboard';
+  const successMessage = location.state?.message;
 
   const handleChange = (e) => {
     setFormData({
@@ -74,6 +75,13 @@ const Login = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="bg-white/95 backdrop-blur-sm py-10 px-6 shadow-2xl sm:rounded-3xl sm:px-12 border border-gray-100 animate-scale-in" style={{animationDelay: '0.2s'}}>
+          {successMessage && (
+            <div className="mb-6 bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded-lg flex items-center gap-3 animate-slide-in-up shadow-sm">
+              <CheckCircle className="h-5 w-5 flex-shrink-0" />
+              <span className="text-sm font-medium">{successMessage}</span>
+            </div>
+          )}
+          
           {error && (
             <div className="mb-6 bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-lg flex items-center gap-3 animate-slide-in-up shadow-sm">
               <AlertCircle className="h-5 w-5 flex-shrink-0" />

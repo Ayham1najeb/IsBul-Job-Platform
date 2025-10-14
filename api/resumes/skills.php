@@ -35,11 +35,17 @@ try {
                       (kullanici_id, beceri_adi, kategori, seviye, yil_deneyim) 
                       VALUES (:kullanici_id, :beceri_adi, :kategori, :seviye, :yil_deneyim)";
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $kategori = $data->kategori ?? null;
+            $seviye = $data->seviye ?? 'orta';
+            $yil_deneyim = $data->yil_deneyim ?? 0;
+            
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':beceri_adi', $data->beceri_adi);
-            $stmt->bindParam(':kategori', $data->kategori ?? null);
-            $stmt->bindParam(':seviye', $data->seviye ?? 'orta');
-            $stmt->bindParam(':yil_deneyim', $data->yil_deneyim ?? 0);
+            $stmt->bindParam(':kategori', $kategori);
+            $stmt->bindParam(':seviye', $seviye);
+            $stmt->bindParam(':yil_deneyim', $yil_deneyim);
             $stmt->execute();
             echo json_encode(['success' => true, 'mesaj' => 'Beceri eklendi', 'id' => $db->lastInsertId()], JSON_UNESCAPED_UNICODE);
             break;

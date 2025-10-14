@@ -37,18 +37,26 @@ try {
                       VALUES (:kullanici_id, :okul_adi, :bolum, :derece, :baslangic_tarihi, :bitis_tarihi, 
                        :devam_ediyor, :not_ortalamasi, :aciklama, :sehir, :sira)";
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $derece = $data->derece ?? 'lisans';
+            $bitis_tarihi = $data->bitis_tarihi ?? null;
+            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
+            $not_ortalamasi = $data->not_ortalamasi ?? null;
+            $aciklama = $data->aciklama ?? null;
+            $sehir = $data->sehir ?? null;
+            $sira = isset($data->sira) ? $data->sira : 0;
+            
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':okul_adi', $data->okul_adi);
             $stmt->bindParam(':bolum', $data->bolum);
-            $stmt->bindParam(':derece', $data->derece ?? 'lisans');
+            $stmt->bindParam(':derece', $derece);
             $stmt->bindParam(':baslangic_tarihi', $data->baslangic_tarihi);
-            $stmt->bindParam(':bitis_tarihi', $data->bitis_tarihi ?? null);
-            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
+            $stmt->bindParam(':bitis_tarihi', $bitis_tarihi);
             $stmt->bindParam(':devam_ediyor', $devam);
-            $stmt->bindParam(':not_ortalamasi', $data->not_ortalamasi ?? null);
-            $stmt->bindParam(':aciklama', $data->aciklama ?? null);
-            $stmt->bindParam(':sehir', $data->sehir ?? null);
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $stmt->bindParam(':not_ortalamasi', $not_ortalamasi);
+            $stmt->bindParam(':aciklama', $aciklama);
+            $stmt->bindParam(':sehir', $sehir);
             $stmt->bindParam(':sira', $sira);
             $stmt->execute();
             echo json_encode(['success' => true, 'mesaj' => 'Eğitim eklendi', 'id' => $db->lastInsertId()], JSON_UNESCAPED_UNICODE);
@@ -61,19 +69,26 @@ try {
                       not_ortalamasi=:not_ortalamasi, aciklama=:aciklama, sehir=:sehir, sira=:sira
                       WHERE id=:id AND kullanici_id=:kullanici_id";
             $stmt = $db->prepare($query);
+            
+            // Değişkenlere ata
+            $bitis_tarihi = $data->bitis_tarihi ?? null;
+            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
+            $not_ortalamasi = $data->not_ortalamasi ?? null;
+            $aciklama = $data->aciklama ?? null;
+            $sehir = $data->sehir ?? null;
+            $sira = isset($data->sira) ? $data->sira : 0;
+            
             $stmt->bindParam(':id', $data->id);
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':okul_adi', $data->okul_adi);
             $stmt->bindParam(':bolum', $data->bolum);
             $stmt->bindParam(':derece', $data->derece);
             $stmt->bindParam(':baslangic_tarihi', $data->baslangic_tarihi);
-            $stmt->bindParam(':bitis_tarihi', $data->bitis_tarihi ?? null);
-            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
+            $stmt->bindParam(':bitis_tarihi', $bitis_tarihi);
             $stmt->bindParam(':devam_ediyor', $devam);
-            $stmt->bindParam(':not_ortalamasi', $data->not_ortalamasi ?? null);
-            $stmt->bindParam(':aciklama', $data->aciklama ?? null);
-            $stmt->bindParam(':sehir', $data->sehir ?? null);
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $stmt->bindParam(':not_ortalamasi', $not_ortalamasi);
+            $stmt->bindParam(':aciklama', $aciklama);
+            $stmt->bindParam(':sehir', $sehir);
             $stmt->bindParam(':sira', $sira);
             $stmt->execute();
             echo json_encode(['success' => true, 'mesaj' => 'Eğitim güncellendi'], JSON_UNESCAPED_UNICODE);

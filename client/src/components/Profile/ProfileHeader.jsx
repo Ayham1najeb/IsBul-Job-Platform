@@ -58,7 +58,7 @@ const ProfileHeader = ({ user, onPhotoUpload }) => {
             )}
 
             {/* Fotoğraf Yükleme Butonu */}
-            <label className={`absolute bottom-0 right-0 w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-primary-700 transition-colors shadow-lg ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <label className={`absolute bottom-0 right-0 w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center cursor-pointer hover:bg-black transition-colors shadow-lg border-2 border-white ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {uploading ? (
                 <Loader className="w-5 h-5 text-white animate-spin" />
               ) : (

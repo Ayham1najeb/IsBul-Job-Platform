@@ -22,10 +22,15 @@ $db = $database->getConnection();
 
 try {
     if ($method === 'GET') {
-        // Profil bilgilerini getir
-        $query = "SELECT id, isim, soyisim, email, telefon, dogum_tarihi, cinsiyet, 
-                  sehir_id, ilce_id, adres, profil_foto, profil_resmi, website, rol, kayit_tarihi
-                  FROM kullanicilar WHERE id = :user_id";
+        // Profil bilgilerini getir (şehir ve ilçe isimleriyle birlikte)
+        $query = "SELECT k.id, k.isim, k.soyisim, k.email, k.telefon, k.dogum_tarihi, k.cinsiyet, 
+                  k.sehir_id, k.ilce_id, k.adres, k.profil_foto, k.profil_resmi, k.website, k.rol, k.kayit_tarihi,
+                  s.isim as sehir,
+                  i.isim as ilce
+                  FROM kullanicilar k
+                  LEFT JOIN sehirler s ON k.sehir_id = s.id
+                  LEFT JOIN ilceler i ON k.ilce_id = i.id
+                  WHERE k.id = :user_id";
         $stmt = $db->prepare($query);
         $stmt->bindValue(':user_id', $user_id);
         $stmt->execute();

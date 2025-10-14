@@ -6,6 +6,9 @@ import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import VerifyEmail from './pages/VerifyEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import JobsPage from './pages/Jobs/JobsPage';
 import JobDetailPage from './pages/Jobs/JobDetailPage';
@@ -50,6 +53,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:id" element={<JobDetailPage />} />
             <Route path="/companies" element={<CompaniesPage />} />

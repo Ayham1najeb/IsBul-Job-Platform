@@ -21,17 +21,23 @@ const ExperienceSection = ({ experiences, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form gönderiliyor:', formData);
     try {
       if (editingId) {
-        await resumeService.updateExperience({ ...formData, id: editingId });
+        const response = await resumeService.updateExperience({ ...formData, id: editingId });
+        console.log('Güncelleme yanıtı:', response);
+        alert('✅ Deneyim başarıyla güncellendi!');
       } else {
-        await resumeService.addExperience(formData);
+        const response = await resumeService.addExperience(formData);
+        console.log('Ekleme yanıtı:', response);
+        alert('✅ Deneyim başarıyla eklendi!');
       }
       resetForm();
       onUpdate();
     } catch (error) {
-      console.error('Hata:', error);
-      alert('İşlem başarısız oldu');
+      console.error('Hata detayı:', error);
+      console.error('Hata yanıtı:', error.response);
+      alert('❌ İşlem başarısız oldu: ' + (error.response?.data?.mesaj || error.message));
     }
   };
 

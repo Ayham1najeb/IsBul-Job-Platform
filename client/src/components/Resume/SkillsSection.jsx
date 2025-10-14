@@ -25,19 +25,23 @@ const SkillsSection = ({ skills, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.beceri_adi.trim()) return;
+    
     try {
       await resumeService.addSkill(formData);
-      resetForm();
+      alert('✅ Beceri başarıyla eklendi!');
+      setFormData({ beceri_adi: '', seviye: 'orta' });
       onUpdate();
     } catch (error) {
       console.error('Hata:', error);
-      alert('İşlem başarısız oldu');
+      alert('❌ İşlem başarısız oldu: ' + (error.response?.data?.mesaj || error.message));
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await resumeService.deleteSkill(id);
+      alert('✅ Beceri başarıyla silindi!');
       onUpdate();
     } catch (error) {
       console.error('Silme hatası:', error);

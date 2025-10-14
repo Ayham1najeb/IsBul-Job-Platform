@@ -23,7 +23,8 @@ export const useAuthStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const data = await authService.register(userData);
-      set({ user: data.user, isAuthenticated: true, loading: false });
+      // لا نقوم بتسجيل الدخول تلقائياً، بل ننتظر التحقق من البريد
+      set({ loading: false });
       return data;
     } catch (error) {
       set({ error: error.response?.data?.message || 'Registration failed', loading: false });
