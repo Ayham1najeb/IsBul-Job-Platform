@@ -41,12 +41,12 @@ const ChangePasswordPage = () => {
 
     // Şifre kontrolü
     if (formData.new_password !== formData.confirm_password) {
-      alert('Yeni şifreler eşleşmiyor!');
+      alert('❌ Yeni şifreler eşleşmiyor!');
       return;
     }
 
     if (formData.new_password.length < 6) {
-      alert('Şifre en az 6 karakter olmalıdır!');
+      alert('❌ Şifre en az 6 karakter olmalıdır!');
       return;
     }
 
@@ -57,11 +57,20 @@ const ChangePasswordPage = () => {
         new_password: formData.new_password
       });
       
-      alert('Şifre başarıyla değiştirildi!');
-      navigate('/profile');
+      alert('✅ Şifre başarıyla değiştirildi!');
+      // Formu temizle
+      setFormData({
+        current_password: '',
+        new_password: '',
+        confirm_password: ''
+      });
+      // 1 saniye sonra profile'a dön
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1000);
     } catch (error) {
       console.error('Şifre değiştirme hatası:', error);
-      alert(error.response?.data?.mesaj || 'Şifre değiştirilemedi.');
+      alert('❌ ' + (error.response?.data?.mesaj || 'Şifre değiştirilemedi. Lütfen mevcut şifrenizi kontrol edin.'));
     } finally {
       setLoading(false);
     }
@@ -180,18 +189,19 @@ const ChangePasswordPage = () => {
             </div>
 
             {/* Butonlar */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium shadow-md hover:shadow-lg flex items-center justify-center gap-2"
               >
-                {loading ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}
+                <Lock className="w-5 h-5" />
+                {loading ? 'Kaydediliyor...' : 'Şifreyi Kaydet'}
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/profile')}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
               >
                 İptal
               </button>

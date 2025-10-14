@@ -19,7 +19,7 @@ export const userService = {
 
   // Şifre değiştir
   changePassword: async (passwordData) => {
-    const response = await api.put('/users/change-password.php', passwordData);
+    const response = await api.post('/users/change-password.php', passwordData);
     return response.data;
   },
 
