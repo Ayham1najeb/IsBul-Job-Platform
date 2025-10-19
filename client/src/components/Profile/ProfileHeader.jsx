@@ -4,17 +4,50 @@
  */
 import { useState } from 'react';
 import { User, Camera, Mail, Phone, MapPin, Calendar, Loader } from 'lucide-react';
+import ImageCropModal from './ImageCropModal';
 
 const ProfileHeader = ({ user, onPhotoUpload }) => {
   const [uploading, setUploading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showCropModal, setShowCropModal] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setUploading(true);
-      await onPhotoUpload(file);
+      // Dosya türü kontrolü
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('❌ Sadece resim dosyaları yüklenebilir (JPG, PNG, GIF, WEBP)');
+        return;
+      }
+
+      // Dosyayı oku ve düzenleme penceresini göster
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedImage(reader.result);
+        setShowCropModal(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCropComplete = async (croppedFile) => {
+    setShowCropModal(false);
+    setSelectedImage(null);
+    setUploading(true);
+    
+    try {
+      await onPhotoUpload(croppedFile);
+    } catch (error) {
+      console.error('Upload error:', error);
+    } finally {
       setUploading(false);
     }
+  };
+
+  const handleCropCancel = () => {
+    setShowCropModal(false);
+    setSelectedImage(null);
   };
 
   // Üyelik tarihi formatla
@@ -131,6 +164,15 @@ const ProfileHeader = ({ user, onPhotoUpload }) => {
           </div>
         </div>
       </div>
+
+      {/* Image Crop Modal */}
+      {showCropModal && (
+        <ImageCropModal
+          image={selectedImage}
+          onComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
   );
 };

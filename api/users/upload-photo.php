@@ -33,13 +33,16 @@ try {
     $file_type = mime_content_type($file['tmp_name']);
     
     if (!in_array($file_type, $allowed_types)) {
-        throw new Exception('Sadece resim dosyaları yüklenebilir (JPG, PNG, GIF, WEBP)');
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'mesaj' => 'Sadece resim dosyaları yüklenebilir (JPG, PNG, GIF, WEBP)'
+        ], JSON_UNESCAPED_UNICODE);
+        exit();
     }
     
-    // Dosya boyutu kontrolü (max 5MB)
-    if ($file['size'] > 5 * 1024 * 1024) {
-        throw new Exception('Dosya boyutu 5MB\'dan küçük olmalıdır');
-    }
+    // Dosya boyutu sınırı kaldırıldı çünkü sıkıştırma ön yüzde yapılıyor
+    // Resim zaten sıkıştırılmış olarak geliyor
     
     // Upload klasörünü oluştur
     $upload_dir = '../../uploads/profiles/';
@@ -74,7 +77,7 @@ try {
     
     // Yeni fotoğraf yolunu kaydet
     $photo_path = 'uploads/profiles/' . $filename;
-    $full_url = 'http://localhost/IsBul/' . $photo_path;
+    $full_url = 'http://localhost/IsBul-Job-Platform/' . $photo_path;
     
     $query = "UPDATE kullanicilar SET profil_foto = :profil_foto WHERE id = :id";
     $stmt = $db->prepare($query);

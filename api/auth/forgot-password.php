@@ -40,14 +40,12 @@ try {
     
     // Yeni kod oluştur
     $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-    $expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
     
     // Kodu kaydet
-    $query = "INSERT INTO verification_codes (email, code, expires_at) VALUES (:email, :code, :expires_at)";
+    $query = "INSERT INTO verification_codes (email, code, expires_at) VALUES (:email, :code, DATE_ADD(NOW(), INTERVAL 15 MINUTE))";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $data->email);
     $stmt->bindParam(':code', $code);
-    $stmt->bindParam(':expires_at', $expires_at);
     $stmt->execute();
     
     // E-posta gönder

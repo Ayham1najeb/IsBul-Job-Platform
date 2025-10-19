@@ -43,16 +43,14 @@ try {
         
         // Yeni kod oluştur
         $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        $expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
         
         $query = "INSERT INTO verification_codes (email, code, user_data, type, expires_at) 
-                  VALUES (:email, :code, :user_data, 'email_verification', :expires_at)";
+                  VALUES (:email, :code, :user_data, 'email_verification', DATE_ADD(NOW(), INTERVAL 15 MINUTE))";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':email', $data->email);
         $stmt->bindParam(':code', $code);
         $userDataJson = json_encode($userData);
         $stmt->bindParam(':user_data', $userDataJson);
-        $stmt->bindParam(':expires_at', $expires_at);
         $stmt->execute();
         
         // E-posta gönder
@@ -95,13 +93,11 @@ try {
         
         // Yeni kod oluştur
         $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        $expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
         
-        $query = "INSERT INTO verification_codes (email, code, type, expires_at) VALUES (:email, :code, 'email_verification', :expires_at)";
+        $query = "INSERT INTO verification_codes (email, code, type, expires_at) VALUES (:email, :code, 'email_verification', DATE_ADD(NOW(), INTERVAL 15 MINUTE))";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':email', $data->email);
         $stmt->bindParam(':code', $code);
-        $stmt->bindParam(':expires_at', $expires_at);
         $stmt->execute();
         
         // E-posta gönder

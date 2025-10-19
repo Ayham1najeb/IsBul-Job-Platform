@@ -46,24 +46,15 @@ const ProfilePage = () => {
   };
 
   const handlePhotoUpload = async (file) => {
-    // Dosya türü kontrolü
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
-      alert('Sadece resim dosyaları yüklenebilir (JPG, PNG, GIF, WEBP)');
-      return;
-    }
-
-    // Dosya boyutu kontrolü (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Dosya boyutu 5MB\'dan küçük olmalıdır');
-      return;
-    }
-
+    // Dosya boyutu kontrolü kaldırıldı çünkü sıkıştırma ProfileHeader'da yapılıyor
+    // Resim zaten sıkıştırılmış olarak geliyor
+    
     try {
       setUploading(true);
       const response = await profileService.uploadPhoto(file);
       
       console.log('Upload response:', response);
+      console.log('File size:', (file.size / 1024).toFixed(2) + ' KB');
       
       // Profili yeniden yükle
       await loadProfile();
