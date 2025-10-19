@@ -23,7 +23,7 @@
 
 Bu proje modern web teknolojileri ile geliştirilmektedir:
 
-### ✅ Frontend: React (İLERLİYOR - %75 TAMAMLANDI)
+### ✅ Frontend: React (İLERLİYOR - %85 TAMAMLANDI)
 - ⚛️ React 18 + Vite
 - 🎨 TailwindCSS ile modern tasarım
 - 🧭 React Router ile sayfa yönetimi
@@ -34,26 +34,31 @@ Bu proje modern web teknolojileri ile geliştirilmektedir:
   - Ana Sayfa (Home) - Modern hero section, kategoriler, istatistikler
   - Giriş (Login) - Gelişmiş tasarım, animasyonlar
   - Kayıt (Register) - Modern form, hesap tipi seçimi
-  - Dashboard - Kullanıcı paneli
-  - İş İlanları (Jobs) - Liste, detay, filtreleme
-  - Şirketler (Companies) - Liste, detay, profil
-  - Başvurular (Applications) - Kullanıcı ve şirket başvuruları
+  - Dashboard - Kullanıcı ve şirket panelleri (gelişmiş)
+  - İş İlanları (Jobs) - Liste, detay, filtreleme, başvuru
+  - Şirketler (Companies) - Liste, detay, profil (modern tasarım)
+  - Başvurular (Applications) - Kullanıcı ve şirket başvuruları (tam entegrasyon)
   - Profil (Profile) - Görüntüleme ve düzenleme (genişletilmiş)
-  - Özgeçmiş (Resume) - Oluşturma, düzenleme, önizleme, PDF indirme
+  - Özgeçmiş (Resume) - Oluşturma, düzenleme, önizleme, PDF indirme (diller + sertifikalar)
   - Kayıtlı İşler (Saved Jobs)
+  - Admin Panel - Kullanıcı, şirket, ilan yönetimi
   - Hakkımızda (About)
   - İletişim (Contact)
   - SSS (FAQ)
   - Şirket Oluşturma (Company Create)
+  - CV Görüntüleme (Güvenli - sadece ilgili şirketler)
 
-### ✅ Backend: PHP + MySQL (TAMAMLANDI)
+### ✅ Backend: PHP + MySQL (TAMAMLANDI - %95)
 - 🐘 PHP 7.4+ ile RESTful API
 - 💾 MySQL 5.7+ veritabanı
 - 🔐 JWT ile kimlik doğrulama
 - 🛡️ PDO ile güvenli veritabanı bağlantısı
 - 🌐 CORS yapılandırması
-- ✅ **6 Model + 26 Endpoint Hazır**
-- ✅ **Database Migrations & Seeds Hazır**
+- ✅ **8 Model + 50+ Endpoint Hazır**
+- ✅ **Database Schema & Setup Script Hazır**
+- ✅ **Başvuru Sistemi Entegrasyonu**
+- ✅ **CV Güvenlik Kontrolü**
+- ✅ **Resim Yönetimi (Taşınabilir)**
 
 ## 📖 Proje Hakkında
 
@@ -229,40 +234,48 @@ IsBul/
 - ✅ Hesap oluşturma ve giriş yapma
 - ✅ İş ilanlarını arama ve filtreleme
 - ✅ İş ilanı detaylarını görüntüleme
-- ✅ İş ilanlarına başvurma
+- ✅ İş ilanlarına başvurma (CV kontrolü ile)
 - ✅ Başvuru durumlarını takip etme
 - ✅ İş ilanlarını kaydetme
 - ✅ Profil yönetimi ve düzenleme (genişletilmiş: doğum tarihi, cinsiyet, adres, website)
-- ✅ Profil fotoğrafı yükleme (kalıcı)
+- ✅ Profil fotoğrafı yükleme (kalıcı, taşınabilir)
 - ✅ Özgeçmiş oluşturma ve düzenleme (tam özellikli)
 - ✅ İş deneyimi, eğitim, beceriler, diller, sertifikalar yönetimi
 - ✅ Özgeçmiş önizleme (2 şablon: Klasik & Minimal)
 - ✅ PDF olarak indirme (text-selectable)
 - ✅ Şirket profillerini görüntüleme
+- ✅ Dashboard (istatistikler, son aktiviteler)
 - 🔄 Mesajlaşma sistemi (yapılacak)
 - 🔄 Firmaları takip etme ve değerlendirme (yapılacak)
 
 ### 🏢 Firmalar İçin
-- ✅ Firma profili oluşturma ve düzenleme
+- ✅ Firma profili oluşturma ve düzenleme (modern tasarım)
+- ✅ Profil tamamlama kontrolü
 - ✅ İş ilanı yayınlama ve yönetme
-- ✅ Başvuruları inceleme ve yönetme
-- ✅ Başvuru durumu güncelleme
-- ✅ Şirket istatistikleri
-- ✅ Aday özgeçmişlerini görüntüleme
+- ✅ Başvuruları inceleme ve yönetme (tam entegrasyon)
+- ✅ Başvuru durumu güncelleme (beklemede, inceleniyor, kabul, red)
+- ✅ Aday özgeçmişlerini görüntüleme (güvenli - sadece başvuru yapanlar)
+- ✅ CV istatistikleri (deneyim, eğitim, beceri sayısı)
+- ✅ Şirket dashboard (istatistikler, hızlı erişim)
+- ✅ Başvuru sayısı gösterimi
 - 🔄 Aday filtreleme ve arama (geliştirilecek)
 - 🔄 Detaylı raporlar (yapılacak)
 - 🔄 Firma değerlendirmelerini görüntüleme (yapılacak)
 
 ### 👨‍💼 Yöneticiler İçin
-- 🔄 Kullanıcı ve firma yönetimi (yapılacak)
-- 🔄 İçerik moderasyonu (yapılacak)
+- ✅ Admin panel (modern tasarım)
+- ✅ Kullanıcı yönetimi (liste, düzenleme, silme)
+- ✅ Şirket yönetimi (onaylama, reddetme)
+- ✅ İlan moderasyonu
+- ✅ Platform istatistikleri
+- ✅ Kategori yönetimi
+- ✅ Şehir/İlçe yönetimi
 - 🔄 Sistem ayarları ve konfigürasyonu (yapılacak)
-- 🔄 İstatistikler ve raporlar (yapılacak)
-- 🔄 Kategori ve meslek yönetimi (yapılacak)
+- 🔄 Detaylı raporlar (yapılacak)
 
 ## 🔌 API Endpoints
 
-### ✅ Tamamlanan Backend API (26 Endpoint)
+### ✅ Tamamlanan Backend API (50+ Endpoint)
 
 #### 🔐 Kimlik Doğrulama (3)
 - ✅ `POST /api/auth/register.php` - Yeni kullanıcı kaydı
@@ -281,14 +294,16 @@ IsBul/
 - ✅ `GET /api/companies/detail.php?id=` - Şirket detayı + ilanları
 - ✅ `PUT /api/companies/update.php` - Şirket güncelle (Şirket - Auth gerekli)
 
-#### 📝 Başvurular (4)
-- ✅ `POST /api/applications/create.php` - Başvuru yap (İş Arayan - Auth gerekli)
+#### 📝 Başvurular (5)
+- ✅ `POST /api/applications/create.php` - Başvuru yap (CV kontrolü + çift başvuru engelleme)
 - ✅ `GET /api/applications/user.php` - Kullanıcının başvuruları (Auth gerekli)
 - ✅ `GET /api/applications/job.php?ilan_id=` - İlana yapılan başvurular (Şirket - Auth gerekli)
+- ✅ `GET /api/applications/company.php` - Şirketin tüm başvuruları (Şirket - Auth gerekli)
 - ✅ `PUT /api/applications/update-status.php` - Başvuru durumu güncelle (Şirket - Auth gerekli)
 
-#### 📄 Özgeçmişler (16)
+#### 📄 Özgeçmişler (22)
 - ✅ `GET /api/resumes/get-full.php` - Tam özgeçmiş getir (Auth gerekli)
+- ✅ `GET /api/resumes/user-resume.php?kullanici_id=` - Kullanıcı CV'si (Şirket - güvenli)
 - ✅ `GET /api/resumes/settings.php` - Özgeçmiş ayarları getir
 - ✅ `POST /api/resumes/settings.php` - Özgeçmiş ayarları kaydet
 - ✅ `GET /api/resumes/experience.php` - İş deneyimleri
@@ -301,6 +316,7 @@ IsBul/
 - ✅ `DELETE /api/resumes/education.php` - Eğitim sil
 - ✅ `GET /api/resumes/skills.php` - Beceriler
 - ✅ `POST /api/resumes/skills.php` - Beceri ekle
+- ✅ `PUT /api/resumes/skills.php` - Beceri güncelle
 - ✅ `DELETE /api/resumes/skills.php` - Beceri sil
 - ✅ `GET /api/resumes/languages.php` - Diller
 - ✅ `POST /api/resumes/languages.php` - Dil ekle

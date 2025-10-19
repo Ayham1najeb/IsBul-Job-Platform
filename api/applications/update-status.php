@@ -3,6 +3,7 @@
  * Başvuru Durumu Güncelleme Endpoint
  */
 
+require_once '../config/cors_headers.php';
 include_once '../config/database.php';
 include_once '../models/Application.php';
 include_once '../middleware/auth.php';

@@ -17,6 +17,18 @@ export const companyService = {
     return response.data;
   },
 
+  // Kendi şirket bilgilerini getir
+  getMyCompany: async () => {
+    const response = await api.get('/companies/my-company.php');
+    return response.data;
+  },
+
+  // Şirket profili oluştur veya güncelle
+  createOrUpdateCompany: async (companyData) => {
+    const response = await api.post('/companies/create-or-update.php', companyData);
+    return response.data;
+  },
+
   // Şirket profili oluştur
   createCompany: async (companyData) => {
     const response = await api.post('/companies/create.php', companyData);

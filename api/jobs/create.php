@@ -4,6 +4,7 @@
  * Yeni iş ilanı oluşturur (Sadece şirketler)
  */
 
+require_once '../config/cors_headers.php';
 include_once '../config/database.php';
 include_once '../models/Job.php';
 include_once '../middleware/auth.php';
@@ -28,6 +29,51 @@ if ($user_data->rol !== 'firma') {
 $database = new Database();
 $db = $database->getConnection();
 
+// Kullanıcının firma kaydını kontrol et
+$firma_query = "SELECT * FROM firmalar WHERE kullanici_id = :kullanici_id LIMIT 1";
+$firma_stmt = $db->prepare($firma_query);
+$firma_stmt->bindParam(':kullanici_id', $user_data->id);
+$firma_stmt->execute();
+$firma = $firma_stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$firma) {
+    http_response_code(400);
+    echo json_encode(array("mesaj" => "Önce firma profilinizi oluşturmalısınız."), JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+// Profil tamamlanma yüzdesini hesapla
+$completion = 0;
+$total_fields = 10;
+$filled_fields = 0;
+
+if (!empty($firma['isim'])) $filled_fields++;
+if (!empty($firma['kategori_id'])) $filled_fields++;
+if (!empty($firma['sehir_id'])) $filled_fields++;
+if (!empty($firma['telefon'])) $filled_fields++;
+if (!empty($firma['email'])) $filled_fields++;
+if (!empty($firma['website'])) $filled_fields++;
+if (!empty($firma['adres'])) $filled_fields++;
+if (!empty($firma['aciklama'])) $filled_fields++;
+if (!empty($firma['kurulus_tarihi'])) $filled_fields++;
+if (!empty($firma['calisan_sayisi'])) $filled_fields++;
+
+$completion = round(($filled_fields / $total_fields) * 100);
+
+// %50'den az ise ilan oluşturamaz
+if ($completion < 50) {
+    http_response_code(403);
+    echo json_encode(
+        array(
+            "mesaj" => "İlan yayınlayabilmek için profilinizi en az %50 tamamlamalısınız. Şu an: %" . $completion,
+            "profil_tamamlanma" => $completion,
+            "minimum_gerekli" => 50
+        ),
+        JSON_UNESCAPED_UNICODE
+    );
+    exit();
+}
+
 $job = new Job($db);
 
 // POST verilerini al
@@ -47,7 +93,7 @@ if (
 
 // İlan verilerini ayarla
 $job->baslik = $data->baslik;
-$job->firma_id = $user_data->id; // Giriş yapan şirketin ID'si
+$job->firma_id = $firma['id']; // Şirketin ID'si (firmalar tablosundan)
 $job->kategori_id = $data->kategori_id;
 $job->sehir_id = $data->sehir_id;
 $job->ilce_id = isset($data->ilce_id) ? $data->ilce_id : null;

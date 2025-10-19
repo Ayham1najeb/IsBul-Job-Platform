@@ -6,7 +6,7 @@
 
 class Job {
     private $conn;
-    private $table_name = "Ilanlar";
+    private $table_name = "ilanlar";
     
     // İlan özellikleri
     public $id;
@@ -46,11 +46,11 @@ class Job {
                     s.isim as sehir_isim,
                     il.isim as ilce_isim
                   FROM " . $this->table_name . " i
-                  LEFT JOIN Firmalar f ON i.firma_id = f.id
-                  LEFT JOIN Kategoriler k ON i.kategori_id = k.id
-                  LEFT JOIN Sehirler s ON i.sehir_id = s.id
-                  LEFT JOIN Ilceler il ON i.ilce_id = il.id
-                  WHERE i.aktif = 1";
+                  LEFT JOIN firmalar f ON i.firma_id = f.id
+                  LEFT JOIN kategoriler k ON i.kategori_id = k.id
+                  LEFT JOIN sehirler s ON i.sehir_id = s.id
+                  LEFT JOIN ilceler il ON i.ilce_id = il.id
+                  WHERE 1=1";
         
         // Filtreleme
         if (!empty($filters['kategori_id'])) {
@@ -117,10 +117,10 @@ class Job {
                     s.isim as sehir_isim,
                     il.isim as ilce_isim
                   FROM " . $this->table_name . " i
-                  LEFT JOIN Firmalar f ON i.firma_id = f.id
-                  LEFT JOIN Kategoriler k ON i.kategori_id = k.id
-                  LEFT JOIN Sehirler s ON i.sehir_id = s.id
-                  LEFT JOIN Ilceler il ON i.ilce_id = il.id
+                  LEFT JOIN firmalar f ON i.firma_id = f.id
+                  LEFT JOIN kategoriler k ON i.kategori_id = k.id
+                  LEFT JOIN sehirler s ON i.sehir_id = s.id
+                  LEFT JOIN ilceler il ON i.ilce_id = il.id
                   WHERE i.id = :id
                   LIMIT 1";
         
@@ -184,21 +184,29 @@ class Job {
         $this->gereksinimler = htmlspecialchars(strip_tags($this->gereksinimler));
         $this->sorumluluklar = htmlspecialchars(strip_tags($this->sorumluluklar));
         
+        // Boş değerleri NULL'a çevir
+        $ilce_id = !empty($this->ilce_id) ? $this->ilce_id : null;
+        $gereksinimler = !empty($this->gereksinimler) ? $this->gereksinimler : null;
+        $sorumluluklar = !empty($this->sorumluluklar) ? $this->sorumluluklar : null;
+        $maas_aralik = !empty($this->maas_aralik) ? $this->maas_aralik : null;
+        $egitim_seviyesi = !empty($this->egitim_seviyesi) ? $this->egitim_seviyesi : null;
+        $son_basvuru_tarihi = !empty($this->son_basvuru_tarihi) ? $this->son_basvuru_tarihi : null;
+        
         // Parametreleri bağla
         $stmt->bindParam(':baslik', $this->baslik);
         $stmt->bindParam(':firma_id', $this->firma_id);
         $stmt->bindParam(':kategori_id', $this->kategori_id);
         $stmt->bindParam(':sehir_id', $this->sehir_id);
-        $stmt->bindParam(':ilce_id', $this->ilce_id);
+        $stmt->bindParam(':ilce_id', $ilce_id);
         $stmt->bindParam(':aciklama', $this->aciklama);
-        $stmt->bindParam(':gereksinimler', $this->gereksinimler);
-        $stmt->bindParam(':sorumluluklar', $this->sorumluluklar);
-        $stmt->bindParam(':maas_aralik', $this->maas_aralik);
+        $stmt->bindParam(':gereksinimler', $gereksinimler);
+        $stmt->bindParam(':sorumluluklar', $sorumluluklar);
+        $stmt->bindParam(':maas_aralik', $maas_aralik);
         $stmt->bindParam(':calisma_sekli', $this->calisma_sekli);
         $stmt->bindParam(':pozisyon_seviyesi', $this->pozisyon_seviyesi);
         $stmt->bindParam(':deneyim_yili', $this->deneyim_yili);
-        $stmt->bindParam(':egitim_seviyesi', $this->egitim_seviyesi);
-        $stmt->bindParam(':son_basvuru_tarihi', $this->son_basvuru_tarihi);
+        $stmt->bindParam(':egitim_seviyesi', $egitim_seviyesi);
+        $stmt->bindParam(':son_basvuru_tarihi', $son_basvuru_tarihi);
         
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();

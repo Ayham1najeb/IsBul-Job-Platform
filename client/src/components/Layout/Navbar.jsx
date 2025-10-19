@@ -157,25 +157,6 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                {/* Şirket Menüsü */}
-                {user?.rol === 'firma' && (
-                  <>
-                    <Link
-                      to="/company/dashboard"
-                      className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
-                    >
-                      <Building2 className="h-4 w-4" />
-                      Panel
-                    </Link>
-                    <Link
-                      to="/company/jobs"
-                      className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                    >
-                      İlanlarım
-                    </Link>
-                  </>
-                )}
-
                 {/* Admin Menüsü */}
                 {user?.rol === 'admin' && (
                   <>
@@ -314,13 +295,23 @@ const Navbar = () => {
 
                       <div className="border-t border-gray-100 my-2"></div>
 
-                      {user?.rol !== 'admin' && (
+                      {user?.rol === 'is_arayan' && (
                         <Link
                           to="/profile/edit"
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
                         >
                           <Settings className="w-4 h-4" />
                           Ayarlar
+                        </Link>
+                      )}
+                      
+                      {user?.rol === 'firma' && (
+                        <Link
+                          to="/company/profile"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        >
+                          <Settings className="w-4 h-4" />
+                          Şirket Profili
                         </Link>
                       )}
                       

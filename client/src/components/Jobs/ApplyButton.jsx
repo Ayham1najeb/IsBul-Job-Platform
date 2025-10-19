@@ -16,7 +16,7 @@ const ApplyButton = ({ jobId, jobTitle, onApply }) => {
 
   const handleOpenModal = () => {
     // Giriş kontrolü
-    if (!isAuthenticated()) {
+    if (!isAuthenticated) {
       navigate('/login', { state: { from: `/jobs/${jobId}` } });
       return;
     }
@@ -55,13 +55,13 @@ const ApplyButton = ({ jobId, jobTitle, onApply }) => {
   }
 
   // Giriş yapılmamışsa
-  if (!isAuthenticated()) {
+  if (!isAuthenticated) {
     return (
       <button
         onClick={handleOpenModal}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl text-lg"
       >
-        <Send className="w-5 h-5" />
+        <Send className="w-6 h-6" />
         Başvur (Giriş Gerekli)
       </button>
     );
@@ -84,10 +84,10 @@ const ApplyButton = ({ jobId, jobTitle, onApply }) => {
     <>
       <button
         onClick={handleOpenModal}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg hover:shadow-xl text-lg"
       >
-        <Send className="w-5 h-5" />
-        Başvur
+        <Send className="w-6 h-6" />
+        Hemen Başvur
       </button>
 
       {/* Başvuru Modal */}

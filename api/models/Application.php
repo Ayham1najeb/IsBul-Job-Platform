@@ -6,12 +6,11 @@
 
 class Application {
     private $conn;
-    private $table_name = "Basvurular";
+    private $table_name = "basvurular";
     
     public $id;
     public $kullanici_id;
     public $ilan_id;
-    public $ozgecmis_id;
     public $basvuru_tarihi;
     public $durum;
     public $notlar;
@@ -39,7 +38,6 @@ class Application {
         $query = "INSERT INTO " . $this->table_name . "
                   SET kullanici_id = :kullanici_id,
                       ilan_id = :ilan_id,
-                      ozgecmis_id = :ozgecmis_id,
                       basvuru_tarihi = NOW(),
                       durum = 'beklemede',
                       notlar = :notlar";
@@ -48,7 +46,6 @@ class Application {
         
         $stmt->bindParam(':kullanici_id', $this->kullanici_id);
         $stmt->bindParam(':ilan_id', $this->ilan_id);
-        $stmt->bindParam(':ozgecmis_id', $this->ozgecmis_id);
         $stmt->bindParam(':notlar', $this->notlar);
         
         if ($stmt->execute()) {
@@ -92,10 +89,11 @@ class Application {
                     k.soyisim,
                     k.email,
                     k.telefon,
-                    o.dosya_url as ozgecmis_url
+                    (SELECT COUNT(*) FROM is_deneyimleri WHERE kullanici_id = b.kullanici_id) as deneyim_sayisi,
+                    (SELECT COUNT(*) FROM egitim_bilgileri WHERE kullanici_id = b.kullanici_id) as egitim_sayisi,
+                    (SELECT COUNT(*) FROM kullanici_becerileri_detay WHERE kullanici_id = b.kullanici_id) as beceri_sayisi
                   FROM " . $this->table_name . " b
-                  LEFT JOIN Kullanicilar k ON b.kullanici_id = k.id
-                  LEFT JOIN Ozgecmisler o ON b.ozgecmis_id = o.id
+                  LEFT JOIN kullanicilar k ON b.kullanici_id = k.id
                   WHERE b.ilan_id = :ilan_id
                   ORDER BY b.basvuru_tarihi DESC";
         

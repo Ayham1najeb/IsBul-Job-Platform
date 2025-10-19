@@ -106,6 +106,22 @@ fi
 
 echo -e "${GREEN}└─ ✓ Veritabanı başarıyla kuruldu${NC}"
 
+# Super Admin oluştur
+echo "└─ Super Admin oluşturuluyor..."
+SETUP_ADMIN="$PROJECT_DIR/api/database/setup_super_admin.php"
+if [ -f "$SETUP_ADMIN" ]; then
+    "$XAMPP_DIR/bin/php" "$SETUP_ADMIN" 2>/dev/null
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}└─ ✓ Super Admin oluşturuldu${NC}"
+        echo "└─ Email: ayhamoy2@gmail.com"
+        echo "└─ Şifre: ABCabc123321#"
+    else
+        echo -e "${RED}└─ ⚠️  Super Admin oluşturulamadı!${NC}"
+    fi
+else
+    echo -e "${RED}└─ ⚠️  setup_super_admin.php bulunamadı!${NC}"
+fi
+
 # ============================================
 # Backend Kontrolü (PHP)
 # ============================================

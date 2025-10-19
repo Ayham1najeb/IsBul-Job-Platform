@@ -61,12 +61,12 @@ try {
             $stmt = $db->prepare($query);
             
             // Değişkenlere ata
-            $bitis_tarihi = $data->bitis_tarihi ?? null;
-            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
-            $aciklama = $data->aciklama ?? null;
-            $sehir = $data->sehir ?? null;
-            $sektor = $data->sektor ?? null;
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $bitis_tarihi = !empty($data->bitis_tarihi) ? $data->bitis_tarihi : null;
+            $halen_calisiyor = isset($data->halen_calisiyor) && $data->halen_calisiyor ? 1 : 0;
+            $aciklama = !empty($data->aciklama) ? $data->aciklama : null;
+            $sehir = !empty($data->sehir) ? $data->sehir : null;
+            $sektor = !empty($data->sektor) ? $data->sektor : null;
+            $sira = isset($data->sira) ? (int)$data->sira : 0;
             
             $stmt->bindParam(':kullanici_id', $user_id);
             $stmt->bindParam(':sirket_adi', $data->sirket_adi);
@@ -112,12 +112,12 @@ try {
             $stmt = $db->prepare($query);
             
             // Değişkenlere ata
-            $bitis_tarihi = $data->bitis_tarihi ?? null;
-            $halen_calisiyor = isset($data->halen_calisiyor) ? $data->halen_calisiyor : false;
-            $aciklama = $data->aciklama ?? null;
-            $sehir = $data->sehir ?? null;
-            $sektor = $data->sektor ?? null;
-            $sira = isset($data->sira) ? $data->sira : 0;
+            $bitis_tarihi = !empty($data->bitis_tarihi) ? $data->bitis_tarihi : null;
+            $halen_calisiyor = isset($data->halen_calisiyor) && $data->halen_calisiyor ? 1 : 0;
+            $aciklama = !empty($data->aciklama) ? $data->aciklama : null;
+            $sehir = !empty($data->sehir) ? $data->sehir : null;
+            $sektor = !empty($data->sektor) ? $data->sektor : null;
+            $sira = isset($data->sira) ? (int)$data->sira : 0;
             
             $stmt->bindParam(':id', $data->id);
             $stmt->bindParam(':kullanici_id', $user_id);

@@ -4,6 +4,8 @@
  */
 import { useState } from 'react';
 import { User, Camera, Mail, Phone, MapPin, Calendar, Loader } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
+import { getImageUrl } from '../../utils/imageHelper';
 import ImageCropModal from './ImageCropModal';
 
 const ProfileHeader = ({ user, onPhotoUpload }) => {
@@ -77,7 +79,7 @@ const ProfileHeader = ({ user, onPhotoUpload }) => {
             {user.profil_foto ? (
               <img
                 key={user.profil_foto}
-                src={user.profil_foto}
+                src={getImageUrl(user.profil_foto)}
                 alt={user.isim}
                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
                 onError={(e) => {

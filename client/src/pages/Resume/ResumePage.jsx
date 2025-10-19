@@ -17,7 +17,8 @@ import {
   Edit,
   Download,
   Eye,
-  Settings
+  Settings,
+  Globe
 } from 'lucide-react';
 
 const ResumePage = () => {
@@ -265,6 +266,89 @@ const ResumePage = () => {
                     className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
                   >
                     Becerilerinizi ekleyin
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Diller */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900">Diller</h2>
+                </div>
+                <Link
+                  to="/resume/edit#languages"
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  Düzenle
+                </Link>
+              </div>
+              {resumeData?.diller && resumeData.diller.length > 0 ? (
+                <div className="space-y-3">
+                  {resumeData.diller.map((lang) => (
+                    <div key={lang.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                      <h3 className="font-semibold text-gray-900">{lang.dil_adi}</h3>
+                      <p className="text-sm text-gray-600">
+                        Seviye: {lang.seviye} • Okuma: {lang.okuma_seviyesi} • Yazma: {lang.yazma_seviyesi} • Konuşma: {lang.konusma_seviyesi}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Globe className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">Henüz dil eklenmemiş</p>
+                  <Link
+                    to="/resume/edit#languages"
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
+                  >
+                    Dillerinizi ekleyin
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Sertifikalar */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <Award className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900">Sertifikalar</h2>
+                </div>
+                <Link
+                  to="/resume/edit#certificates"
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  Düzenle
+                </Link>
+              </div>
+              {resumeData?.sertifikalar && resumeData.sertifikalar.length > 0 ? (
+                <div className="space-y-3">
+                  {resumeData.sertifikalar.map((cert) => (
+                    <div key={cert.id} className="border-l-4 border-orange-500 pl-4 py-2">
+                      <h3 className="font-semibold text-gray-900">{cert.sertifika_adi}</h3>
+                      <p className="text-gray-700">{cert.kurum}</p>
+                      <p className="text-sm text-gray-600">
+                        {new Date(cert.tarih).toLocaleDateString('tr-TR')}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Award className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">Henüz sertifika eklenmemiş</p>
+                  <Link
+                    to="/resume/edit#certificates"
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
+                  >
+                    Sertifikalarınızı ekleyin
                   </Link>
                 </div>
               )}

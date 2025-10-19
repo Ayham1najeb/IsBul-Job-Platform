@@ -28,9 +28,13 @@ desktop.ini
 *.swo
 *~
 
-# Uploads (optional - حذف هذا السطر إذا أردت رفع الملفات)
-uploads/*
-!uploads/.gitkeep
+# Uploads - لا ترفع الملفات المرفوعة من المستخدمين
+uploads/profiles/*
+!uploads/profiles/.gitkeep
+uploads/companies/*
+!uploads/companies/.gitkeep
+uploads/certificates/*
+!uploads/certificates/.gitkeep
 
 # Temporary files
 *.tmp

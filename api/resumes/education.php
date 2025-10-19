@@ -40,11 +40,11 @@ try {
             
             // Değişkenlere ata
             $derece = $data->derece ?? 'lisans';
-            $bitis_tarihi = $data->bitis_tarihi ?? null;
-            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
-            $not_ortalamasi = $data->not_ortalamasi ?? null;
-            $aciklama = $data->aciklama ?? null;
-            $sehir = $data->sehir ?? null;
+            $bitis_tarihi = !empty($data->bitis_tarihi) ? $data->bitis_tarihi : null;
+            $devam = isset($data->devam_ediyor) && $data->devam_ediyor ? 1 : 0;
+            $not_ortalamasi = !empty($data->not_ortalamasi) ? $data->not_ortalamasi : null;
+            $aciklama = !empty($data->aciklama) ? $data->aciklama : null;
+            $sehir = !empty($data->sehir) ? $data->sehir : null;
             $sira = isset($data->sira) ? $data->sira : 0;
             
             $stmt->bindParam(':kullanici_id', $user_id);
@@ -71,11 +71,11 @@ try {
             $stmt = $db->prepare($query);
             
             // Değişkenlere ata
-            $bitis_tarihi = $data->bitis_tarihi ?? null;
-            $devam = isset($data->devam_ediyor) ? $data->devam_ediyor : false;
-            $not_ortalamasi = $data->not_ortalamasi ?? null;
-            $aciklama = $data->aciklama ?? null;
-            $sehir = $data->sehir ?? null;
+            $bitis_tarihi = !empty($data->bitis_tarihi) ? $data->bitis_tarihi : null;
+            $devam = isset($data->devam_ediyor) && $data->devam_ediyor ? 1 : 0;
+            $not_ortalamasi = !empty($data->not_ortalamasi) ? $data->not_ortalamasi : null;
+            $aciklama = !empty($data->aciklama) ? $data->aciklama : null;
+            $sehir = !empty($data->sehir) ? $data->sehir : null;
             $sira = isset($data->sira) ? $data->sira : 0;
             
             $stmt->bindParam(':id', $data->id);

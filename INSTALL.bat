@@ -104,6 +104,22 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo └─ ✓ Veritabanı başarıyla kuruldu
 
+:: Super Admin oluştur
+echo └─ Super Admin oluşturuluyor...
+set "SETUP_ADMIN=%PROJECT_DIR%api\database\setup_super_admin.php"
+if exist "%SETUP_ADMIN%" (
+    "%XAMPP_DIR%\php\php.exe" "%SETUP_ADMIN%" 2>nul
+    if %ERRORLEVEL% EQU 0 (
+        echo └─ ✓ Super Admin oluşturuldu
+        echo └─ Email: ayhamoy2@gmail.com
+        echo └─ Şifre: ABCabc123321#
+    ) else (
+        echo └─ ⚠️  Super Admin oluşturulamadı!
+    )
+) else (
+    echo └─ ⚠️  setup_super_admin.php bulunamadı!
+)
+
 :: ============================================
 :: Backend Kontrolü (PHP)
 :: ============================================
@@ -138,11 +154,12 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo └─ ✓ Node.js bulundu
-node --version
+for /f "tokens=*" %%i in ('node --version') do set NODE_VERSION=%%i
+echo └─ Node.js sürümü: %NODE_VERSION%
 
 :: node_modules kontrolü
 if not exist "node_modules" (
-    echo └─ Bağımlılıklar yükleniyor (bu birkaç dakika sürebilir)...
+    echo └─ Bağımlılıklar yükleniyor ^(bu birkaç dakika sürebilir^)...
     call npm install
     if %ERRORLEVEL% NEQ 0 (
         echo └─ ⚠️  Bağımlılıklar yüklenemedi!

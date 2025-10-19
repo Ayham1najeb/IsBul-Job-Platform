@@ -11,6 +11,12 @@ export const resumeService = {
     return response.data;
   },
 
+  // Kullanıcı özgeçmişi getir (Şirket için)
+  getUserResume: async (kullaniciId) => {
+    const response = await api.get(`/resumes/user-resume.php?kullanici_id=${kullaniciId}`);
+    return response.data;
+  },
+
   // Ayarlar
   getSettings: async () => {
     const response = await api.get('/resumes/settings.php');

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout/Layout';
+import CompanyLayout from './components/Layout/CompanyLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import GuestRoute from './components/GuestRoute';
 import ScrollToTop from './components/ScrollToTop';
@@ -20,6 +21,8 @@ import CreateCompanyPage from './pages/Company/CreateCompanyPage';
 import CreateJobPage from './pages/Company/CreateJobPage';
 import ManageJobsPage from './pages/Company/ManageJobsPage';
 import CompanyApplicationsPage from './pages/Company/ApplicationsPage';
+import CompanyProfile from './pages/Company/CompanyProfile';
+import ViewApplicantResume from './pages/Company/ViewApplicantResume';
 import MyApplicationsPage from './pages/Applications/MyApplicationsPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import EditProfilePage from './pages/Profile/EditProfilePage';
@@ -171,12 +174,23 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* Company Routes */}
+          </Route>
+
+          {/* Company Routes - Özel Layout */}
+          <Route element={<CompanyLayout />}>
             <Route
               path="/company/dashboard"
               element={
                 <ProtectedRoute requireCompany>
                   <CompanyDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company/profile"
+              element={
+                <ProtectedRoute requireCompany>
+                  <CompanyProfile />
                 </ProtectedRoute>
               }
             />
@@ -212,6 +226,18 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/company/applicant-resume/:kullaniciId/:basvuruId"
+              element={
+                <ProtectedRoute requireCompany>
+                  <ViewApplicantResume />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          {/* Normal Layout için devam */}
+          <Route element={<Layout />}>
             
             {/* Admin Routes */}
             <Route

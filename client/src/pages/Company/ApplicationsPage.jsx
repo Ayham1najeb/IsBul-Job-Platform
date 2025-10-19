@@ -30,10 +30,9 @@ const ApplicationsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedJob) {
-      loadApplications(selectedJob);
-    }
-  }, [selectedJob]);
+    // Tüm başvuruları yükle
+    loadApplications();
+  }, []);
 
   useEffect(() => {
     filterApplications();
@@ -61,7 +60,7 @@ const ApplicationsPage = () => {
       setError(null);
       setSelectedApplication(null);
 
-      const data = await applicationService.getJobApplications(jobId);
+      const data = await applicationService.getCompanyApplications();
       setApplications(data.kayitlar || []);
     } catch (err) {
       console.error('Başvurular yüklenemedi:', err);
@@ -152,11 +151,14 @@ const ApplicationsPage = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
           >
             <option value="">İlan Seçin</option>
-            {jobs.map((job) => (
-              <option key={job.id} value={job.id}>
-                {job.baslik} ({job.basvuru_sayisi || 0} başvuru)
-              </option>
-            ))}
+            {jobs.map((job) => {
+              const jobApplicationCount = applications.filter(app => app.ilan_id === job.id).length;
+              return (
+                <option key={job.id} value={job.id}>
+                  {job.baslik} ({jobApplicationCount} başvuru)
+                </option>
+              );
+            })}
           </select>
         </div>
 

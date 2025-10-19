@@ -2,10 +2,13 @@
  * Başvuru Detay Bileşeni
  * Başvuru ve aday detaylarını gösterir
  */
-import { User, Mail, Phone, Calendar, FileText, Download } from 'lucide-react';
+import { useState } from 'react';
+import { User, Mail, Phone, Calendar, FileText, Download, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import ApplicationStatus from '../Applications/ApplicationStatus';
 
 const ApplicationDetail = ({ application }) => {
+  const navigate = useNavigate();
   // Tarih formatla
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -103,21 +106,35 @@ const ApplicationDetail = ({ application }) => {
       )}
 
       {/* Özgeçmiş */}
-      {application.ozgecmis_url && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Özgeçmiş</h3>
-          <a
-            href={application.ozgecmis_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-3 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors"
-          >
-            <FileText className="w-5 h-5" />
-            <span className="font-medium">Özgeçmişi Görüntüle</span>
-            <Download className="w-4 h-4 ml-auto" />
-          </a>
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200 p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+          <FileText className="w-5 h-5 mr-2 text-blue-600" />
+          Özgeçmiş Bilgileri
+        </h3>
+        
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="text-center p-3 bg-white rounded-lg">
+            <div className="text-2xl font-bold text-blue-600">{application.deneyim_sayisi || 0}</div>
+            <div className="text-xs text-gray-600">Deneyim</div>
+          </div>
+          <div className="text-center p-3 bg-white rounded-lg">
+            <div className="text-2xl font-bold text-green-600">{application.egitim_sayisi || 0}</div>
+            <div className="text-xs text-gray-600">Eğitim</div>
+          </div>
+          <div className="text-center p-3 bg-white rounded-lg">
+            <div className="text-2xl font-bold text-purple-600">{application.beceri_sayisi || 0}</div>
+            <div className="text-xs text-gray-600">Beceri</div>
+          </div>
         </div>
-      )}
+        
+        <button
+          onClick={() => navigate(`/company/applicant-resume/${application.kullanici_id}/${application.id}`)}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg font-semibold"
+        >
+          <Eye className="w-5 h-5" />
+          <span>Özgeçmişi Görüntüle</span>
+        </button>
+      </div>
     </div>
   );
 };

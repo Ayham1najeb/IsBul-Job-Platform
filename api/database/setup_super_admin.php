@@ -16,12 +16,25 @@ try {
     $db->exec($query);
     echo "✅ is_super_admin sütunu eklendi\n";
     
+    // Önce Super Admin'in zaten var olup olmadığını kontrol et
+    $query = "SELECT id, email FROM kullanicilar WHERE is_super_admin = TRUE LIMIT 1";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $existingSuperAdmin = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($existingSuperAdmin) {
+        echo "ℹ️  Super Admin zaten mevcut\n";
+        echo "📧 Email: " . $existingSuperAdmin['email'] . "\n";
+        echo "⚠️  Yeni Super Admin oluşturulmadı\n";
+        exit(0);
+    }
+    
     // Super Admin şifresini hash'le
     $email = 'ayhamoy2@gmail.com';
     $password = 'ABCabc123321#';
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     
-    // Super Admin'in var olup olmadığını kontrol et
+    // Email ile kullanıcı var mı kontrol et
     $query = "SELECT id FROM kullanicilar WHERE email = :email";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $email);

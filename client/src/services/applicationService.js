@@ -23,6 +23,12 @@ export const applicationService = {
     return response.data;
   },
 
+  // Şirketin tüm başvurularını getir
+  getCompanyApplications: async () => {
+    const response = await api.get('/applications/company.php');
+    return response.data;
+  },
+
   // Başvuru durumunu güncelle (Şirket için)
   updateApplicationStatus: async (id, durum) => {
     const response = await api.put('/applications/update-status.php', { id, durum });
