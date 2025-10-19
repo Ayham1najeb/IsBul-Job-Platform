@@ -2,6 +2,7 @@
  * Kontrol Paneli Bileşeni
  * Kullanıcı ana kontrol paneli
  */
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { Link } from 'react-router-dom';
 import { 
@@ -17,11 +18,31 @@ import {
   ArrowRight,
   Eye,
   Send,
-  CheckCircle
+  CheckCircle,
+  Loader
 } from 'lucide-react';
+import { userService } from '../services/userService';
 
 const Dashboard = () => {
   const { user } = useAuthStore();
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadStats();
+  }, []);
+
+  const loadStats = async () => {
+    try {
+      setLoading(true);
+      const response = await userService.getDashboardStats();
+      setStats(response.data);
+    } catch (error) {
+      console.error('İstatistikler yüklenemedi:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   const quickActions = user?.rol === 'is_arayan' ? [
@@ -35,6 +56,17 @@ const Dashboard = () => {
     { icon: MessageSquare, label: 'Mesajlar', path: '/messages', color: 'purple' },
     { icon: User, label: 'Başvurular', path: '/company/applications', color: 'orange' },
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader className="w-12 h-12 text-primary-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
@@ -84,57 +116,115 @@ const Dashboard = () => {
 
         {/* İstatistikler */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Link to="/saved-jobs" className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm font-medium">Kayıtlı İşler</p>
-                <p className="text-3xl font-bold mt-2">0</p>
-                <p className="text-blue-100 text-xs mt-1">İş ilanı</p>
-              </div>
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                <Bookmark className="h-7 w-7" />
-              </div>
-            </div>
-          </Link>
+          {user?.rol === 'is_arayan' ? (
+            <>
+              <Link to="/saved-jobs" className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-100 text-sm font-medium">Kayıtlı İşler</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.kayitli_isler || 0}</p>
+                    <p className="text-blue-100 text-xs mt-1">İş ilanı</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Bookmark className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
 
-          <Link to="/applications" className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm font-medium">Başvurular</p>
-                <p className="text-3xl font-bold mt-2">0</p>
-                <p className="text-green-100 text-xs mt-1">Başvuru</p>
-              </div>
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                <Send className="h-7 w-7" />
-              </div>
-            </div>
-          </Link>
+              <Link to="/applications" className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">Başvurular</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.toplam_basvuru || 0}</p>
+                    <p className="text-green-100 text-xs mt-1">Başvuru</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Send className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
 
-          <Link to="/messages" className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm font-medium">Mesajlar</p>
-                <p className="text-3xl font-bold mt-2">0</p>
-                <p className="text-purple-100 text-xs mt-1">Yeni mesaj</p>
-              </div>
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                <MessageSquare className="h-7 w-7" />
-              </div>
-            </div>
-          </Link>
+              <Link to="/messages" className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-100 text-sm font-medium">Mesajlar</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.mesaj_sayisi || 0}</p>
+                    <p className="text-purple-100 text-xs mt-1">Mesaj</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <MessageSquare className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
 
-          <Link to="/profile" className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm font-medium">Profil</p>
-                <p className="text-2xl font-bold mt-2">%60</p>
-                <p className="text-orange-100 text-xs mt-1">Tamamlandı</p>
-              </div>
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                <User className="h-7 w-7" />
-              </div>
-            </div>
-          </Link>
+              <Link to="/profile" className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-100 text-sm font-medium">Profil</p>
+                    <p className="text-2xl font-bold mt-2">%{stats?.profil_tamamlama || 0}</p>
+                    <p className="text-orange-100 text-xs mt-1">Tamamlandı</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <User className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/company/jobs" className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-100 text-sm font-medium">Toplam İlan</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.toplam_ilan || 0}</p>
+                    <p className="text-blue-100 text-xs mt-1">İlan</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Briefcase className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
+
+              <Link to="/company/jobs" className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">Aktif İlan</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.aktif_ilan || 0}</p>
+                    <p className="text-green-100 text-xs mt-1">İlan</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
+
+              <Link to="/company/applications" className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-100 text-sm font-medium">Toplam Başvuru</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.toplam_basvuru || 0}</p>
+                    <p className="text-purple-100 text-xs mt-1">Başvuru</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <FileText className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
+
+              <Link to="/company/applications" className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg hover:shadow-xl p-6 text-white transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-100 text-sm font-medium">Bu Ay</p>
+                    <p className="text-3xl font-bold mt-2">{stats?.aylik_basvuru || 0}</p>
+                    <p className="text-orange-100 text-xs mt-1">Başvuru</p>
+                  </div>
+                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Clock className="h-7 w-7" />
+                  </div>
+                </div>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Alt Bölüm */}

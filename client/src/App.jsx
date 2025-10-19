@@ -32,6 +32,11 @@ import ResumePage from './pages/Resume/ResumePage';
 import EditResumePage from './pages/Resume/EditResumePage';
 import ResumePreviewPage from './pages/Resume/ResumePreviewPage';
 import ResumeSettingsPage from './pages/Resume/ResumeSettingsPage';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import UsersManagement from './pages/Admin/UsersManagement';
+import JobsManagement from './pages/Admin/JobsManagement';
+import CompaniesManagement from './pages/Admin/CompaniesManagement';
+import Statistics from './pages/Admin/Statistics';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -203,7 +208,48 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* Add more routes as needed */}
+            
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <UsersManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/jobs"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <JobsManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/companies"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <CompaniesManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/statistics"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <Statistics />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </Router>

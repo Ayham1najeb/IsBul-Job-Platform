@@ -34,4 +34,10 @@ export const userService = {
     });
     return response.data;
   },
+
+  // Dashboard istatistiklerini getir
+  getDashboardStats: async () => {
+    const response = await api.get('/users/dashboard-stats.php');
+    return response.data;
+  },
 };

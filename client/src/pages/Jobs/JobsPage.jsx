@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { jobService } from '../../services/jobService';
 import JobCard from '../../components/Jobs/JobCard';
 import JobFilters from '../../components/Jobs/JobFilters';
-import JobSearch from '../../components/Jobs/JobSearch';
+import AdvancedSearch from '../../components/Jobs/AdvancedSearch';
 import { Briefcase, Loader } from 'lucide-react';
 
 const JobsPage = () => {
@@ -96,9 +96,9 @@ const JobsPage = () => {
           </p>
         </div>
 
-        {/* Arama */}
+        {/* Gelişmiş Arama */}
         <div className="mb-6">
-          <JobSearch 
+          <AdvancedSearch 
             onSearch={handleSearch}
             initialValue={filters.arama}
           />
