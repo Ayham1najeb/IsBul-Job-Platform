@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import GuestRoute from './components/GuestRoute';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -37,6 +38,8 @@ import UsersManagement from './pages/Admin/UsersManagement';
 import JobsManagement from './pages/Admin/JobsManagement';
 import CompaniesManagement from './pages/Admin/CompaniesManagement';
 import Statistics from './pages/Admin/Statistics';
+import VerifyAdmin from './pages/Admin/VerifyAdmin';
+import RoleConfirmation from './pages/RoleConfirmation';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -56,11 +59,12 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+            <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/role-confirmation" element={<ProtectedRoute><RoleConfirmation /></ProtectedRoute>} />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:id" element={<JobDetailPage />} />
             <Route path="/companies" element={<CompaniesPage />} />
@@ -71,11 +75,11 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
             
-            {/* Applications */}
+            {/* Applications - Sadece İş Arayanlar */}
             <Route
               path="/applications"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <MyApplicationsPage />
                 </ProtectedRoute>
               }
@@ -91,11 +95,11 @@ function App() {
               }
             />
             
-            {/* Resume */}
+            {/* Resume - Sadece İş Arayanlar */}
             <Route
               path="/resume"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <ResumePage />
                 </ProtectedRoute>
               }
@@ -103,7 +107,7 @@ function App() {
             <Route
               path="/resume/edit"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <EditResumePage />
                 </ProtectedRoute>
               }
@@ -111,7 +115,7 @@ function App() {
             <Route
               path="/resume/preview"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <ResumePreviewPage />
                 </ProtectedRoute>
               }
@@ -119,17 +123,17 @@ function App() {
             <Route
               path="/resume/settings"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <ResumeSettingsPage />
                 </ProtectedRoute>
               }
             />
             
-            {/* Saved Jobs */}
+            {/* Saved Jobs - Sadece İş Arayanlar */}
             <Route
               path="/saved-jobs"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <SavedJobsPage />
                 </ProtectedRoute>
               }
@@ -162,7 +166,7 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireJobSeeker>
                   <Dashboard />
                 </ProtectedRoute>
               }
@@ -171,7 +175,7 @@ function App() {
             <Route
               path="/company/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireCompany>
                   <CompanyDashboard />
                 </ProtectedRoute>
               }
@@ -179,7 +183,7 @@ function App() {
             <Route
               path="/company/create"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireCompany>
                   <CreateCompanyPage />
                 </ProtectedRoute>
               }
@@ -187,7 +191,7 @@ function App() {
             <Route
               path="/company/jobs"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireCompany>
                   <ManageJobsPage />
                 </ProtectedRoute>
               }
@@ -195,7 +199,7 @@ function App() {
             <Route
               path="/company/jobs/create"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireCompany>
                   <CreateJobPage />
                 </ProtectedRoute>
               }
@@ -203,7 +207,7 @@ function App() {
             <Route
               path="/company/applications"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireCompany>
                   <CompanyApplicationsPage />
                 </ProtectedRoute>
               }
@@ -249,6 +253,10 @@ function App() {
                   <Statistics />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/admin/verify"
+              element={<VerifyAdmin />}
             />
           </Route>
         </Routes>

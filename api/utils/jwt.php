@@ -99,4 +99,23 @@ class JWT {
         return null;
     }
 }
+
+/**
+ * Helper function - Token oluştur
+ * @param array $user Kullanıcı bilgileri
+ * @return string JWT token
+ */
+function generateToken($user) {
+    $token_payload = array(
+        "id" => $user['id'],
+        "isim" => $user['isim'],
+        "soyisim" => $user['soyisim'],
+        "email" => $user['email'],
+        "rol" => $user['rol'],
+        "is_super_admin" => isset($user['is_super_admin']) ? (bool)$user['is_super_admin'] : false,
+        "exp" => time() + (86400 * 30) // 30 gün
+    );
+    
+    return JWT::encode($token_payload);
+}
 ?>

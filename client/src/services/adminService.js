@@ -43,5 +43,28 @@ export const adminService = {
       reason
     });
     return response.data;
+  },
+
+  // Yeni admin ekle
+  addAdmin: async (email) => {
+    const response = await api.post('/admin/add-admin.php', { email });
+    return response.data;
+  },
+
+  // Admin doğrula
+  verifyAdmin: async (email, code) => {
+    const response = await api.post('/admin/verify-admin.php', {
+      email,
+      code
+    });
+    return response.data;
+  },
+
+  // Admin onayla
+  approveAdmin: async (userId) => {
+    const response = await api.post('/admin/approve-admin.php', {
+      user_id: userId
+    });
+    return response.data;
   }
 };

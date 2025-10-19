@@ -3,6 +3,7 @@
  * Şirketler Listesi Endpoint
  */
 
+require_once '../config/cors_headers.php';
 include_once '../config/database.php';
 include_once '../models/Company.php';
 

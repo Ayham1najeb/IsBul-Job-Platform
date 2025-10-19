@@ -4,7 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { Briefcase, User, LogOut, Menu, X, Bookmark, FileText, Building2, Bell, MessageSquare, FileUser, Settings } from 'lucide-react';
+import { Briefcase, User, LogOut, Menu, X, Bookmark, FileText, Building2, Bell, MessageSquare, FileUser, Settings, Shield, Users, BarChart3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NotificationBell from '../Notifications/NotificationBell';
 
@@ -46,17 +46,18 @@ const Navbar = () => {
 
           {/* Masaüstü Navigasyon */}
           <div className="hidden md:flex items-center space-x-1">
-            {/* İş İlanları Dropdown */}
-            <div className="relative group">
-              <Link
-                to="/jobs"
-                className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
-              >
-                İş İlanları
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
+            {/* İş İlanları Dropdown - Admin için gizle */}
+            {user?.rol !== 'admin' && (
+              <div className="relative group">
+                <Link
+                  to="/jobs"
+                  className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                >
+                  İş İlanları
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </Link>
               {/* Dropdown Menu */}
               <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
                 <Link to="/jobs?kategori=1" className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-t-lg">
@@ -79,17 +80,21 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
+            )}
 
-            {/* Şirketler Link */}
-            <Link
-              to="/companies"
-              className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
-              Şirketler
-            </Link>
+            {/* Şirketler Link - Admin için gizle */}
+            {user?.rol !== 'admin' && (
+              <Link
+                to="/companies"
+                className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Şirketler
+              </Link>
+            )}
 
-            {/* Keşfet Dropdown */}
-            <div className="relative group">
+            {/* Keşfet Dropdown - Admin için gizle */}
+            {user?.rol !== 'admin' && (
+              <div className="relative group">
               <button className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
                 Keşfet
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,6 +116,7 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
+            )}
 
             {isAuthenticated ? (
               <>
@@ -140,14 +146,16 @@ const Navbar = () => {
                   </>
                 )}
                 
-                {/* Mesajlar - Tüm kullanıcılar için */}
-                <Link
-                  to="/messages"
-                  className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
-                >
-                  <MessageSquare className="h-4 w-4" />
-                  Mesajlar
-                </Link>
+                {/* Mesajlar - Admin hariç */}
+                {user?.rol !== 'admin' && (
+                  <Link
+                    to="/messages"
+                    className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                    Mesajlar
+                  </Link>
+                )}
 
                 {/* Şirket Menüsü */}
                 {user?.rol === 'firma' && (
@@ -168,6 +176,33 @@ const Navbar = () => {
                   </>
                 )}
 
+                {/* Admin Menüsü */}
+                {user?.rol === 'admin' && (
+                  <>
+                    <Link
+                      to="/admin"
+                      className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <Shield className="h-4 w-4" />
+                      Admin Panel
+                    </Link>
+                    <Link
+                      to="/admin/users"
+                      className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <Users className="h-4 w-4" />
+                      Kullanıcılar
+                    </Link>
+                    <Link
+                      to="/admin/statistics"
+                      className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <BarChart3 className="h-4 w-4" />
+                      İstatistikler
+                    </Link>
+                  </>
+                )}
+
                 {/* Bildirimler */}
                 <NotificationBell />
 
@@ -181,9 +216,19 @@ const Navbar = () => {
                   {/* Dropdown */}
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden">
                     {/* Kullanıcı Bilgisi */}
-                    <div className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+                    <div className={`px-4 py-3 ${
+                      user?.rol === 'admin' 
+                        ? 'bg-gradient-to-r from-purple-600 to-purple-700' 
+                        : 'bg-gradient-to-r from-blue-600 to-blue-700'
+                    } text-white`}>
                       <p className="font-semibold">{user?.isim} {user?.soyisim}</p>
-                      <p className="text-xs text-blue-100">{user?.email}</p>
+                      <p className="text-xs opacity-90">{user?.email}</p>
+                      {user?.rol === 'admin' && (
+                        <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-white/20 rounded-full text-xs">
+                          <Shield className="w-3 h-3" />
+                          Admin
+                        </span>
+                      )}
                     </div>
 
                     {/* Menü İçeriği */}
@@ -196,7 +241,7 @@ const Navbar = () => {
                         Profilim
                       </Link>
                       <Link
-                        to="/dashboard"
+                        to={user?.rol === 'admin' ? '/admin' : user?.rol === 'firma' ? '/company/dashboard' : '/dashboard'}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
                       >
                         <Briefcase className="w-4 h-4" />
@@ -229,23 +274,55 @@ const Navbar = () => {
                         </>
                       )}
 
-                      <Link
-                        to="/messages"
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                        Mesajlar
-                      </Link>
+                      {/* Admin Menü Öğeleri */}
+                      {user?.rol === 'admin' && (
+                        <>
+                          <div className="border-t border-gray-100 my-2"></div>
+                          <Link
+                            to="/admin/users"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                          >
+                            <Users className="w-4 h-4" />
+                            Kullanıcı Yönetimi
+                          </Link>
+                          <Link
+                            to="/admin/jobs"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                          >
+                            <Briefcase className="w-4 h-4" />
+                            İlan Yönetimi
+                          </Link>
+                          <Link
+                            to="/admin/statistics"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                          >
+                            <BarChart3 className="w-4 h-4" />
+                            İstatistikler
+                          </Link>
+                        </>
+                      )}
+
+                      {user?.rol !== 'admin' && (
+                        <Link
+                          to="/messages"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          Mesajlar
+                        </Link>
+                      )}
 
                       <div className="border-t border-gray-100 my-2"></div>
 
-                      <Link
-                        to="/profile/edit"
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                      >
-                        <Settings className="w-4 h-4" />
-                        Ayarlar
-                      </Link>
+                      {user?.rol !== 'admin' && (
+                        <Link
+                          to="/profile/edit"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        >
+                          <Settings className="w-4 h-4" />
+                          Ayarlar
+                        </Link>
+                      )}
                       
                       <button
                         onClick={handleLogout}

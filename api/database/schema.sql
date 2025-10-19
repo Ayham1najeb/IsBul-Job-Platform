@@ -1,89 +1,217 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
+-- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for osx10.10 (x86_64)
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 13, 2025 at 05:58 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: isbul
+-- ------------------------------------------------------
+-- Server version	10.4.28-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `isbul`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `acililanlar`
 --
 
+DROP TABLE IF EXISTS `acililanlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `acililanlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ilan_id` int(11) DEFAULT NULL,
-  `bitis_tarihi` date DEFAULT NULL
+  `bitis_tarihi` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ilan_id` (`ilan_id`),
+  CONSTRAINT `acililanlar_ibfk_1` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `acililanlar`
+--
+
+LOCK TABLES `acililanlar` WRITE;
+/*!40000 ALTER TABLE `acililanlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `acililanlar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `basvurular`
 --
 
+DROP TABLE IF EXISTS `basvurular`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `basvurular` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `ilan_id` int(11) DEFAULT NULL,
   `basvuru_tarihi` datetime DEFAULT current_timestamp(),
   `durum` varchar(50) DEFAULT 'beklemede',
-  `notlar` text DEFAULT NULL
+  `notlar` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_basvurular_kullanici` (`kullanici_id`),
+  KEY `idx_basvurular_ilan` (`ilan_id`),
+  KEY `idx_basvurular_durum` (`durum`),
+  CONSTRAINT `basvurular_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `basvurular_ibfk_2` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `basvurular`
+--
+
+LOCK TABLES `basvurular` WRITE;
+/*!40000 ALTER TABLE `basvurular` DISABLE KEYS */;
+/*!40000 ALTER TABLE `basvurular` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `beceriler`
 --
 
+DROP TABLE IF EXISTS `beceriler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `beceriler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
-  `kategori_id` int(11) DEFAULT NULL
+  `kategori_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kategori_id` (`kategori_id`),
+  CONSTRAINT `beceriler_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `beceriler`
+--
+
+LOCK TABLES `beceriler` WRITE;
+/*!40000 ALTER TABLE `beceriler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `beceriler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `degerlendirmeler`
 --
 
+DROP TABLE IF EXISTS `degerlendirmeler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `degerlendirmeler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `firma_id` int(11) DEFAULT NULL,
   `puan` int(11) DEFAULT NULL CHECK (`puan` between 1 and 5),
   `yorum` text DEFAULT NULL,
   `tarih` datetime DEFAULT current_timestamp(),
-  `onaylandi` tinyint(1) DEFAULT 0
+  `onaylandi` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  KEY `firma_id` (`firma_id`),
+  CONSTRAINT `degerlendirmeler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `degerlendirmeler_ibfk_2` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `degerlendirmeler`
+--
+
+LOCK TABLES `degerlendirmeler` WRITE;
+/*!40000 ALTER TABLE `degerlendirmeler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `degerlendirmeler` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `diller`
+--
+
+DROP TABLE IF EXISTS `diller`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `diller` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `dil_adi` varchar(100) NOT NULL,
+  `seviye` enum('baslangic','orta','ileri','anadil') DEFAULT 'orta',
+  `okuma_seviyesi` enum('zayif','orta','iyi','cok_iyi') DEFAULT 'orta',
+  `yazma_seviyesi` enum('zayif','orta','iyi','cok_iyi') DEFAULT 'orta',
+  `konusma_seviyesi` enum('zayif','orta','iyi','cok_iyi') DEFAULT 'orta',
+  `sertifika` varchar(255) DEFAULT NULL,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_kullanici_dil` (`kullanici_id`,`dil_adi`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  CONSTRAINT `diller_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `diller`
+--
+
+LOCK TABLES `diller` WRITE;
+/*!40000 ALTER TABLE `diller` DISABLE KEYS */;
+/*!40000 ALTER TABLE `diller` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `egitim_bilgileri`
+--
+
+DROP TABLE IF EXISTS `egitim_bilgileri`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `egitim_bilgileri` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `okul_adi` varchar(255) NOT NULL,
+  `bolum` varchar(255) NOT NULL,
+  `derece` enum('lise','onlisans','lisans','yuksek_lisans','doktora') DEFAULT 'lisans',
+  `baslangic_tarihi` date NOT NULL,
+  `bitis_tarihi` date DEFAULT NULL,
+  `devam_ediyor` tinyint(1) DEFAULT 0,
+  `not_ortalamasi` decimal(3,2) DEFAULT NULL,
+  `aciklama` text DEFAULT NULL,
+  `sehir` varchar(100) DEFAULT NULL,
+  `sira` int(11) DEFAULT 0,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  KEY `idx_sira` (`sira`),
+  CONSTRAINT `egitim_bilgileri_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `egitim_bilgileri`
+--
+
+LOCK TABLES `egitim_bilgileri` WRITE;
+/*!40000 ALTER TABLE `egitim_bilgileri` DISABLE KEYS */;
+/*!40000 ALTER TABLE `egitim_bilgileri` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `firmalar`
 --
 
+DROP TABLE IF EXISTS `firmalar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `firmalar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
   `sehir_id` int(11) DEFAULT NULL,
   `ilce_id` int(11) DEFAULT NULL,
@@ -95,40 +223,64 @@ CREATE TABLE `firmalar` (
   `logo_url` varchar(255) DEFAULT NULL,
   `aciklama` text DEFAULT NULL,
   `kurulus_tarihi` date DEFAULT NULL,
-  `calisan_sayisi` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `calisan_sayisi` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sehir_id` (`sehir_id`),
+  KEY `ilce_id` (`ilce_id`),
+  KEY `kategori_id` (`kategori_id`),
+  CONSTRAINT `firmalar_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
+  CONSTRAINT `firmalar_ibfk_2` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`),
+  CONSTRAINT `firmalar_ibfk_3` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `firmalar`
 --
 
-INSERT INTO `firmalar` (`id`, `isim`, `sehir_id`, `ilce_id`, `kategori_id`, `adres`, `telefon`, `email`, `website`, `logo_url`, `aciklama`, `kurulus_tarihi`, `calisan_sayisi`) VALUES
-(1, 'Tech Solutions A.Ş.', 1, NULL, 1, NULL, '0212 555 0001', 'info@techsolutions.com', NULL, NULL, 'Yazılım ve teknoloji çözümleri', NULL, 50),
-(2, 'Digital Marketing Pro', 1, NULL, 2, NULL, '0212 555 0002', 'info@digitalmarketing.com', NULL, NULL, 'Dijital pazarlama ajansı', NULL, 30),
-(3, 'Creative Design Studio', 1, NULL, 3, NULL, '0212 555 0003', 'info@creativedesign.com', NULL, NULL, 'Tasarım ve kreatif hizmetler', NULL, 20),
-(4, 'Finance Consulting', 2, NULL, 4, NULL, '0312 555 0004', 'info@financeconsulting.com', NULL, NULL, 'Mali danışmanlık', NULL, 40);
-
--- --------------------------------------------------------
+LOCK TABLES `firmalar` WRITE;
+/*!40000 ALTER TABLE `firmalar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `firmalar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `firmatakipcileri`
 --
 
+DROP TABLE IF EXISTS `firmatakipcileri`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `firmatakipcileri` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `firma_id` int(11) DEFAULT NULL,
-  `takip_tarihi` datetime DEFAULT current_timestamp()
+  `takip_tarihi` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  KEY `firma_id` (`firma_id`),
+  CONSTRAINT `firmatakipcileri_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `firmatakipcileri_ibfk_2` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `firmatakipcileri`
+--
+
+LOCK TABLES `firmatakipcileri` WRITE;
+/*!40000 ALTER TABLE `firmatakipcileri` DISABLE KEYS */;
+/*!40000 ALTER TABLE `firmatakipcileri` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `ilanlar`
 --
 
+DROP TABLE IF EXISTS `ilanlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ilanlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `baslik` varchar(255) NOT NULL,
   `firma_id` int(11) DEFAULT NULL,
   `kategori_id` int(11) DEFAULT NULL,
@@ -142,127 +294,257 @@ CREATE TABLE `ilanlar` (
   `pozisyon_seviyesi` varchar(50) DEFAULT NULL,
   `son_basvuru_tarihi` date DEFAULT NULL,
   `yayinlanma_tarihi` date DEFAULT NULL,
-  `aktif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `aktif` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `firma_id` (`firma_id`),
+  KEY `ilce_id` (`ilce_id`),
+  KEY `idx_ilanlar_kategori` (`kategori_id`),
+  KEY `idx_ilanlar_sehir` (`sehir_id`),
+  KEY `idx_ilanlar_calisma_sekli` (`calisma_sekli`),
+  CONSTRAINT `ilanlar_ibfk_1` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`),
+  CONSTRAINT `ilanlar_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`),
+  CONSTRAINT `ilanlar_ibfk_3` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
+  CONSTRAINT `ilanlar_ibfk_4` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ilanlar`
 --
 
-INSERT INTO `ilanlar` (`id`, `baslik`, `firma_id`, `kategori_id`, `sehir_id`, `ilce_id`, `aciklama`, `gereksinimler`, `maas_aralik`, `egitim_seviyesi`, `calisma_sekli`, `pozisyon_seviyesi`, `son_basvuru_tarihi`, `yayinlanma_tarihi`, `aktif`) VALUES
-(1, 'Senior Frontend Developer', 1, 1, 1, NULL, 'React ve TypeScript ile çalışacak deneyimli frontend developer arıyoruz. Modern web teknolojileri ile kullanıcı dostu arayüzler geliştirme fırsatı.', 'React, TypeScript, 5+ yıl deneyim, Redux, REST API', '25000-35000 TL', 'lisans', 'hybrid', 'senior', '2025-11-01', '2025-10-02', 1),
-(2, 'Backend Developer', 1, 1, 1, NULL, 'Node.js ve MongoDB ile backend geliştirme yapacak developer. Ölçeklenebilir API\'ler geliştirme deneyimi.', 'Node.js, MongoDB, REST API, Express.js', '20000-28000 TL', 'lisans', 'remote', 'mid', '2025-11-01', '2025-10-02', 1),
-(3, 'Full Stack Developer', 1, 1, 2, NULL, 'Hem frontend hem backend geliştirebilecek full stack developer. Tam kapsamlı proje geliştirme.', 'React, Node.js, PostgreSQL, Docker', '30000-40000 TL', 'lisans', 'full-time', 'senior', '2025-11-01', '2025-10-02', 1),
-(4, 'Junior Frontend Developer', 1, 1, 1, NULL, 'Kariyerine başlayan, öğrenmeye açık frontend developer. Mentorluk desteği sağlanacak.', 'HTML, CSS, JavaScript, React (temel)', '12000-18000 TL', 'lisans', 'full-time', 'entry', '2025-11-01', '2025-10-02', 1),
-(5, 'Dijital Pazarlama Uzmanı', 2, 2, 1, NULL, 'SEO, SEM ve sosyal medya yönetimi yapacak pazarlama uzmanı. Kampanya yönetimi ve analiz.', 'Google Ads, Facebook Ads, SEO, Analytics', '15000-22000 TL', 'lisans', 'full-time', 'mid', '2025-11-01', '2025-10-02', 1),
-(6, 'İçerik Pazarlama Müdürü', 2, 2, 3, NULL, 'İçerik stratejisi ve yönetimi yapacak müdür. Takım liderliği ve strateji geliştirme.', 'İçerik stratejisi, 5+ yıl deneyim, Takım yönetimi', '28000-38000 TL', 'lisans', 'hybrid', 'senior', '2025-11-01', '2025-10-02', 1),
-(7, 'Sosyal Medya Uzmanı', 2, 2, 1, NULL, 'Sosyal medya hesaplarını yönetecek, içerik üretecek uzman arıyoruz.', 'Instagram, Twitter, LinkedIn, İçerik üretimi', '13000-19000 TL', 'lisans', 'remote', 'entry', '2025-11-01', '2025-10-02', 1),
-(8, 'UI/UX Designer', 3, 3, 1, NULL, 'Kullanıcı deneyimi ve arayüz tasarımı yapacak designer. Kullanıcı araştırması ve prototipleme.', 'Figma, Adobe XD, UI/UX, Kullanıcı araştırması', '18000-25000 TL', 'lisans', 'remote', 'mid', '2025-11-01', '2025-10-02', 1),
-(9, 'Grafik Tasarımcı', 3, 3, 1, NULL, 'Görsel içerik ve grafik tasarım yapacak tasarımcı. Dijital ve basılı medya tasarımı.', 'Photoshop, Illustrator, InDesign', '12000-18000 TL', 'lisans', 'full-time', 'entry', '2025-11-01', '2025-10-02', 1),
-(10, 'Senior Product Designer', 3, 3, 1, NULL, 'Ürün tasarımı ve kullanıcı deneyimi konusunda uzman tasarımcı. Tasarım sistemi yönetimi.', 'Figma, Sketch, Design Systems, 5+ yıl', '25000-35000 TL', 'lisans', 'hybrid', 'senior', '2025-11-01', '2025-10-02', 1),
-(11, 'Mali Müşavir', 4, 4, 2, NULL, 'Şirket mali işlerini yönetecek mali müşavir. Vergi danışmanlığı ve mali raporlama.', 'SMMM, 3+ yıl deneyim, Vergi mevzuatı', '22000-30000 TL', 'lisans', 'full-time', 'senior', '2025-11-01', '2025-10-02', 1),
-(12, 'Muhasebe Elemanı', 4, 4, 2, NULL, 'Günlük muhasebe işlemlerini yapacak eleman. Fatura ve dekont takibi.', 'Muhasebe bilgisi, Excel, Logo/Eta', '10000-15000 TL', 'lisans', 'full-time', 'entry', '2025-11-01', '2025-10-02', 1),
-(13, 'Finans Analisti', 4, 4, 1, NULL, 'Finansal analiz ve raporlama yapacak analist. Bütçe planlama ve takip.', 'Excel, Power BI, Finansal analiz, 2+ yıl', '18000-25000 TL', 'lisans', 'full-time', 'mid', '2025-11-01', '2025-10-02', 1);
-
--- --------------------------------------------------------
+LOCK TABLES `ilanlar` WRITE;
+/*!40000 ALTER TABLE `ilanlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ilanlar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `ilceler`
 --
 
+DROP TABLE IF EXISTS `ilceler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ilceler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
-  `sehir_id` int(11) DEFAULT NULL
+  `sehir_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sehir_id` (`sehir_id`),
+  CONSTRAINT `ilceler_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `ilceler`
+--
+
+LOCK TABLES `ilceler` WRITE;
+/*!40000 ALTER TABLE `ilceler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ilceler` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `is_deneyimleri`
+--
+
+DROP TABLE IF EXISTS `is_deneyimleri`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `is_deneyimleri` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `sirket_adi` varchar(255) NOT NULL,
+  `pozisyon` varchar(255) NOT NULL,
+  `baslangic_tarihi` date NOT NULL,
+  `bitis_tarihi` date DEFAULT NULL,
+  `halen_calisiyor` tinyint(1) DEFAULT 0,
+  `aciklama` text DEFAULT NULL,
+  `sehir` varchar(100) DEFAULT NULL,
+  `sektor` varchar(100) DEFAULT NULL,
+  `sira` int(11) DEFAULT 0,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  KEY `idx_sira` (`sira`),
+  CONSTRAINT `is_deneyimleri_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `is_deneyimleri`
+--
+
+LOCK TABLES `is_deneyimleri` WRITE;
+/*!40000 ALTER TABLE `is_deneyimleri` DISABLE KEYS */;
+/*!40000 ALTER TABLE `is_deneyimleri` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `isalarmları`
 --
 
+DROP TABLE IF EXISTS `isalarmları`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `isalarmları` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `kategori_id` int(11) DEFAULT NULL,
   `anahtar_kelimeler` text DEFAULT NULL,
   `sehir_id` int(11) DEFAULT NULL,
   `bildirim_sikligi` varchar(20) DEFAULT NULL,
-  `aktif` tinyint(1) DEFAULT 1
+  `aktif` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  KEY `kategori_id` (`kategori_id`),
+  KEY `sehir_id` (`sehir_id`),
+  CONSTRAINT `isalarmları_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `isalarmları_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`),
+  CONSTRAINT `isalarmları_ibfk_3` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `isalarmları`
+--
+
+LOCK TABLES `isalarmları` WRITE;
+/*!40000 ALTER TABLE `isalarmları` DISABLE KEYS */;
+/*!40000 ALTER TABLE `isalarmları` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `kategoriler`
 --
 
+DROP TABLE IF EXISTS `kategoriler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kategoriler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
   `aciklama` text DEFAULT NULL,
-  `ikon` varchar(10) DEFAULT '?'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `ikon` varchar(10) DEFAULT '?',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_kategori_isim` (`isim`)
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `kategoriler`
 --
 
-INSERT INTO `kategoriler` (`id`, `isim`, `aciklama`, `ikon`) VALUES
-(1, 'Yazılım & Teknoloji', 'Yazılım geliştirme, IT ve teknoloji pozisyonları', '📁'),
-(2, 'Pazarlama & Satış', 'Pazarlama, satış ve müşteri ilişkileri', '📁'),
-(3, 'Tasarım & Kreatif', 'Grafik tasarım, UI/UX ve kreatif pozisyonlar', '📁'),
-(4, 'Finans & Muhasebe', 'Finans, muhasebe ve ekonomi', '📁'),
-(5, 'Mühendislik', 'Makine, elektrik, inşaat mühendisliği', '📁'),
-(6, 'Satış & İş Geliştirme', 'Satış temsilcisi ve iş geliştirme', '📁'),
-(7, 'Eğitim & Öğretim', 'Öğretmenlik ve eğitim danışmanlığı', '📁'),
-(8, 'İnsan Kaynakları', 'İK, işe alım ve personel yönetimi', '📁'),
-(9, 'Sağlık', 'Sağlık hizmetleri ve tıbbi pozisyonlar', '📁'),
-(10, 'Hukuk', 'Avukatlık ve hukuk danışmanlığı', '📁'),
-(11, 'Üretim & Lojistik', 'Üretim, lojistik ve tedarik zinciri', '📁'),
-(12, 'Müşteri Hizmetleri', 'Müşteri destek ve çağrı merkezi', '📁'),
-(13, 'Medya & İletişim', 'Gazetecilik, PR ve medya', '📁'),
-(14, 'Turizm & Otelcilik', 'Turizm, otel ve restoran yönetimi', '📁'),
-(15, 'Güvenlik', 'Güvenlik ve koruma hizmetleri', '📁');
-
--- --------------------------------------------------------
+LOCK TABLES `kategoriler` WRITE;
+/*!40000 ALTER TABLE `kategoriler` DISABLE KEYS */;
+INSERT INTO `kategoriler` VALUES (1,'Yazılım & Teknoloji','Yazılım geliştirme, IT ve teknoloji pozisyonları','📁'),(2,'Pazarlama & Satış','Pazarlama, satış ve müşteri ilişkileri','📁'),(3,'Tasarım & Kreatif','Grafik tasarım, UI/UX ve kreatif pozisyonlar','📁'),(4,'Finans & Muhasebe','Finans, muhasebe ve ekonomi','📁'),(5,'Mühendislik','Makine, elektrik, inşaat mühendisliği','📁'),(6,'Satış & İş Geliştirme','Satış temsilcisi ve iş geliştirme','📁'),(7,'Eğitim & Öğretim','Öğretmenlik ve eğitim danışmanlığı','📁'),(8,'İnsan Kaynakları','İK, işe alım ve personel yönetimi','📁'),(9,'Sağlık','Sağlık hizmetleri ve tıbbi pozisyonlar','📁'),(10,'Hukuk','Avukatlık ve hukuk danışmanlığı','📁'),(11,'Üretim & Lojistik','Üretim, lojistik ve tedarik zinciri','📁'),(12,'Müşteri Hizmetleri','Müşteri destek ve çağrı merkezi','📁'),(13,'Medya & İletişim','Gazetecilik, PR ve medya','📁'),(14,'Turizm & Otelcilik','Turizm, otel ve restoran yönetimi','📁'),(15,'Güvenlik','Güvenlik ve koruma hizmetleri','📁');
+/*!40000 ALTER TABLE `kategoriler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `kaydedilenilanlar`
 --
 
+DROP TABLE IF EXISTS `kaydedilenilanlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kaydedilenilanlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `ilan_id` int(11) DEFAULT NULL,
-  `kayit_tarihi` datetime DEFAULT current_timestamp()
+  `kayit_tarihi` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  KEY `ilan_id` (`ilan_id`),
+  CONSTRAINT `kaydedilenilanlar_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `kaydedilenilanlar_ibfk_2` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `kaydedilenilanlar`
+--
+
+LOCK TABLES `kaydedilenilanlar` WRITE;
+/*!40000 ALTER TABLE `kaydedilenilanlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `kaydedilenilanlar` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `kullanici_becerileri_detay`
+--
+
+DROP TABLE IF EXISTS `kullanici_becerileri_detay`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kullanici_becerileri_detay` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `beceri_adi` varchar(255) NOT NULL,
+  `kategori` varchar(100) DEFAULT NULL,
+  `seviye` enum('baslangic','orta','ileri','uzman') DEFAULT 'orta',
+  `yil_deneyim` int(11) DEFAULT 0,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  KEY `idx_kategori` (`kategori`),
+  CONSTRAINT `kullanici_becerileri_detay_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kullanici_becerileri_detay`
+--
+
+LOCK TABLES `kullanici_becerileri_detay` WRITE;
+/*!40000 ALTER TABLE `kullanici_becerileri_detay` DISABLE KEYS */;
+/*!40000 ALTER TABLE `kullanici_becerileri_detay` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `kullanicibeceriler`
 --
 
+DROP TABLE IF EXISTS `kullanicibeceriler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kullanicibeceriler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `beceri_id` int(11) DEFAULT NULL,
-  `seviye` int(11) DEFAULT NULL
+  `seviye` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  KEY `beceri_id` (`beceri_id`),
+  CONSTRAINT `kullanicibeceriler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `kullanicibeceriler_ibfk_2` FOREIGN KEY (`beceri_id`) REFERENCES `beceriler` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `kullanicibeceriler`
+--
+
+LOCK TABLES `kullanicibeceriler` WRITE;
+/*!40000 ALTER TABLE `kullanicibeceriler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `kullanicibeceriler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `kullanicilar`
 --
 
+DROP TABLE IF EXISTS `kullanicilar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kullanicilar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
   `soyisim` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `email_verified` tinyint(1) DEFAULT 0,
+  `is_super_admin` tinyint(1) DEFAULT 0,
   `profil_foto` varchar(255) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
   `sektor_id` int(11) DEFAULT NULL,
@@ -277,25 +559,39 @@ CREATE TABLE `kullanicilar` (
   `kayit_tarihi` datetime DEFAULT current_timestamp(),
   `son_giris` datetime DEFAULT NULL,
   `aktif` tinyint(1) DEFAULT 1,
-  `rol` varchar(20) DEFAULT 'is_arayan'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `rol` varchar(20) DEFAULT 'is_arayan',
+  `rol_confirmed` tinyint(1) DEFAULT 0,
+  `admin_approved` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `ilce_id` (`ilce_id`),
+  KEY `fk_kullanici_sektor` (`sektor_id`),
+  KEY `fk_kullanici_sehir` (`sehir_id`),
+  CONSTRAINT `fk_kullanici_sehir` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `kullanicilar_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
+  CONSTRAINT `kullanicilar_ibfk_2` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `kullanicilar`
 --
 
-INSERT INTO `kullanicilar` (`id`, `isim`, `soyisim`, `email`, `profil_foto`, `website`, `sektor_id`, `sifre`, `telefon`, `dogum_tarihi`, `cinsiyet`, `sehir_id`, `ilce_id`, `adres`, `profil_resmi`, `kayit_tarihi`, `son_giris`, `aktif`, `rol`) VALUES
-(1, 'ayham', 'najip', 'admin@admin.com', 'http://localhost/IsBul/uploads/profiles/user_1_1760371009.png', NULL, NULL, '$2y$10$Sdv54tISVxJspLSNjS85DurL4OmXYjVFsYQv998/MDBDTP/DXbeUi', '', NULL, NULL, NULL, NULL, NULL, NULL, '2025-10-02 15:37:17', '2025-10-13 08:56:54', 1, 'is_arayan'),
-(2, 'ihsan', 'alapsi', 'admin@admi.com', NULL, NULL, NULL, '$2y$10$yznpujlxRpuWFt2Qx/rzYeexbhjQkZSxD.2gZoamnB31wX09VkU7a', '', NULL, NULL, NULL, NULL, NULL, NULL, '2025-10-04 09:59:51', NULL, 1, 'is_arayan');
-
--- --------------------------------------------------------
+LOCK TABLES `kullanicilar` WRITE;
+/*!40000 ALTER TABLE `kullanicilar` DISABLE KEYS */;
+INSERT INTO `kullanicilar` VALUES (8,'ihsan','alapsi','lohalip916@fogdiver.com',1,0,'http://localhost/IsBul-Job-Platform/uploads/profiles/user_8_1760882565.jpg',NULL,NULL,'$2y$10$nC60piiLzdUWF1hzmfwPCOrhh9xbeSsbcuBfjMolqtNZ8r9dE0YeO','',NULL,NULL,NULL,NULL,NULL,NULL,'2025-10-19 16:54:08','2025-10-19 18:29:32',1,'is_arayan',0,1),(9,'Super','Admin','ayhamoy2@gmail.com',1,1,'http://localhost/IsBul-Job-Platform/uploads/profiles/user_9_1760885917.jpg',NULL,NULL,'$2y$10$zyChpL0i43a5YR.cjoYboOV.zeB0qUjN.3nZLZCNu7hf/kiJPEDjq',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2025-10-19 17:42:37','2025-10-19 18:29:19',1,'admin',0,1);
+/*!40000 ALTER TABLE `kullanicilar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `mesajlar`
 --
 
+DROP TABLE IF EXISTS `mesajlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mesajlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `gonderen_id` int(11) DEFAULT NULL,
   `alici_id` int(11) DEFAULT NULL,
   `konu` varchar(255) DEFAULT NULL,
@@ -303,46 +599,154 @@ CREATE TABLE `mesajlar` (
   `okundu` tinyint(1) DEFAULT 0,
   `gonderme_tarihi` datetime DEFAULT current_timestamp(),
   `silindi_gonderen` tinyint(1) DEFAULT 0,
-  `silindi_alici` tinyint(1) DEFAULT 0
+  `silindi_alici` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `gonderen_id` (`gonderen_id`),
+  KEY `alici_id` (`alici_id`),
+  CONSTRAINT `mesajlar_ibfk_1` FOREIGN KEY (`gonderen_id`) REFERENCES `kullanicilar` (`id`),
+  CONSTRAINT `mesajlar_ibfk_2` FOREIGN KEY (`alici_id`) REFERENCES `kullanicilar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `mesajlar`
+--
+
+LOCK TABLES `mesajlar` WRITE;
+/*!40000 ALTER TABLE `mesajlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mesajlar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `meslekler`
 --
 
+DROP TABLE IF EXISTS `meslekler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `meslekler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
   `kategori_id` int(11) DEFAULT NULL,
   `aciklama` text DEFAULT NULL,
-  `gereken_beceriler` text DEFAULT NULL
+  `gereken_beceriler` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kategori_id` (`kategori_id`),
+  CONSTRAINT `meslekler_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `meslekler`
+--
+
+LOCK TABLES `meslekler` WRITE;
+/*!40000 ALTER TABLE `meslekler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `meslekler` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `moderasyon_kayitlari`
+--
+
+DROP TABLE IF EXISTS `moderasyon_kayitlari`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `moderasyon_kayitlari` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ilan_id` int(11) DEFAULT NULL,
+  `admin_id` int(11) NOT NULL,
+  `islem` enum('approve','reject') NOT NULL,
+  `sebep` text DEFAULT NULL,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_ilan` (`ilan_id`),
+  KEY `idx_admin` (`admin_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `moderasyon_kayitlari`
+--
+
+LOCK TABLES `moderasyon_kayitlari` WRITE;
+/*!40000 ALTER TABLE `moderasyon_kayitlari` DISABLE KEYS */;
+/*!40000 ALTER TABLE `moderasyon_kayitlari` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `mulakatlar`
 --
 
+DROP TABLE IF EXISTS `mulakatlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mulakatlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `basvuru_id` int(11) DEFAULT NULL,
   `tarih` datetime DEFAULT NULL,
   `yer` text DEFAULT NULL,
   `notlar` text DEFAULT NULL,
-  `durum` varchar(50) DEFAULT 'planlandı'
+  `durum` varchar(50) DEFAULT 'planlandı',
+  PRIMARY KEY (`id`),
+  KEY `basvuru_id` (`basvuru_id`),
+  CONSTRAINT `mulakatlar_ibfk_1` FOREIGN KEY (`basvuru_id`) REFERENCES `basvurular` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `mulakatlar`
+--
+
+LOCK TABLES `mulakatlar` WRITE;
+/*!40000 ALTER TABLE `mulakatlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mulakatlar` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ozgecmis_ayarlari`
+--
+
+DROP TABLE IF EXISTS `ozgecmis_ayarlari`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ozgecmis_ayarlari` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `baslik` varchar(255) DEFAULT NULL,
+  `ozet` text DEFAULT NULL,
+  `linkedin_url` varchar(255) DEFAULT NULL,
+  `github_url` varchar(255) DEFAULT NULL,
+  `website_url` varchar(255) DEFAULT NULL,
+  `portfolio_url` varchar(255) DEFAULT NULL,
+  `gorunurluk` enum('herkese_acik','sadece_sirketler','gizli') DEFAULT 'sadece_sirketler',
+  `pdf_template` varchar(50) DEFAULT 'modern',
+  `son_guncelleme` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kullanici_id` (`kullanici_id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  CONSTRAINT `ozgecmis_ayarlari_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ozgecmis_ayarlari`
+--
+
+LOCK TABLES `ozgecmis_ayarlari` WRITE;
+/*!40000 ALTER TABLE `ozgecmis_ayarlari` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ozgecmis_ayarlari` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `ozgecmisler`
 --
 
+DROP TABLE IF EXISTS `ozgecmisler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ozgecmisler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kullanici_id` int(11) DEFAULT NULL,
   `ozgecmis` text DEFAULT NULL,
   `egitim` text DEFAULT NULL,
@@ -352,512 +756,248 @@ CREATE TABLE `ozgecmisler` (
   `sertifikalar` text DEFAULT NULL,
   `referanslar` text DEFAULT NULL,
   `dosya_url` varchar(255) DEFAULT NULL,
-  `guncelleme_tarihi` datetime DEFAULT current_timestamp()
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kullanici_id` (`kullanici_id`),
+  CONSTRAINT `ozgecmisler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `ozgecmisler`
+--
+
+LOCK TABLES `ozgecmisler` WRITE;
+/*!40000 ALTER TABLE `ozgecmisler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ozgecmisler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `parttimeilanlar`
 --
 
+DROP TABLE IF EXISTS `parttimeilanlar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `parttimeilanlar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ilan_id` int(11) DEFAULT NULL,
-  `haftalik_saat` int(11) DEFAULT NULL
+  `haftalik_saat` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ilan_id` (`ilan_id`),
+  CONSTRAINT `parttimeilanlar_ibfk_1` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `parttimeilanlar`
+--
+
+LOCK TABLES `parttimeilanlar` WRITE;
+/*!40000 ALTER TABLE `parttimeilanlar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `parttimeilanlar` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `projeler`
+--
+
+DROP TABLE IF EXISTS `projeler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projeler` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `proje_adi` varchar(255) NOT NULL,
+  `aciklama` text DEFAULT NULL,
+  `baslangic_tarihi` date NOT NULL,
+  `bitis_tarihi` date DEFAULT NULL,
+  `devam_ediyor` tinyint(1) DEFAULT 0,
+  `rol` varchar(100) DEFAULT NULL,
+  `teknolojiler` text DEFAULT NULL,
+  `proje_url` varchar(255) DEFAULT NULL,
+  `github_url` varchar(255) DEFAULT NULL,
+  `sira` int(11) DEFAULT 0,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  KEY `idx_sira` (`sira`),
+  CONSTRAINT `projeler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `projeler`
+--
+
+LOCK TABLES `projeler` WRITE;
+/*!40000 ALTER TABLE `projeler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `projeler` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `referanslar`
+--
+
+DROP TABLE IF EXISTS `referanslar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `referanslar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `isim` varchar(255) NOT NULL,
+  `pozisyon` varchar(255) DEFAULT NULL,
+  `sirket` varchar(255) DEFAULT NULL,
+  `telefon` varchar(20) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `iliskilendirme` varchar(255) DEFAULT NULL,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  CONSTRAINT `referanslar_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `referanslar`
+--
+
+LOCK TABLES `referanslar` WRITE;
+/*!40000 ALTER TABLE `referanslar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `referanslar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sehirler`
 --
 
+DROP TABLE IF EXISTS `sehirler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sehirler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(255) NOT NULL,
-  `bolge` varchar(50) DEFAULT 'Diğer'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `bolge` varchar(50) DEFAULT 'Diğer',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_sehir_isim` (`isim`)
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sehirler`
 --
 
-INSERT INTO `sehirler` (`id`, `isim`, `bolge`) VALUES
-(1, 'İstanbul', 'Diğer'),
-(2, 'Ankara', 'Diğer'),
-(3, 'İzmir', 'Diğer'),
-(4, 'Bursa', 'Diğer'),
-(5, 'Antalya', 'Diğer'),
-(6, 'Adana', 'Diğer'),
-(7, 'Konya', 'Diğer'),
-(8, 'Gaziantep', 'Diğer'),
-(9, 'Şanlıurfa', 'Diğer'),
-(10, 'Kocaeli', 'Diğer'),
-(11, 'Mersin', 'Diğer'),
-(12, 'Diyarbakır', 'Diğer'),
-(13, 'Hatay', 'Diğer'),
-(14, 'Manisa', 'Diğer'),
-(15, 'Kayseri', 'Diğer'),
-(16, 'Samsun', 'Diğer'),
-(17, 'Balıkesir', 'Diğer'),
-(18, 'Kahramanmaraş', 'Diğer'),
-(19, 'Van', 'Diğer'),
-(20, 'Aydın', 'Diğer'),
-(21, 'Denizli', 'Diğer'),
-(22, 'Sakarya', 'Diğer'),
-(23, 'Tekirdağ', 'Diğer'),
-(24, 'Muğla', 'Diğer'),
-(25, 'Eskişehir', 'Diğer'),
-(26, 'Mardin', 'Diğer'),
-(27, 'Malatya', 'Diğer'),
-(28, 'Erzurum', 'Diğer'),
-(29, 'Trabzon', 'Diğer'),
-(30, 'Elazığ', 'Diğer');
-
--- --------------------------------------------------------
+LOCK TABLES `sehirler` WRITE;
+/*!40000 ALTER TABLE `sehirler` DISABLE KEYS */;
+INSERT INTO `sehirler` VALUES (1,'İstanbul','Diğer'),(2,'Ankara','Diğer'),(3,'İzmir','Diğer'),(4,'Bursa','Diğer'),(5,'Antalya','Diğer'),(6,'Adana','Diğer'),(7,'Konya','Diğer'),(8,'Gaziantep','Diğer'),(9,'Şanlıurfa','Diğer'),(10,'Kocaeli','Diğer'),(11,'Mersin','Diğer'),(12,'Diyarbakır','Diğer'),(13,'Hatay','Diğer'),(14,'Manisa','Diğer'),(15,'Kayseri','Diğer'),(16,'Samsun','Diğer'),(17,'Balıkesir','Diğer'),(18,'Kahramanmaraş','Diğer'),(19,'Van','Diğer'),(20,'Aydın','Diğer'),(21,'Denizli','Diğer'),(22,'Sakarya','Diğer'),(23,'Tekirdağ','Diğer'),(24,'Muğla','Diğer'),(25,'Eskişehir','Diğer'),(26,'Mardin','Diğer'),(27,'Malatya','Diğer'),(28,'Erzurum','Diğer'),(29,'Trabzon','Diğer'),(30,'Elazığ','Diğer');
+/*!40000 ALTER TABLE `sehirler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sektorler`
 --
 
+DROP TABLE IF EXISTS `sektorler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sektorler` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `isim` varchar(100) NOT NULL,
   `aciklama` text DEFAULT NULL,
-  `olusturulma_tarihi` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `olusturulma_tarihi` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `isim` (`isim`),
+  UNIQUE KEY `unique_sektor_isim` (`isim`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sektorler`
 --
 
-INSERT INTO `sektorler` (`id`, `isim`, `aciklama`, `olusturulma_tarihi`) VALUES
-(1, 'Bilgi Teknolojileri', 'Yazılım, donanım ve IT hizmetleri', '2025-10-02 21:45:57'),
-(2, 'Finans', 'Bankacılık, sigorta ve finans hizmetleri', '2025-10-02 21:45:57'),
-(3, 'Sağlık', 'Hastane, klinik ve sağlık kuruluşları', '2025-10-02 21:45:57'),
-(4, 'Eğitim', 'Okul, üniversite ve eğitim kurumları', '2025-10-02 21:45:57'),
-(5, 'Perakende', 'Mağaza ve perakende satış', '2025-10-02 21:45:57'),
-(6, 'Üretim', 'İmalat ve üretim tesisleri', '2025-10-02 21:45:57'),
-(7, 'İnşaat', 'İnşaat ve gayrimenkul', '2025-10-02 21:45:57'),
-(8, 'Turizm', 'Otel, restoran ve turizm', '2025-10-02 21:45:57'),
-(9, 'Lojistik', 'Taşımacılık ve lojistik', '2025-10-02 21:45:57'),
-(10, 'Enerji', 'Enerji ve doğal kaynaklar', '2025-10-02 21:45:57'),
-(11, 'Telekomünikasyon', 'İletişim ve telekomünikasyon', '2025-10-02 21:45:57'),
-(12, 'Medya', 'Gazete, TV ve dijital medya', '2025-10-02 21:45:57'),
-(13, 'Otomotiv', 'Otomotiv ve yan sanayi', '2025-10-02 21:45:57'),
-(14, 'Gıda', 'Gıda üretim ve dağıtım', '2025-10-02 21:45:57'),
-(15, 'Tekstil', 'Tekstil ve hazır giyim', '2025-10-02 21:45:57');
+LOCK TABLES `sektorler` WRITE;
+/*!40000 ALTER TABLE `sektorler` DISABLE KEYS */;
+INSERT INTO `sektorler` VALUES (1,'Bilgi Teknolojileri','Yazılım, donanım ve IT hizmetleri','2025-10-02 21:45:57'),(2,'Finans','Bankacılık, sigorta ve finans hizmetleri','2025-10-02 21:45:57'),(3,'Sağlık','Hastane, klinik ve sağlık kuruluşları','2025-10-02 21:45:57'),(4,'Eğitim','Okul, üniversite ve eğitim kurumları','2025-10-02 21:45:57'),(5,'Perakende','Mağaza ve perakende satış','2025-10-02 21:45:57'),(6,'Üretim','İmalat ve üretim tesisleri','2025-10-02 21:45:57'),(7,'İnşaat','İnşaat ve gayrimenkul','2025-10-02 21:45:57'),(8,'Turizm','Otel, restoran ve turizm','2025-10-02 21:45:57'),(9,'Lojistik','Taşımacılık ve lojistik','2025-10-02 21:45:57'),(10,'Enerji','Enerji ve doğal kaynaklar','2025-10-02 21:45:57'),(11,'Telekomünikasyon','İletişim ve telekomünikasyon','2025-10-02 21:45:57'),(12,'Medya','Gazete, TV ve dijital medya','2025-10-02 21:45:57'),(13,'Otomotiv','Otomotiv ve yan sanayi','2025-10-02 21:45:57'),(14,'Gıda','Gıda üretim ve dağıtım','2025-10-02 21:45:57'),(15,'Tekstil','Tekstil ve hazır giyim','2025-10-02 21:45:57');
+/*!40000 ALTER TABLE `sektorler` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Indexes for dumped tables
+-- Table structure for table `sertifikalar`
 --
 
---
--- Indexes for table `acililanlar`
---
-ALTER TABLE `acililanlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ilan_id` (`ilan_id`);
+DROP TABLE IF EXISTS `sertifikalar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sertifikalar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kullanici_id` int(11) NOT NULL,
+  `sertifika_adi` varchar(255) NOT NULL,
+  `kurum` varchar(255) NOT NULL,
+  `tarih` date NOT NULL,
+  `gecerlilik_tarihi` date DEFAULT NULL,
+  `sertifika_no` varchar(100) DEFAULT NULL,
+  `aciklama` text DEFAULT NULL,
+  `dosya_url` varchar(255) DEFAULT NULL,
+  `olusturulma_tarihi` datetime DEFAULT current_timestamp(),
+  `guncelleme_tarihi` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_kullanici` (`kullanici_id`),
+  CONSTRAINT `sertifikalar_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Indexes for table `basvurular`
---
-ALTER TABLE `basvurular`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_basvurular_kullanici` (`kullanici_id`),
-  ADD KEY `idx_basvurular_ilan` (`ilan_id`),
-  ADD KEY `idx_basvurular_durum` (`durum`);
-
---
--- Indexes for table `beceriler`
---
-ALTER TABLE `beceriler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_id` (`kategori_id`);
-
---
--- Indexes for table `degerlendirmeler`
---
-ALTER TABLE `degerlendirmeler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`),
-  ADD KEY `firma_id` (`firma_id`);
-
---
--- Indexes for table `firmalar`
---
-ALTER TABLE `firmalar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sehir_id` (`sehir_id`),
-  ADD KEY `ilce_id` (`ilce_id`),
-  ADD KEY `kategori_id` (`kategori_id`);
-
---
--- Indexes for table `firmatakipcileri`
---
-ALTER TABLE `firmatakipcileri`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`),
-  ADD KEY `firma_id` (`firma_id`);
-
---
--- Indexes for table `ilanlar`
---
-ALTER TABLE `ilanlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `firma_id` (`firma_id`),
-  ADD KEY `ilce_id` (`ilce_id`),
-  ADD KEY `idx_ilanlar_kategori` (`kategori_id`),
-  ADD KEY `idx_ilanlar_sehir` (`sehir_id`),
-  ADD KEY `idx_ilanlar_calisma_sekli` (`calisma_sekli`);
-
---
--- Indexes for table `ilceler`
---
-ALTER TABLE `ilceler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sehir_id` (`sehir_id`);
-
---
--- Indexes for table `isalarmları`
---
-ALTER TABLE `isalarmları`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`),
-  ADD KEY `kategori_id` (`kategori_id`),
-  ADD KEY `sehir_id` (`sehir_id`);
-
---
--- Indexes for table `kategoriler`
---
-ALTER TABLE `kategoriler`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_kategori_isim` (`isim`);
-
---
--- Indexes for table `kaydedilenilanlar`
---
-ALTER TABLE `kaydedilenilanlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`),
-  ADD KEY `ilan_id` (`ilan_id`);
-
---
--- Indexes for table `kullanicibeceriler`
---
-ALTER TABLE `kullanicibeceriler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`),
-  ADD KEY `beceri_id` (`beceri_id`);
-
---
--- Indexes for table `kullanicilar`
---
-ALTER TABLE `kullanicilar`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `ilce_id` (`ilce_id`),
-  ADD KEY `fk_kullanici_sektor` (`sektor_id`),
-  ADD KEY `fk_kullanici_sehir` (`sehir_id`);
-
---
--- Indexes for table `mesajlar`
---
-ALTER TABLE `mesajlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `gonderen_id` (`gonderen_id`),
-  ADD KEY `alici_id` (`alici_id`);
-
---
--- Indexes for table `meslekler`
---
-ALTER TABLE `meslekler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_id` (`kategori_id`);
-
---
--- Indexes for table `mulakatlar`
---
-ALTER TABLE `mulakatlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `basvuru_id` (`basvuru_id`);
-
---
--- Indexes for table `ozgecmisler`
---
-ALTER TABLE `ozgecmisler`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kullanici_id` (`kullanici_id`);
-
---
--- Indexes for table `parttimeilanlar`
---
-ALTER TABLE `parttimeilanlar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ilan_id` (`ilan_id`);
-
---
--- Indexes for table `sehirler`
---
-ALTER TABLE `sehirler`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_sehir_isim` (`isim`);
-
---
--- Indexes for table `sektorler`
---
-ALTER TABLE `sektorler`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `isim` (`isim`),
-  ADD UNIQUE KEY `unique_sektor_isim` (`isim`);
-
---
--- AUTO_INCREMENT for dumped tables
+-- Dumping data for table `sertifikalar`
 --
 
---
--- AUTO_INCREMENT for table `acililanlar`
---
-ALTER TABLE `acililanlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+LOCK TABLES `sertifikalar` WRITE;
+/*!40000 ALTER TABLE `sertifikalar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sertifikalar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- AUTO_INCREMENT for table `basvurular`
---
-ALTER TABLE `basvurular`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `beceriler`
---
-ALTER TABLE `beceriler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `degerlendirmeler`
---
-ALTER TABLE `degerlendirmeler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `firmalar`
---
-ALTER TABLE `firmalar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `firmatakipcileri`
---
-ALTER TABLE `firmatakipcileri`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `ilanlar`
---
-ALTER TABLE `ilanlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `ilceler`
---
-ALTER TABLE `ilceler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `isalarmları`
---
-ALTER TABLE `isalarmları`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `kategoriler`
---
-ALTER TABLE `kategoriler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
-
---
--- AUTO_INCREMENT for table `kaydedilenilanlar`
---
-ALTER TABLE `kaydedilenilanlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `kullanicibeceriler`
---
-ALTER TABLE `kullanicibeceriler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `kullanicilar`
---
-ALTER TABLE `kullanicilar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `mesajlar`
---
-ALTER TABLE `mesajlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `meslekler`
---
-ALTER TABLE `meslekler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `mulakatlar`
---
-ALTER TABLE `mulakatlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `ozgecmisler`
---
-ALTER TABLE `ozgecmisler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `parttimeilanlar`
---
-ALTER TABLE `parttimeilanlar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sehirler`
---
-ALTER TABLE `sehirler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
-
---
--- AUTO_INCREMENT for table `sektorler`
---
-ALTER TABLE `sektorler`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- Constraints for dumped tables
+-- Table structure for table `verification_codes`
 --
 
---
--- Constraints for table `acililanlar`
---
-ALTER TABLE `acililanlar`
-  ADD CONSTRAINT `acililanlar_ibfk_1` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`);
+DROP TABLE IF EXISTS `verification_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `verification_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `code` varchar(6) NOT NULL,
+  `user_data` text DEFAULT NULL,
+  `type` enum('email_verification','password_reset') DEFAULT 'email_verification',
+  `expires_at` datetime NOT NULL,
+  `verified` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_email` (`email`),
+  KEY `idx_code` (`code`),
+  KEY `idx_expires` (`expires_at`),
+  KEY `idx_type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Constraints for table `basvurular`
+-- Dumping data for table `verification_codes`
 --
-ALTER TABLE `basvurular`
-  ADD CONSTRAINT `basvurular_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `basvurular_ibfk_2` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`);
 
---
--- Constraints for table `beceriler`
---
-ALTER TABLE `beceriler`
-  ADD CONSTRAINT `beceriler_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`);
+LOCK TABLES `verification_codes` WRITE;
+/*!40000 ALTER TABLE `verification_codes` DISABLE KEYS */;
+INSERT INTO `verification_codes` VALUES (1,'ihsanalapsi@gmail.com','655744',NULL,'email_verification','2025-10-14 20:33:01',0,'2025-10-14 11:18:01'),(5,'bayburt23fabio@gmail.com','148133',NULL,'email_verification','2025-10-14 20:40:11',1,'2025-10-14 11:25:11'),(6,'badarit468@fanlvr.com','732262','{\"isim\":\"safsa\",\"soyisim\":\"safsfa\",\"email\":\"badarit468@fanlvr.com\",\"sifre\":\"$2y$10$iMM2isrn7uVAM9P1LY.rk.lhOC7.2lKFCN81zZQ5CZgb88GF0WiWK\",\"telefon\":\"\",\"rol\":\"is_arayan\"}','email_verification','2025-10-14 22:07:15',1,'2025-10-14 12:52:16'),(10,'test@example.com','490505','{\"isim\":\"Test\",\"soyisim\":\"User\",\"email\":\"test@example.com\",\"sifre\":\"$2y$10$LuFjtVIopG50xkfgix9qD.yDRP4y00go6hwEZ45A1hMxQStP1Ta.6\",\"telefon\":\"1234567890\",\"rol\":\"is_arayan\"}','email_verification','2025-10-19 16:06:05',0,'2025-10-19 16:51:06'),(11,'newtest@example.com','307920','{\"isim\":\"Test\",\"soyisim\":\"User\",\"email\":\"newtest@example.com\",\"sifre\":\"$2y$10$QmxhzTqRmwxG7j4XWffEt.Id3eJbZ5\\/mSQXvPo7QdxikTNIuwp\\/Hq\",\"telefon\":\"1234567890\",\"rol\":\"is_arayan\"}','email_verification','2025-10-19 17:07:47',0,'2025-10-19 16:52:47'),(12,'lohalip916@fogdiver.com','682059','{\"isim\":\"ihsan\",\"soyisim\":\"alapsi\",\"email\":\"lohalip916@fogdiver.com\",\"sifre\":\"$2y$10$nC60piiLzdUWF1hzmfwPCOrhh9xbeSsbcuBfjMolqtNZ8r9dE0YeO\",\"telefon\":\"\",\"rol\":\"is_arayan\"}','email_verification','2025-10-19 17:08:47',1,'2025-10-19 16:53:47');
+/*!40000 ALTER TABLE `verification_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Constraints for table `degerlendirmeler`
---
-ALTER TABLE `degerlendirmeler`
-  ADD CONSTRAINT `degerlendirmeler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `degerlendirmeler_ibfk_2` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`);
-
---
--- Constraints for table `firmalar`
---
-ALTER TABLE `firmalar`
-  ADD CONSTRAINT `firmalar_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
-  ADD CONSTRAINT `firmalar_ibfk_2` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`),
-  ADD CONSTRAINT `firmalar_ibfk_3` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`);
-
---
--- Constraints for table `firmatakipcileri`
---
-ALTER TABLE `firmatakipcileri`
-  ADD CONSTRAINT `firmatakipcileri_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `firmatakipcileri_ibfk_2` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`);
-
---
--- Constraints for table `ilanlar`
---
-ALTER TABLE `ilanlar`
-  ADD CONSTRAINT `ilanlar_ibfk_1` FOREIGN KEY (`firma_id`) REFERENCES `firmalar` (`id`),
-  ADD CONSTRAINT `ilanlar_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`),
-  ADD CONSTRAINT `ilanlar_ibfk_3` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
-  ADD CONSTRAINT `ilanlar_ibfk_4` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`);
-
---
--- Constraints for table `ilceler`
---
-ALTER TABLE `ilceler`
-  ADD CONSTRAINT `ilceler_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`);
-
---
--- Constraints for table `isalarmları`
---
-ALTER TABLE `isalarmları`
-  ADD CONSTRAINT `isalarmları_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `isalarmları_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`),
-  ADD CONSTRAINT `isalarmları_ibfk_3` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`);
-
---
--- Constraints for table `kaydedilenilanlar`
---
-ALTER TABLE `kaydedilenilanlar`
-  ADD CONSTRAINT `kaydedilenilanlar_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `kaydedilenilanlar_ibfk_2` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`);
-
---
--- Constraints for table `kullanicibeceriler`
---
-ALTER TABLE `kullanicibeceriler`
-  ADD CONSTRAINT `kullanicibeceriler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `kullanicibeceriler_ibfk_2` FOREIGN KEY (`beceri_id`) REFERENCES `beceriler` (`id`);
-
---
--- Constraints for table `kullanicilar`
---
-ALTER TABLE `kullanicilar`
-  ADD CONSTRAINT `fk_kullanici_sehir` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `kullanicilar_ibfk_1` FOREIGN KEY (`sehir_id`) REFERENCES `sehirler` (`id`),
-  ADD CONSTRAINT `kullanicilar_ibfk_2` FOREIGN KEY (`ilce_id`) REFERENCES `ilceler` (`id`);
-
---
--- Constraints for table `mesajlar`
---
-ALTER TABLE `mesajlar`
-  ADD CONSTRAINT `mesajlar_ibfk_1` FOREIGN KEY (`gonderen_id`) REFERENCES `kullanicilar` (`id`),
-  ADD CONSTRAINT `mesajlar_ibfk_2` FOREIGN KEY (`alici_id`) REFERENCES `kullanicilar` (`id`);
-
---
--- Constraints for table `meslekler`
---
-ALTER TABLE `meslekler`
-  ADD CONSTRAINT `meslekler_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategoriler` (`id`);
-
---
--- Constraints for table `mulakatlar`
---
-ALTER TABLE `mulakatlar`
-  ADD CONSTRAINT `mulakatlar_ibfk_1` FOREIGN KEY (`basvuru_id`) REFERENCES `basvurular` (`id`);
-
---
--- Constraints for table `ozgecmisler`
---
-ALTER TABLE `ozgecmisler`
-  ADD CONSTRAINT `ozgecmisler_ibfk_1` FOREIGN KEY (`kullanici_id`) REFERENCES `kullanicilar` (`id`);
-
---
--- Constraints for table `parttimeilanlar`
---
-ALTER TABLE `parttimeilanlar`
-  ADD CONSTRAINT `parttimeilanlar_ibfk_1` FOREIGN KEY (`ilan_id`) REFERENCES `ilanlar` (`id`);
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-10-19 18:39:26

@@ -42,5 +42,11 @@ export const useAuthStore = create((set) => ({
     localStorage.setItem('user', JSON.stringify(userData));
   },
 
+  setAuth: (token, user) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    set({ user, isAuthenticated: true });
+  },
+
   clearError: () => set({ error: null }),
 }));

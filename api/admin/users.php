@@ -58,19 +58,22 @@ try {
             $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
             
             // Kullanıcıları getir
-            $query = "SELECT id, isim, soyisim, email, telefon, rol, sehir, profil_foto, 
-                      email_verified, olusturulma_tarihi 
-                      FROM kullanicilar WHERE 1=1";
+            $query = "SELECT k.id, k.isim, k.soyisim, k.email, k.telefon, k.rol, 
+                      s.isim as sehir, k.profil_foto, 
+                      k.email_verified, k.is_super_admin, k.admin_approved, k.kayit_tarihi as olusturulma_tarihi 
+                      FROM kullanicilar k
+                      LEFT JOIN sehirler s ON k.sehir_id = s.id
+                      WHERE 1=1";
             
             if ($search) {
-                $query .= " AND (isim LIKE :search OR soyisim LIKE :search OR email LIKE :search)";
+                $query .= " AND (k.isim LIKE :search OR k.soyisim LIKE :search OR k.email LIKE :search)";
             }
             
             if ($rol) {
-                $query .= " AND rol = :rol";
+                $query .= " AND k.rol = :rol";
             }
             
-            $query .= " ORDER BY olusturulma_tarihi DESC LIMIT :limit OFFSET :offset";
+            $query .= " ORDER BY k.kayit_tarihi DESC LIMIT :limit OFFSET :offset";
             
             $stmt = $db->prepare($query);
             foreach ($params as $key => $value) {
@@ -108,9 +111,43 @@ try {
             $updates = [];
             $params = [':id' => $data->id];
             
+            // Rol değişikliği kontrolü
             if (isset($data->rol)) {
-                $updates[] = "rol = :rol";
-                $params[':rol'] = $data->rol;
+                // Kendi rolünü değiştirmeye çalışıyor mu?
+                if ($data->id == $auth['data']->id) {
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'mesaj' => 'Kendi rolünüzü değiştiremezsiniz']);
+                    exit();
+                }
+                
+                // Mevcut rolü al
+                $query = "SELECT rol, email, isim, is_super_admin FROM kullanicilar WHERE id = :id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id', $data->id);
+                $stmt->execute();
+                $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Super Admin'in rolünü değiştirmeye çalışıyor mu?
+                if ($currentUser && $currentUser['is_super_admin']) {
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'mesaj' => 'Super Admin\'in rolü değiştirilemez']);
+                    exit();
+                }
+                
+                // Rol değiştiyse, rol_confirmed'ı FALSE yap
+                if ($currentUser && $currentUser['rol'] !== $data->rol) {
+                    $updates[] = "rol = :rol";
+                    $updates[] = "rol_confirmed = FALSE";
+                    $params[':rol'] = $data->rol;
+                    
+                    // Eğer yeni rol Admin ise, admin_approved'ı FALSE yap
+                    if ($data->rol === 'admin') {
+                        $updates[] = "admin_approved = FALSE";
+                    }
+                    
+                    // E-posta bildirimi gönder (opsiyonel)
+                    // EmailService ile bildirim gönderilebilir
+                }
             }
             
             if (isset($data->email_verified)) {
@@ -153,6 +190,19 @@ try {
             if ($data->id == $auth['data']->id) {
                 http_response_code(400);
                 echo json_encode(['success' => false, 'mesaj' => 'Kendi hesabınızı silemezsiniz']);
+                exit();
+            }
+            
+            // Super Admin kontrolü
+            $query = "SELECT is_super_admin FROM kullanicilar WHERE id = :id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id', $data->id);
+            $stmt->execute();
+            $targetUser = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($targetUser && $targetUser['is_super_admin']) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'mesaj' => 'Super Admin silinemez']);
                 exit();
             }
             

@@ -24,6 +24,18 @@ if(!empty($data->email) && !empty($data->sifre)) {
     $userData = $user->getUserByEmail();
 
     if($userData && password_verify($data->sifre, $userData['sifre'])) {
+        // Admin ama onaylanmamışsa giriş yapamaz
+        if ($userData['rol'] === 'admin' && 
+            !$userData['is_super_admin'] && 
+            isset($userData['admin_approved']) && 
+            !$userData['admin_approved']) {
+            http_response_code(403);
+            echo json_encode(array(
+                "message" => "Admin hesabınız henüz onaylanmadı. Lütfen Super Admin ile iletişime geçin."
+            ));
+            exit();
+        }
+        
         // Son giriş zamanını güncelle
         $user->id = $userData['id'];
         $user->updateLastLogin();
@@ -34,6 +46,8 @@ if(!empty($data->email) && !empty($data->sifre)) {
             "soyisim" => $userData['soyisim'],
             "email" => $userData['email'],
             "rol" => $userData['rol'],
+            "is_super_admin" => isset($userData['is_super_admin']) ? (bool)$userData['is_super_admin'] : false,
+            "rol_confirmed" => isset($userData['rol_confirmed']) ? (bool)$userData['rol_confirmed'] : true,
             "exp" => time() + (86400 * 30) // 30 gün
         );
 

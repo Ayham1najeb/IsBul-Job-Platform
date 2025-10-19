@@ -285,5 +285,52 @@ class EmailService {
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
+    
+    /**
+     * Admin doğrulama kodu gönder
+     */
+    public function sendAdminVerificationCode($to, $code, $tempPassword) {
+        try {
+            $this->mailer->clearAddresses();
+            $this->mailer->addAddress($to);
+            
+            $this->mailer->isHTML(true);
+            $this->mailer->Subject = 'IsBul - Admin Hesabı Doğrulama 🔐';
+            
+            $body = "
+            <!DOCTYPE html>
+            <html>
+            <body style='font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;'>
+                <div style='max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 10px;'>
+                    <h2 style='color: #333;'>Admin Hesabı Doğrulama 🔐</h2>
+                    <p>Merhaba,</p>
+                    <p>IsBul platformu için Admin hesabınız oluşturuldu. Hesabınızı aktifleştirmek için aşağıdaki doğrulama kodunu kullanın:</p>
+                    
+                    <div style='background-color: #f0f0f0; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0;'>
+                        <h1 style='color: #4CAF50; font-size: 36px; letter-spacing: 5px; margin: 0;'>$code</h1>
+                    </div>
+                    
+                    <p><strong>Geçici Şifreniz:</strong> <code style='background-color: #f0f0f0; padding: 5px 10px; border-radius: 3px;'>$tempPassword</code></p>
+                    
+                    <p style='color: #666; font-size: 14px;'>⏰ Bu kod 30 dakika geçerlidir.</p>
+                    <p style='color: #666; font-size: 14px;'>🔒 İlk girişinizde şifrenizi değiştirmeniz önerilir.</p>
+                    
+                    <div style='background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;'>
+                        <p style='color: #856404; margin: 0;'>⚠️ Bu kodu kimseyle paylaşmayın.</p>
+                    </div>
+                    
+                    <p style='color: #999; font-size: 12px; margin-top: 30px;'>© 2025 IsBul Platform</p>
+                </div>
+            </body>
+            </html>
+            ";
+            
+            $this->mailer->Body = $body;
+            $this->mailer->send();
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
 }
 ?>

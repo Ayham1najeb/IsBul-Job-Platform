@@ -17,7 +17,6 @@ const Login = () => {
     sifre: '',
   });
 
-  const from = location.state?.from || '/dashboard';
   const successMessage = location.state?.message;
 
   const handleChange = (e) => {
@@ -30,8 +29,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData);
-      navigate(from, { replace: true });
+      const result = await login(formData);
+      
+      // Rol onayı kontrolü
+      if (result.user.rol_confirmed === false) {
+        navigate('/role-confirmation', { replace: true });
+        return;
+      }
+      
+      // Kullanıcı rolüne göre yönlendir
+      if (result.user.rol === 'admin') {
+        navigate('/admin', { replace: true });
+      } else if (result.user.rol === 'firma') {
+        navigate('/company/dashboard', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     } catch (err) {
       console.error('Giriş hatası:', err);
     }

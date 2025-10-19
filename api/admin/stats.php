@@ -27,91 +27,122 @@ try {
     $database = new Database();
     $db = $database->getConnection();
     
-    // Toplam kullanıcı sayısı
-    $query = "SELECT COUNT(*) as total FROM kullanicilar";
+    // Toplam kullanıcı sayısı (Admin hariç)
+    $query = "SELECT COUNT(*) as total FROM kullanicilar WHERE rol != 'admin'";
     $stmt = $db->prepare($query);
     $stmt->execute();
     $totalUsers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Rol bazında kullanıcı sayıları
-    $query = "SELECT rol, COUNT(*) as count FROM kullanicilar GROUP BY rol";
+    // Rol bazında kullanıcı sayıları (Admin hariç)
+    $query = "SELECT rol, COUNT(*) as count FROM kullanicilar WHERE rol != 'admin' GROUP BY rol";
     $stmt = $db->prepare($query);
     $stmt->execute();
     $usersByRole = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Toplam iş ilanı sayısı
-    $query = "SELECT COUNT(*) as total FROM is_ilanlari";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $totalJobs = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    // Toplam iş ilanı sayısı (tablo yoksa 0 döndür)
+    $totalJobs = 0;
+    try {
+        $query = "SELECT COUNT(*) as total FROM is_ilanlari";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $totalJobs = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {
+        // Tablo yoksa 0 olarak devam et
+    }
     
     // Aktif iş ilanı sayısı
-    $query = "SELECT COUNT(*) as total FROM is_ilanlari WHERE durum = 'aktif'";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $activeJobs = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $activeJobs = 0;
+    try {
+        $query = "SELECT COUNT(*) as total FROM is_ilanlari WHERE durum = 'aktif'";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $activeJobs = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {}
     
     // Toplam başvuru sayısı
-    $query = "SELECT COUNT(*) as total FROM basvurular";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $totalApplications = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalApplications = 0;
+    try {
+        $query = "SELECT COUNT(*) as total FROM basvurular";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $totalApplications = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {}
     
     // Bu ayki başvuru sayısı
-    $query = "SELECT COUNT(*) as total FROM basvurular 
-              WHERE MONTH(basvuru_tarihi) = MONTH(CURRENT_DATE()) 
-              AND YEAR(basvuru_tarihi) = YEAR(CURRENT_DATE())";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $monthlyApplications = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $monthlyApplications = 0;
+    try {
+        $query = "SELECT COUNT(*) as total FROM basvurular 
+                  WHERE MONTH(basvuru_tarihi) = MONTH(CURRENT_DATE()) 
+                  AND YEAR(basvuru_tarihi) = YEAR(CURRENT_DATE())";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $monthlyApplications = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {}
     
     // Toplam şirket sayısı
-    $query = "SELECT COUNT(DISTINCT firma_id) as total FROM is_ilanlari";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $totalCompanies = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalCompanies = 0;
+    try {
+        $query = "SELECT COUNT(DISTINCT firma_id) as total FROM is_ilanlari";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $totalCompanies = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {}
     
-    // Son 7 günün istatistikleri
-    $query = "SELECT DATE(olusturulma_tarihi) as tarih, COUNT(*) as sayi 
-              FROM kullanicilar 
-              WHERE olusturulma_tarihi >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-              GROUP BY DATE(olusturulma_tarihi)
-              ORDER BY tarih DESC";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $weeklyUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Son 7 günün istatistikleri (Admin hariç)
+    $weeklyUsers = [];
+    try {
+        $query = "SELECT DATE(olusturulma_tarihi) as tarih, COUNT(*) as sayi 
+                  FROM kullanicilar 
+                  WHERE olusturulma_tarihi >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                  AND rol != 'admin'
+                  GROUP BY DATE(olusturulma_tarihi)
+                  ORDER BY tarih DESC";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $weeklyUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
     
     // Son 7 günün iş ilanları
-    $query = "SELECT DATE(olusturulma_tarihi) as tarih, COUNT(*) as sayi 
-              FROM is_ilanlari 
-              WHERE olusturulma_tarihi >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-              GROUP BY DATE(olusturulma_tarihi)
-              ORDER BY tarih DESC";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $weeklyJobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $weeklyJobs = [];
+    try {
+        $query = "SELECT DATE(olusturulma_tarihi) as tarih, COUNT(*) as sayi 
+                  FROM is_ilanlari 
+                  WHERE olusturulma_tarihi >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                  GROUP BY DATE(olusturulma_tarihi)
+                  ORDER BY tarih DESC";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $weeklyJobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
     
     // Popüler kategoriler
-    $query = "SELECT k.isim, COUNT(i.id) as ilan_sayisi 
-              FROM kategoriler k
-              LEFT JOIN is_ilanlari i ON k.id = i.kategori_id
-              GROUP BY k.id, k.isim
-              ORDER BY ilan_sayisi DESC
-              LIMIT 10";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $popularCategories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $popularCategories = [];
+    try {
+        $query = "SELECT k.isim, COUNT(i.id) as ilan_sayisi 
+                  FROM kategoriler k
+                  LEFT JOIN is_ilanlari i ON k.id = i.kategori_id
+                  GROUP BY k.id, k.isim
+                  ORDER BY ilan_sayisi DESC
+                  LIMIT 10";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $popularCategories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
     
     // Popüler şehirler
-    $query = "SELECT sehir, COUNT(*) as ilan_sayisi 
-              FROM is_ilanlari 
-              WHERE sehir IS NOT NULL
-              GROUP BY sehir
-              ORDER BY ilan_sayisi DESC
-              LIMIT 10";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $popularCities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $popularCities = [];
+    try {
+        $query = "SELECT sehir, COUNT(*) as ilan_sayisi 
+                  FROM is_ilanlari 
+                  WHERE sehir IS NOT NULL
+                  GROUP BY sehir
+                  ORDER BY ilan_sayisi DESC
+                  LIMIT 10";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $popularCities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
+
     
     http_response_code(200);
     echo json_encode([

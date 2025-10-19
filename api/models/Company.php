@@ -6,7 +6,7 @@
 
 class Company {
     private $conn;
-    private $table_name = "Firmalar";
+    private $table_name = "firmalar";
     
     public $id;
     public $kullanici_id;
@@ -39,11 +39,11 @@ class Company {
                     k.isim as kategori_isim,
                     COUNT(DISTINCT i.id) as ilan_sayisi
                   FROM " . $this->table_name . " f
-                  LEFT JOIN Sehirler s ON f.sehir_id = s.id
-                  LEFT JOIN Ilceler il ON f.ilce_id = il.id
-                  LEFT JOIN Kategoriler k ON f.kategori_id = k.id
-                  LEFT JOIN Ilanlar i ON f.id = i.firma_id AND i.aktif = 1
-                  WHERE f.aktif = 1";
+                  LEFT JOIN sehirler s ON f.sehir_id = s.id
+                  LEFT JOIN ilceler il ON f.ilce_id = il.id
+                  LEFT JOIN kategoriler k ON f.kategori_id = k.id
+                  LEFT JOIN ilanlar i ON f.id = i.firma_id
+                  WHERE 1=1";
         
         if (!empty($filters['sehir_id'])) {
             $query .= " AND f.sehir_id = :sehir_id";
@@ -90,9 +90,9 @@ class Company {
                     il.isim as ilce_isim,
                     k.isim as kategori_isim
                   FROM " . $this->table_name . " f
-                  LEFT JOIN Sehirler s ON f.sehir_id = s.id
-                  LEFT JOIN Ilceler il ON f.ilce_id = il.id
-                  LEFT JOIN Kategoriler k ON f.kategori_id = k.id
+                  LEFT JOIN sehirler s ON f.sehir_id = s.id
+                  LEFT JOIN ilceler il ON f.ilce_id = il.id
+                  LEFT JOIN kategoriler k ON f.kategori_id = k.id
                   WHERE f.id = :id
                   LIMIT 1";
         
