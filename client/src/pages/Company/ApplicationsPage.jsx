@@ -104,7 +104,7 @@ const ApplicationsPage = () => {
           alert('Başvuru durumu güncellendi!');
         }
       } else {
-        alert('Başvuru durumu güncellendi!');
+      alert('Başvuru durumu güncellendi!');
       }
       
       // Listeyi yenile

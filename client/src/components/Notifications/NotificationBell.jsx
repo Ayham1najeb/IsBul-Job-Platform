@@ -38,7 +38,7 @@ const NotificationBell = () => {
         basvuru_id: n.basvuru_id,
         mesaj_id: n.mesaj_id
       }));
-      
+
       setNotifications(formattedNotifications);
       setUnreadCount(data.okunmamis_sayisi || 0);
     } catch (error) {
@@ -52,12 +52,12 @@ const NotificationBell = () => {
     try {
       await notificationService.markAsRead(notificationId);
       // Optimistic update
-      setNotifications(prev =>
-        prev.map(n =>
-          n.id === notificationId ? { ...n, read: true } : n
-        )
-      );
-      setUnreadCount(prev => Math.max(0, prev - 1));
+    setNotifications(prev =>
+      prev.map(n =>
+        n.id === notificationId ? { ...n, read: true } : n
+      )
+    );
+    setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
       console.error('Bildirim okundu olarak işaretlenemedi:', error);
     }
@@ -66,10 +66,10 @@ const NotificationBell = () => {
   const handleMarkAllAsRead = async () => {
     try {
       await notificationService.markAllAsRead();
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, read: true }))
-      );
-      setUnreadCount(0);
+    setNotifications(prev =>
+      prev.map(n => ({ ...n, read: true }))
+    );
+    setUnreadCount(0);
     } catch (error) {
       console.error('Bildirimler okundu olarak işaretlenemedi:', error);
     }

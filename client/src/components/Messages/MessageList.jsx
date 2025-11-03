@@ -69,9 +69,9 @@ const MessageList = ({ messages, selectedUser, onSelectUser, searchTerm }) => {
             <div className="relative flex-shrink-0">
               <div className="relative w-12 h-12 flex-shrink-0">
                 {user.avatar && String(user.avatar).trim() !== '' ? (
-                  <img
+                <img
                     src={getImageUrl(user.avatar)}
-                    alt={user.userName}
+                  alt={user.userName}
                     className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 shadow-sm absolute inset-0 z-10"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -83,7 +83,7 @@ const MessageList = ({ messages, selectedUser, onSelectUser, searchTerm }) => {
                         fallback.style.zIndex = '1';
                       }
                     }}
-                  />
+                />
                 ) : null}
                 <div 
                   className="w-12 h-12 rounded-full flex items-center justify-center shadow-md border-2 border-white avatar-fallback absolute inset-0"

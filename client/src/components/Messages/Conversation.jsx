@@ -125,17 +125,17 @@ const Conversation = ({ user, onSendMessage }) => {
 
   // Sadece ilk yüklemede scroll yap - otomatik güncellemelerde scroll yapma
   const isFirstLoadRef = useRef(true);
-  
+
   useEffect(() => {
     // Sadece ilk yüklemede scroll yap
     if (messages.length > 0 && !loading && isFirstLoadRef.current) {
       isFirstLoadRef.current = false;
       setTimeout(() => {
-        scrollToBottom();
+    scrollToBottom();
       }, 100);
     }
   }, [loading, messages.length]);
-  
+
   const checkOnlineStatus = async () => {
     try {
       if (!user.userId || !currentUser?.id || user.userId === currentUser.id) {
@@ -514,9 +514,9 @@ const Conversation = ({ user, onSendMessage }) => {
         <div className="flex items-center gap-3">
           <div className="relative w-12 h-12 flex-shrink-0">
             {user.avatar && String(user.avatar).trim() !== '' ? (
-              <img
+            <img
                 src={getImageUrl(user.avatar)}
-                alt={user.userName}
+              alt={user.userName}
                 className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 absolute inset-0 z-10"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -528,7 +528,7 @@ const Conversation = ({ user, onSendMessage }) => {
                     fallback.style.zIndex = '1';
                   }
                 }}
-              />
+            />
             ) : null}
             <div 
               className="w-12 h-12 rounded-full flex items-center justify-center shadow-md border-2 border-white avatar-fallback absolute inset-0"
@@ -544,7 +544,7 @@ const Conversation = ({ user, onSendMessage }) => {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900">{user.userName}</h3>
+            <h3 className="font-semibold text-gray-900">{user.userName}</h3>
               {isOtherUserOnline && (
                 <div className="relative flex items-center">
                   <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
