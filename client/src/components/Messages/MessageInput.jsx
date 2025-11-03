@@ -3,7 +3,7 @@
  * Mesaj yazma ve gönderme
  */
 import { useState } from 'react';
-import { Send, Paperclip, Smile } from 'lucide-react';
+import { Send, Smile } from 'lucide-react';
 
 const MessageInput = ({ onSend }) => {
   const [message, setMessage] = useState('');
@@ -18,6 +18,15 @@ const MessageInput = ({ onSend }) => {
       setSending(true);
       await onSend(message.trim());
       setMessage('');
+      
+      // Mesaj gönderildikten sonra focus'u kaldır
+      // Kullanıcı yeni mesajı görmek istediği için focus'u kaldırıyoruz
+      setTimeout(() => {
+        const textarea = e.target.querySelector('textarea');
+        if (textarea) {
+          textarea.blur();
+        }
+      }, 50);
     } catch (error) {
       console.error('Mesaj gönderilemedi:', error);
       alert('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
@@ -36,15 +45,7 @@ const MessageInput = ({ onSend }) => {
   return (
     <form onSubmit={handleSubmit} className="p-4 border-t border-gray-100 bg-white">
       <div className="flex items-end gap-2">
-        {/* Ek Dosya */}
-        <button
-          type="button"
-          className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-        >
-          <Paperclip className="w-5 h-5" />
-        </button>
-
-        {/* Emoji */}
+        {/* Emoji - Sadece metin mesajlarına izin veriliyor, dosya ekleme yok */}
         <button
           type="button"
           className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"

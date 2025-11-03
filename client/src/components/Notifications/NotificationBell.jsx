@@ -5,60 +5,74 @@
 import { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
 import NotificationList from './NotificationList';
+import { notificationService } from '../../services/notificationService';
 
 const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: API'den bildirimleri çek
     loadNotifications();
+    // Her 30 saniyede bir bildirimleri yenile
+    const interval = setInterval(loadNotifications, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadNotifications = async () => {
     try {
-      // Şimdilik örnek bildirimler
-      const mockNotifications = [
-        {
-          id: 1,
-          type: 'application_status',
-          title: 'Başvuru Durumu Güncellendi',
-          message: 'Frontend Developer pozisyonuna başvurunuz inceleniyor',
-          read: false,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          type: 'new_job',
-          title: 'Yeni İlan',
-          message: 'İlgilenebileceğiniz yeni bir iş ilanı var',
-          read: false,
-          created_at: new Date(Date.now() - 86400000).toISOString()
-        }
-      ];
-
-      setNotifications(mockNotifications);
-      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+      setLoading(true);
+      const data = await notificationService.getNotifications();
+      const bildirimler = data.kayitlar || [];
+      
+      // API'den gelen verileri formatla
+      const formattedNotifications = bildirimler.map(n => ({
+        id: n.id,
+        type: n.tip,
+        title: n.baslik,
+        message: n.mesaj,
+        read: n.okundu === 1 || n.okundu === true,
+        created_at: n.olusturulma_tarihi,
+        ilan_id: n.ilan_id,
+        basvuru_id: n.basvuru_id,
+        mesaj_id: n.mesaj_id
+      }));
+      
+      setNotifications(formattedNotifications);
+      setUnreadCount(data.okunmamis_sayisi || 0);
     } catch (error) {
       console.error('Bildirimler yüklenemedi:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleMarkAsRead = (notificationId) => {
-    setNotifications(prev =>
-      prev.map(n =>
-        n.id === notificationId ? { ...n, read: true } : n
-      )
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await notificationService.markAsRead(notificationId);
+      // Optimistic update
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === notificationId ? { ...n, read: true } : n
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Bildirim okundu olarak işaretlenemedi:', error);
+    }
   };
 
-  const handleMarkAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(n => ({ ...n, read: true }))
-    );
-    setUnreadCount(0);
+  const handleMarkAllAsRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications(prev =>
+        prev.map(n => ({ ...n, read: true }))
+      );
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Bildirimler okundu olarak işaretlenemedi:', error);
+    }
   };
 
   return (

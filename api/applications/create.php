@@ -7,6 +7,7 @@
 require_once '../config/cors_headers.php';
 include_once '../config/database.php';
 include_once '../models/Application.php';
+include_once '../models/Notification.php';
 include_once '../middleware/auth.php';
 
 // Kimlik doğrulama kontrolü
@@ -88,6 +89,37 @@ $application->notlar = !empty($data->notlar) ? $data->notlar : null;
 
 try {
     if ($application->create()) {
+        // İlan bilgilerini ve firma kullanıcı ID'sini al
+        $ilan_query = "SELECT i.baslik, i.firma_id, f.kullanici_id as firma_kullanici_id
+                       FROM ilanlar i
+                       LEFT JOIN firmalar f ON i.firma_id = f.id
+                       WHERE i.id = :ilan_id";
+        $ilan_stmt = $db->prepare($ilan_query);
+        $ilan_stmt->bindParam(':ilan_id', $data->ilan_id);
+        $ilan_stmt->execute();
+        $ilan_data = $ilan_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Kullanıcı bilgilerini al
+        $kullanici_query = "SELECT isim, soyisim FROM kullanicilar WHERE id = :kullanici_id";
+        $kullanici_stmt = $db->prepare($kullanici_query);
+        $kullanici_stmt->bindParam(':kullanici_id', $user_data->id);
+        $kullanici_stmt->execute();
+        $kullanici_data = $kullanici_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Şirkete bildirim gönder
+        if ($ilan_data && $ilan_data['firma_kullanici_id'] && $kullanici_data) {
+            $notification = new Notification($db);
+            $notification->kullanici_id = $ilan_data['firma_kullanici_id'];
+            $notification->tip = 'application_created';
+            $notification->baslik = 'Yeni Başvuru';
+            $notification->mesaj = $kullanici_data['isim'] . ' ' . $kullanici_data['soyisim'] . 
+                                  ' adlı kişi "' . $ilan_data['baslik'] . '" ilanına başvuru yaptı.';
+            $notification->ilan_id = $data->ilan_id;
+            $notification->basvuru_id = $application->id;
+            $notification->mesaj_id = null;
+            $notification->create();
+        }
+        
         http_response_code(201);
         echo json_encode(
             array(

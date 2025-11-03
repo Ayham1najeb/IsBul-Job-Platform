@@ -24,6 +24,12 @@ const NotificationList = ({ notifications, onMarkAsRead, onMarkAllAsRead, onClos
   // Bildirim ikonu
   const getNotificationIcon = (type) => {
     switch (type) {
+      case 'application_created':
+        return <Briefcase className="w-5 h-5 text-blue-600" />;
+      case 'application_accepted':
+        return <Briefcase className="w-5 h-5 text-green-600" />;
+      case 'message_sent':
+        return <Users className="w-5 h-5 text-purple-600" />;
       case 'application_status':
         return <Briefcase className="w-5 h-5 text-blue-600" />;
       case 'new_job':

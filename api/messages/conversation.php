@@ -34,4 +34,4 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 http_response_code(200);
-echo json_encode(array("kayitlar" => $mesajlar), JSON_UNESCAPED_UNICODE);
+echo json_encode(array("kayitlar" => $mesajlar, "mesajlar" => $mesajlar), JSON_UNESCAPED_UNICODE);

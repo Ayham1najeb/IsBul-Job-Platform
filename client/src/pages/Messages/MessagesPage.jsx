@@ -3,12 +3,16 @@
  * Kullanıcı mesajlaşma sayfası
  */
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { messageService } from '../../services/messageService';
 import MessageList from '../../components/Messages/MessageList';
 import Conversation from '../../components/Messages/Conversation';
 import { MessageSquare, Loader, Search, Users } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
 
 const MessagesPage = () => {
+  const location = useLocation();
+  const { user: currentUser } = useAuthStore();
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,11 +22,54 @@ const MessagesPage = () => {
     loadMessages();
   }, []);
 
+  // Location state'den gelen bilgi ile otomatik konuşma açma
+  useEffect(() => {
+    if (location.state?.openConversation && messages.length > 0) {
+      const userId = parseInt(location.state.openConversation);
+      
+      // Mesaj listesinde bu kullanıcı ile konuşma var mı kontrol et
+      const message = messages.find(
+        msg => (msg.gonderen_id === userId || msg.alici_id === userId)
+      );
+      
+      if (message) {
+        const otherUserId = message.gonderen_id === currentUser.id 
+          ? message.alici_id 
+          : message.gonderen_id;
+        
+        setSelectedUser({
+          userId: otherUserId,
+          userName: message.gonderen_id === currentUser.id 
+            ? `${message.alici_isim || ''} ${message.alici_soyisim || ''}`.trim() || 'Kullanıcı'
+            : `${message.gonderen_isim || ''} ${message.gonderen_soyisim || ''}`.trim() || 'Kullanıcı',
+          avatar: null
+        });
+      } else {
+        // Eğer mesaj yoksa, direkt kullanıcı ID'si ile aç
+        setSelectedUser({
+          userId: userId,
+          userName: 'Kullanıcı',
+          avatar: null
+        });
+      }
+      
+      // State'i temizle
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, messages, currentUser?.id]);
+
   const loadMessages = async () => {
     try {
       setLoading(true);
       const data = await messageService.getMessages();
-      setMessages(data.mesajlar || []);
+      // API "kayitlar" döndürüyor, "mesajlar" değil
+      const messagesData = data.kayitlar || data.mesajlar || [];
+      // current_user_id ekle
+      const messagesWithUser = messagesData.map(msg => ({
+        ...msg,
+        current_user_id: currentUser.id
+      }));
+      setMessages(messagesWithUser);
     } catch (error) {
       console.error('Mesajlar yüklenemedi:', error);
     } finally {

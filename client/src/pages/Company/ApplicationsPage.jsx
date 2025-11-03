@@ -9,6 +9,7 @@ import { jobService } from '../../services/jobService';
 import ApplicationList from '../../components/Company/ApplicationList';
 import ApplicationDetail from '../../components/Company/ApplicationDetail';
 import ApplicationActions from '../../components/Company/ApplicationActions';
+import AcceptanceModal from '../../components/Company/AcceptanceModal';
 import { ArrowLeft, Loader, Filter, X } from 'lucide-react';
 
 const ApplicationsPage = () => {
@@ -24,6 +25,8 @@ const ApplicationsPage = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAcceptanceModal, setShowAcceptanceModal] = useState(false);
+  const [pendingAcceptance, setPendingAcceptance] = useState(null);
 
   useEffect(() => {
     loadJobs();
@@ -84,7 +87,25 @@ const ApplicationsPage = () => {
   const handleStatusChange = async (applicationId, newStatus) => {
     try {
       await applicationService.updateApplicationStatus(applicationId, newStatus);
-      alert('Başvuru durumu güncellendi!');
+      
+      // Eğer durum "kabul" ise, modal göster
+      if (newStatus === 'kabul') {
+        const application = applications.find(app => app.id === applicationId);
+        const job = jobs.find(j => j.id === application?.ilan_id);
+        
+        if (application) {
+          setPendingAcceptance({
+            ...application,
+            durum: newStatus,
+            jobTitle: job?.baslik || 'İş İlanı'
+          });
+          setShowAcceptanceModal(true);
+        } else {
+          alert('Başvuru durumu güncellendi!');
+        }
+      } else {
+        alert('Başvuru durumu güncellendi!');
+      }
       
       // Listeyi yenile
       loadApplications(selectedJob);
@@ -286,6 +307,19 @@ const ApplicationsPage = () => {
               </div>
             </div>
           </>
+        )}
+
+        {/* Kabul Onay Modal */}
+        {pendingAcceptance && (
+          <AcceptanceModal
+            isOpen={showAcceptanceModal}
+            onClose={() => {
+              setShowAcceptanceModal(false);
+              setPendingAcceptance(null);
+            }}
+            application={pendingAcceptance}
+            jobTitle={pendingAcceptance.jobTitle}
+          />
         )}
       </div>
     </div>

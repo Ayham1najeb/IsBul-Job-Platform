@@ -35,8 +35,8 @@ if ($num > 0) {
     }
     
     http_response_code(200);
-    echo json_encode(array("kayitlar" => $mesajlar), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("kayitlar" => $mesajlar, "mesajlar" => $mesajlar), JSON_UNESCAPED_UNICODE);
 } else {
     http_response_code(200);
-    echo json_encode(array("mesaj" => "Mesaj bulunamadı.", "kayitlar" => array()), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("mesaj" => "Mesaj bulunamadı.", "kayitlar" => array(), "mesajlar" => array()), JSON_UNESCAPED_UNICODE);
 }

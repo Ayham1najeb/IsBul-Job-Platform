@@ -166,3 +166,48 @@ button:active {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* ===================================== */
+/* Conversation Message Styles - Özel Stiller */
+/* ===================================== */
+
+/* Gönderen mesajı - her zaman mavi */
+.conversation-container .message-bubble-sender {
+  background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.conversation-container .message-bubble-sender .message-text {
+  color: #ffffff !important;
+}
+
+/* Alıcı mesajı - her zaman beyaz */
+.conversation-container .message-bubble-receiver {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.conversation-container .message-bubble-receiver .message-text {
+  color: #111827 !important;
+}
+
+.job-sticky-bar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+}
+
+/* Avatar fallback - varsayılan kullanıcı ikonu için stil */
+.avatar-fallback {
+  background: linear-gradient(to bottom right, #60a5fa, #2563eb) !important;
+  background-color: #3b82f6 !important;
+}
+
+.conversation-container .avatar-fallback,
+.message-list .avatar-fallback {
+  background: linear-gradient(to bottom right, #60a5fa, #2563eb) !important;
+  background-color: #3b82f6 !important;
+}

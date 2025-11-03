@@ -3,6 +3,7 @@
  * Kullanıcı mesaj listesi
  */
 import { User, Circle } from 'lucide-react';
+import { getImageUrl } from '../../utils/imageHelper';
 
 const MessageList = ({ messages, selectedUser, onSelectUser, searchTerm }) => {
   // Mesajları kullanıcılara göre grupla
@@ -66,19 +67,38 @@ const MessageList = ({ messages, selectedUser, onSelectUser, searchTerm }) => {
           <div className="flex items-start gap-3">
             {/* Avatar */}
             <div className="relative flex-shrink-0">
-              {user.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={user.userName}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+              <div className="relative w-12 h-12 flex-shrink-0">
+                {user.avatar && String(user.avatar).trim() !== '' ? (
+                  <img
+                    src={getImageUrl(user.avatar)}
+                    alt={user.userName}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 shadow-sm absolute inset-0 z-10"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.style.display = 'none';
+                      const fallback = e.target.parentElement?.querySelector('.avatar-fallback');
+                      if (fallback) {
+                        fallback.classList.remove('hidden');
+                        fallback.style.display = 'flex';
+                        fallback.style.zIndex = '1';
+                      }
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center shadow-md border-2 border-white avatar-fallback absolute inset-0"
+                  style={{ 
+                    display: (user.avatar && String(user.avatar).trim() !== '') ? 'none' : 'flex',
+                    zIndex: 1,
+                    background: 'linear-gradient(to bottom right, #60a5fa, #2563eb)',
+                    backgroundColor: '#3b82f6'
+                  }}
+                >
                   <User className="w-6 h-6 text-white" />
                 </div>
-              )}
+              </div>
               {user.unread && (
-                <Circle className="absolute -top-1 -right-1 w-4 h-4 text-primary-600 fill-current" />
+                <Circle className="absolute -top-1 -right-1 w-4 h-4 text-primary-600 fill-current z-20" />
               )}
             </div>
 

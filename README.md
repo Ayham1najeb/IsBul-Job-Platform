@@ -23,7 +23,7 @@
 
 Bu proje modern web teknolojileri ile geliştirilmektedir:
 
-### ✅ Frontend: React (İLERLİYOR - %85 TAMAMLANDI)
+### ✅ Frontend: React (İLERLİYOR - %90 TAMAMLANDI)
 - ⚛️ React 18 + Vite
 - 🎨 TailwindCSS ile modern tasarım
 - 🧭 React Router ile sayfa yönetimi
@@ -47,6 +47,12 @@ Bu proje modern web teknolojileri ile geliştirilmektedir:
   - SSS (FAQ)
   - Şirket Oluşturma (Company Create)
   - CV Görüntüleme (Güvenli - sadece ilgili şirketler)
+  - Mesajlaşma (Messages) - Real-time chat sistemi
+    - Konuşma listesi
+    - Mesaj gönderme/alma
+    - Online/Offline durumu
+    - İş ilanı bağlantılı konuşmalar
+    - Başvuru kabul sonrası otomatik mesaj
 
 ### ✅ Backend: PHP + MySQL (TAMAMLANDI - %95)
 - 🐘 PHP 7.4+ ile RESTful API
@@ -54,11 +60,14 @@ Bu proje modern web teknolojileri ile geliştirilmektedir:
 - 🔐 JWT ile kimlik doğrulama
 - 🛡️ PDO ile güvenli veritabanı bağlantısı
 - 🌐 CORS yapılandırması
-- ✅ **8 Model + 50+ Endpoint Hazır**
+- ✅ **8 Model + 57+ Endpoint Hazır**
 - ✅ **Database Schema & Setup Script Hazır**
 - ✅ **Başvuru Sistemi Entegrasyonu**
 - ✅ **CV Güvenlik Kontrolü**
 - ✅ **Resim Yönetimi (Taşınabilir)**
+- ✅ **Mesajlaşma Sistemi (Real-time)**
+- ✅ **Bildirim Sistemi (Notifications)**
+- ✅ **Online/Offline Durumu (Heartbeat)**
 
 ## 📖 Proje Hakkında
 
@@ -245,7 +254,13 @@ IsBul/
 - ✅ PDF olarak indirme (text-selectable)
 - ✅ Şirket profillerini görüntüleme
 - ✅ Dashboard (istatistikler, son aktiviteler)
-- 🔄 Mesajlaşma sistemi (yapılacak)
+- ✅ Mesajlaşma sistemi (tam özellikli - real-time)
+  - ✅ Şirket ile mesajlaşma (başvuru kabul sonrası)
+  - ✅ Real-time mesaj güncelleme (WhatsApp/Messenger tarzı)
+  - ✅ Online/Offline durumu
+  - ✅ Mesaj zamanı ve tarih gösterimi
+  - ✅ Okundu bilgisi
+  - ✅ İş ilanı bağlantılı konuşmalar
 - 🔄 Firmaları takip etme ve değerlendirme (yapılacak)
 
 ### 🏢 Firmalar İçin
@@ -258,6 +273,12 @@ IsBul/
 - ✅ CV istatistikleri (deneyim, eğitim, beceri sayısı)
 - ✅ Şirket dashboard (istatistikler, hızlı erişim)
 - ✅ Başvuru sayısı gösterimi
+- ✅ Mesajlaşma sistemi (tam özellikli)
+  - ✅ Başvuru kabul sonrası otomatik mesaj gönderme
+  - ✅ Aday ile mesajlaşma
+  - ✅ Real-time mesaj güncelleme
+  - ✅ Online/Offline durumu
+  - ✅ İş ilanı bağlantılı konuşmalar
 - 🔄 Aday filtreleme ve arama (geliştirilecek)
 - 🔄 Detaylı raporlar (yapılacak)
 - 🔄 Firma değerlendirmelerini görüntüleme (yapılacak)
@@ -327,10 +348,14 @@ IsBul/
 - ✅ `PUT /api/resumes/certificates.php` - Sertifika güncelle
 - ✅ `DELETE /api/resumes/certificates.php` - Sertifika sil
 
-#### 💬 Mesajlar (3)
-- ✅ `POST /api/messages/send.php` - Mesaj gönder (Auth gerekli)
+#### 💬 Mesajlar (6)
+- ✅ `POST /api/messages/send.php` - Mesaj gönder (Auth gerekli, ilan_id desteği)
 - ✅ `GET /api/messages/` - Kullanıcının mesajları (Auth gerekli)
 - ✅ `GET /api/messages/conversation.php?user_id=` - İki kullanıcı arası konuşma (Auth gerekli)
+- ✅ `GET /api/messages/new-messages.php?user_id=&last_message_id=` - Yeni mesajları getir (performans optimizasyonu)
+- ✅ `POST /api/messages/heartbeat.php` - Online durumu bildir (Auth gerekli)
+- ✅ `POST /api/messages/remove-heartbeat.php` - Offline durumu bildir (Auth gerekli)
+- ✅ `GET /api/messages/online-status.php?user_id=` - Online durumu kontrol (Auth gerekli)
 
 #### 📂 Kategoriler (1)
 - ✅ `GET /api/categories/` - Tüm kategorileri listele
@@ -350,11 +375,11 @@ IsBul/
 | **Şirketler** | 3 | ✅ Tamamlandı |
 | **Başvurular** | 4 | ✅ Tamamlandı |
 | **Özgeçmişler** | 16 | ✅ Tamamlandı |
-| **Mesajlar** | 3 | ✅ Tamamlandı |
+| **Mesajlar** | 7 | ✅ Tamamlandı |
 | **Kullanıcılar** | 3 | ✅ Tamamlandı |
 | **Kategoriler** | 1 | ✅ Tamamlandı |
 | **Lokasyonlar** | 2 | ✅ Tamamlandı |
-| **TOPLAM** | **42** | **✅ %100** |
+| **TOPLAM** | **46** | **✅ %100** |
 
 ---
 

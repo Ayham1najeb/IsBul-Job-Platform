@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { getImageUrl } from '../../utils/imageHelper';
 import { useState } from 'react';
+import NotificationBell from '../Notifications/NotificationBell';
 
 const CompanyNavbar = () => {
   const { user, logout } = useAuthStore();
@@ -84,10 +85,7 @@ const CompanyNavbar = () => {
           {/* Sağ Taraf - Bildirimler ve Profil */}
           <div className="flex items-center space-x-4">
             {/* Bildirimler */}
-            <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <NotificationBell />
 
             {/* Profil Menüsü */}
             <div className="relative">

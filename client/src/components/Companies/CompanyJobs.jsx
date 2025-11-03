@@ -20,10 +20,18 @@ const CompanyJobs = ({ ilanlar = [] }) => {
 
   // Tarih formatla
   const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
     const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const today = new Date();
+    
+    // Tarihleri sadece tarih kısmına indir (saat bilgisi olmadan)
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    // Gün farkını hesapla
+    const diffTime = todayOnly - dateOnly;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) return 'Bugün';
     if (diffDays === 1) return 'Dün';
