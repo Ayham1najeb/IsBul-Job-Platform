@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { companyService } from '../../services/companyService';
 import CompanyCard from '../../components/Companies/CompanyCard';
 import CompanyFilters from '../../components/Companies/CompanyFilters';
+import SkeletonCard from '../../components/UI/SkeletonCard';
+import ScrollReveal from '../../components/UI/ScrollReveal';
 import { Building2, Loader, Search } from 'lucide-react';
 
 const CompaniesPage = () => {
@@ -140,11 +142,14 @@ const CompaniesPage = () => {
 
           {/* Sağ: Şirketler */}
           <div className="lg:col-span-3">
-            {/* Yükleniyor */}
+            {/* Yükleniyor - Skeleton Cards */}
             {loading && companies.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12">
-                <Loader className="w-12 h-12 text-primary-600 animate-spin mb-4" />
-                <p className="text-gray-600">Şirketler yükleniyor...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[...Array(6)].map((_, index) => (
+                  <ScrollReveal key={index} delay={index * 100}>
+                    <SkeletonCard type="company" />
+                  </ScrollReveal>
+                ))}
               </div>
             )}
 
@@ -176,8 +181,10 @@ const CompaniesPage = () => {
 
             {!loading && !error && companies.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {companies.map((company) => (
-                  <CompanyCard key={company.id} company={company} />
+                {companies.map((company, index) => (
+                  <ScrollReveal key={company.id} delay={index * 50}>
+                    <CompanyCard company={company} />
+                  </ScrollReveal>
                 ))}
               </div>
             )}

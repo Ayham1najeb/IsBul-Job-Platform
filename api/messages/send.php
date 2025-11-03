@@ -26,17 +26,21 @@ $db = $database->getConnection();
 $message = new Message($db);
 $data = json_decode(file_get_contents("php://input"));
 
+// Input sanitization için
+require_once '../utils/input_sanitizer.php';
+
 if (empty($data->alici_id) || empty($data->mesaj)) {
     http_response_code(400);
     echo json_encode(array("mesaj" => "Alıcı ve mesaj gerekli."), JSON_UNESCAPED_UNICODE);
     exit();
 }
 
+// Input sanitization - XSS ve SQL injection koruması
 $message->gonderen_id = $user_data->id;
-$message->alici_id = $data->alici_id;
-$message->ilan_id = isset($data->ilan_id) ? $data->ilan_id : null;
-$message->konu = isset($data->konu) ? $data->konu : 'Mesaj';
-$message->mesaj = $data->mesaj;
+$message->alici_id = InputSanitizer::sanitizeInt($data->alici_id);
+$message->ilan_id = isset($data->ilan_id) ? InputSanitizer::sanitizeInt($data->ilan_id) : null;
+$message->konu = isset($data->konu) ? InputSanitizer::preventXSS($data->konu) : 'Mesaj';
+$message->mesaj = InputSanitizer::preventXSS($data->mesaj);
 
 if ($message->send()) {
     // Bu ilan için daha önce mesaj var mı kontrol et (ilk mesaj mı?)

@@ -9,6 +9,7 @@ include_once '../config/database.php';
 include_once '../models/Application.php';
 include_once '../models/Notification.php';
 include_once '../middleware/auth.php';
+require_once '../utils/input_sanitizer.php';
 
 // Kimlik doğrulama kontrolü
 $auth = authenticate();
@@ -39,6 +40,10 @@ if (empty($data->ilan_id)) {
     echo json_encode(array("mesaj" => "İlan ID gerekli."), JSON_UNESCAPED_UNICODE);
     exit();
 }
+
+// Input sanitization
+$ilan_id = InputSanitizer::sanitizeInt($data->ilan_id);
+$mesaj = isset($data->mesaj) ? InputSanitizer::preventXSS($data->mesaj) : null;
 
 // CV kontrolü - Kullanıcının CV'si var mı?
 $has_cv = false;
@@ -84,8 +89,8 @@ if (!$has_cv) {
 $application = new Application($db);
 
 $application->kullanici_id = $user_data->id;
-$application->ilan_id = $data->ilan_id;
-$application->notlar = !empty($data->notlar) ? $data->notlar : null;
+$application->ilan_id = $ilan_id;
+$application->notlar = !empty($data->notlar) ? InputSanitizer::preventXSS($data->notlar) : null;
 
 try {
     if ($application->create()) {
@@ -95,7 +100,7 @@ try {
                        LEFT JOIN firmalar f ON i.firma_id = f.id
                        WHERE i.id = :ilan_id";
         $ilan_stmt = $db->prepare($ilan_query);
-        $ilan_stmt->bindParam(':ilan_id', $data->ilan_id);
+        $ilan_stmt->bindParam(':ilan_id', $ilan_id);
         $ilan_stmt->execute();
         $ilan_data = $ilan_stmt->fetch(PDO::FETCH_ASSOC);
         
@@ -114,7 +119,7 @@ try {
             $notification->baslik = 'Yeni Başvuru';
             $notification->mesaj = $kullanici_data['isim'] . ' ' . $kullanici_data['soyisim'] . 
                                   ' adlı kişi "' . $ilan_data['baslik'] . '" ilanına başvuru yaptı.';
-            $notification->ilan_id = $data->ilan_id;
+            $notification->ilan_id = $ilan_id;
             $notification->basvuru_id = $application->id;
             $notification->mesaj_id = null;
             $notification->create();

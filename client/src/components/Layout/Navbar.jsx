@@ -92,32 +92,6 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Keşfet Dropdown - Admin için gizle */}
-            {user?.rol !== 'admin' && (
-              <div className="relative group">
-              <button className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
-                Keşfet
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <Link to="/blog" className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-t-lg">
-                  📝 Blog
-                </Link>
-                <Link to="/career-guide" className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                  📚 Kariyer Rehberi
-                </Link>
-                <Link to="/salary-guide" className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                  💵 Maaş Rehberi
-                </Link>
-                <Link to="/about" className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-b-lg">
-                  ℹ️ Hakkımızda
-                </Link>
-              </div>
-            </div>
-            )}
-
             {isAuthenticated ? (
               <>
                 {/* İş Arayan Menüsü */}

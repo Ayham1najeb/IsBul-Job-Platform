@@ -7,6 +7,14 @@
 // CORS Headers
 require_once '../config/cors_headers.php';
 
+// Rate Limiting - Brute force saldırılarına karşı koruma
+require_once '../middleware/rate_limiter.php';
+require_once '../utils/input_sanitizer.php';
+
+// Rate limit kontrolü - IP bazlı
+$clientIP = RateLimiter::getClientIP();
+RateLimiter::check($clientIP);
+
 include_once '../config/database.php';
 include_once '../models/User.php';
 include_once '../utils/jwt.php';
@@ -19,7 +27,15 @@ $user = new User($db);
 $data = json_decode(file_get_contents("php://input"));
 
 if(!empty($data->email) && !empty($data->sifre)) {
-    $user->email = $data->email;
+    // Input sanitization - Email ve şifre temizleme
+    $email = InputSanitizer::sanitizeEmail($data->email);
+    if (!$email) {
+        http_response_code(400);
+        echo json_encode(array("message" => "Geçersiz e-posta formatı"));
+        exit();
+    }
+    
+    $user->email = $email;
     
     $userData = $user->getUserByEmail();
 

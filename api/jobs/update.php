@@ -7,6 +7,7 @@
 include_once '../config/database.php';
 include_once '../models/Job.php';
 include_once '../middleware/auth.php';
+require_once '../utils/input_sanitizer.php';
 
 // Kimlik doğrulama
 $auth = authenticate();
@@ -38,21 +39,22 @@ if (empty($data->id)) {
     exit();
 }
 
-$job->id = $data->id;
+// Input sanitization
+$job->id = InputSanitizer::sanitizeInt($data->id);
 $job->firma_id = $user_data->id;
-$job->baslik = $data->baslik;
-$job->kategori_id = $data->kategori_id;
-$job->sehir_id = $data->sehir_id;
-$job->ilce_id = isset($data->ilce_id) ? $data->ilce_id : null;
-$job->aciklama = $data->aciklama;
-$job->gereksinimler = isset($data->gereksinimler) ? $data->gereksinimler : null;
-$job->sorumluluklar = isset($data->sorumluluklar) ? $data->sorumluluklar : null;
-$job->maas_aralik = isset($data->maas_aralik) ? $data->maas_aralik : null;
-$job->calisma_sekli = isset($data->calisma_sekli) ? $data->calisma_sekli : 'full-time';
-$job->pozisyon_seviyesi = isset($data->pozisyon_seviyesi) ? $data->pozisyon_seviyesi : 'mid';
-$job->deneyim_yili = isset($data->deneyim_yili) ? $data->deneyim_yili : 0;
-$job->egitim_seviyesi = isset($data->egitim_seviyesi) ? $data->egitim_seviyesi : null;
-$job->son_basvuru_tarihi = isset($data->son_basvuru_tarihi) ? $data->son_basvuru_tarihi : null;
+$job->baslik = InputSanitizer::preventXSS($data->baslik);
+$job->kategori_id = InputSanitizer::sanitizeInt($data->kategori_id);
+$job->sehir_id = InputSanitizer::sanitizeInt($data->sehir_id);
+$job->ilce_id = isset($data->ilce_id) ? InputSanitizer::sanitizeInt($data->ilce_id) : null;
+$job->aciklama = InputSanitizer::preventXSS($data->aciklama);
+$job->gereksinimler = isset($data->gereksinimler) ? InputSanitizer::preventXSS($data->gereksinimler) : null;
+$job->sorumluluklar = isset($data->sorumluluklar) ? InputSanitizer::preventXSS($data->sorumluluklar) : null;
+$job->maas_aralik = isset($data->maas_aralik) ? InputSanitizer::sanitizeString($data->maas_aralik) : null;
+$job->calisma_sekli = isset($data->calisma_sekli) ? InputSanitizer::sanitizeString($data->calisma_sekli) : 'full-time';
+$job->pozisyon_seviyesi = isset($data->pozisyon_seviyesi) ? InputSanitizer::sanitizeString($data->pozisyon_seviyesi) : 'mid';
+$job->deneyim_yili = isset($data->deneyim_yili) ? InputSanitizer::sanitizeInt($data->deneyim_yili) : 0;
+$job->egitim_seviyesi = isset($data->egitim_seviyesi) ? InputSanitizer::sanitizeString($data->egitim_seviyesi) : null;
+$job->son_basvuru_tarihi = isset($data->son_basvuru_tarihi) ? InputSanitizer::sanitizeString($data->son_basvuru_tarihi) : null;
 
 if ($job->update()) {
     http_response_code(200);

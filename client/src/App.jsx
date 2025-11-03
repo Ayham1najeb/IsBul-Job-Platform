@@ -1,48 +1,79 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { lazy, Suspense } from 'react';
 import Layout from './components/Layout/Layout';
 import CompanyLayout from './components/Layout/CompanyLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import GuestRoute from './components/GuestRoute';
 import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import VerifyEmail from './pages/VerifyEmail';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import Dashboard from './pages/Dashboard';
-import JobsPage from './pages/Jobs/JobsPage';
-import JobDetailPage from './pages/Jobs/JobDetailPage';
-import CompaniesPage from './pages/Companies/CompaniesPage';
-import CompanyDetailPage from './pages/Companies/CompanyDetailPage';
-import CompanyDashboard from './pages/Company/CompanyDashboard';
-import CreateCompanyPage from './pages/Company/CreateCompanyPage';
-import CreateJobPage from './pages/Company/CreateJobPage';
-import ManageJobsPage from './pages/Company/ManageJobsPage';
-import CompanyApplicationsPage from './pages/Company/ApplicationsPage';
-import CompanyProfile from './pages/Company/CompanyProfile';
-import ViewApplicantResume from './pages/Company/ViewApplicantResume';
-import MyApplicationsPage from './pages/Applications/MyApplicationsPage';
-import ProfilePage from './pages/Profile/ProfilePage';
-import EditProfilePage from './pages/Profile/EditProfilePage';
-import ChangePasswordPage from './pages/Profile/ChangePasswordPage';
-import SavedJobsPage from './pages/SavedJobs/SavedJobsPage';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import FAQ from './pages/FAQ';
-import MessagesPage from './pages/Messages/MessagesPage';
-import ResumePage from './pages/Resume/ResumePage';
-import EditResumePage from './pages/Resume/EditResumePage';
-import ResumePreviewPage from './pages/Resume/ResumePreviewPage';
-import ResumeSettingsPage from './pages/Resume/ResumeSettingsPage';
-import AdminDashboard from './pages/Admin/AdminDashboard';
-import UsersManagement from './pages/Admin/UsersManagement';
-import JobsManagement from './pages/Admin/JobsManagement';
-import CompaniesManagement from './pages/Admin/CompaniesManagement';
-import Statistics from './pages/Admin/Statistics';
-import VerifyAdmin from './pages/Admin/VerifyAdmin';
-import RoleConfirmation from './pages/RoleConfirmation';
+import SkipToContent from './components/UI/SkipToContent';
+import { Loader } from 'lucide-react';
+
+// Lazy loading - Ana sayfalar
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+// Lazy loading - İş İlanları
+const JobsPage = lazy(() => import('./pages/Jobs/JobsPage'));
+const JobDetailPage = lazy(() => import('./pages/Jobs/JobDetailPage'));
+
+// Lazy loading - Şirketler
+const CompaniesPage = lazy(() => import('./pages/Companies/CompaniesPage'));
+const CompanyDetailPage = lazy(() => import('./pages/Companies/CompanyDetailPage'));
+
+// Lazy loading - Şirket Paneli
+const CompanyDashboard = lazy(() => import('./pages/Company/CompanyDashboard'));
+const CreateCompanyPage = lazy(() => import('./pages/Company/CreateCompanyPage'));
+const CreateJobPage = lazy(() => import('./pages/Company/CreateJobPage'));
+const ManageJobsPage = lazy(() => import('./pages/Company/ManageJobsPage'));
+const CompanyApplicationsPage = lazy(() => import('./pages/Company/ApplicationsPage'));
+const CompanyProfile = lazy(() => import('./pages/Company/CompanyProfile'));
+const ViewApplicantResume = lazy(() => import('./pages/Company/ViewApplicantResume'));
+
+// Lazy loading - Başvurular ve Profil
+const MyApplicationsPage = lazy(() => import('./pages/Applications/MyApplicationsPage'));
+const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
+const EditProfilePage = lazy(() => import('./pages/Profile/EditProfilePage'));
+const ChangePasswordPage = lazy(() => import('./pages/Profile/ChangePasswordPage'));
+const SavedJobsPage = lazy(() => import('./pages/SavedJobs/SavedJobsPage'));
+
+// Lazy loading - Genel Sayfalar
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+
+// Lazy loading - Mesajlar
+const MessagesPage = lazy(() => import('./pages/Messages/MessagesPage'));
+
+// Lazy loading - Özgeçmiş
+const ResumePage = lazy(() => import('./pages/Resume/ResumePage'));
+const EditResumePage = lazy(() => import('./pages/Resume/EditResumePage'));
+const ResumePreviewPage = lazy(() => import('./pages/Resume/ResumePreviewPage'));
+const ResumeSettingsPage = lazy(() => import('./pages/Resume/ResumeSettingsPage'));
+
+// Lazy loading - Admin
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'));
+const UsersManagement = lazy(() => import('./pages/Admin/UsersManagement'));
+const JobsManagement = lazy(() => import('./pages/Admin/JobsManagement'));
+const CompaniesManagement = lazy(() => import('./pages/Admin/CompaniesManagement'));
+const Statistics = lazy(() => import('./pages/Admin/Statistics'));
+const VerifyAdmin = lazy(() => import('./pages/Admin/VerifyAdmin'));
+const RoleConfirmation = lazy(() => import('./pages/RoleConfirmation'));
+
+// Loading Component
+const PageLoader = () => (
+  <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-orange-50 flex items-center justify-center">
+    <div className="text-center">
+      <Loader className="w-12 h-12 text-primary-600 animate-spin mx-auto mb-4" />
+      <p className="text-gray-600">Yükleniyor...</p>
+    </div>
+  </div>
+);
 
 // Create a client
 const queryClient = new QueryClient({
@@ -58,8 +89,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <SkipToContent />
         <ScrollToTop />
-        <Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
@@ -286,6 +319,7 @@ function App() {
             />
           </Route>
         </Routes>
+        </Suspense>
       </Router>
     </QueryClientProvider>
   );
