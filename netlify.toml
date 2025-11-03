@@ -1,10 +1,12 @@
-# Netlify Configuration
+# Netlify Configuration (Root Level)
 # Bu dosya Netlify'e site yapılandırmasını söyler
 
 [build]
+  # Base directory (client klasörü)
+  base = "client"
   # Build komutu
   command = "npm install && npm run build"
-  # Build edilen dosyaların bulunduğu klasör
+  # Build edilen dosyaların bulunduğu klasör (base directory'den itibaren)
   publish = "dist"
 
 # SPA (Single Page Application) için redirect kuralları
